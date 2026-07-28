@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="512" height="512" rx="80" fill="#141210"/>
+  <!-- Outer diamond -->
+  <path d="M256 48 L464 256 L256 464 L48 256 Z" stroke="#C9A96E" stroke-width="8" fill="none" opacity="0.35"/>
+  <!-- Inner diamond -->
+  <path d="M256 120 L392 256 L256 392 L120 256 Z" stroke="#C9A96E" stroke-width="8" fill="none" opacity="0.6"/>
+  <!-- Crown -->
+  <path d="M168 296 L168 232 L208 272 L256 192 L304 272 L344 232 L344 296 Z" stroke="#C9A96E" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+  <!-- Crown base -->
+  <line x1="168" y1="310" x2="344" y2="310" stroke="#C9A96E" stroke-width="10" stroke-linecap="round"/>
+  <!-- Jewels -->
+  <circle cx="208" cy="279" r="8" fill="#C9A96E"/>
+  <circle cx="256" cy="279" r="8" fill="#C9A96E"/>
+  <circle cx="304" cy="279" r="8" fill="#C9A96E"/>
+</svg>
