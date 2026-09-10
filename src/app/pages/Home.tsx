@@ -592,7 +592,7 @@ export function Home() {
             <div key={city.city} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden"
               style={{ width: "230px" }}>
               {/* City image header */}
-              <div className="relative" style={{ height: "100px" }}>
+              <div className="relative overflow-hidden" style={{ height: "100px" }}>
                 <img src={city.image} alt={city.city} className="w-full h-full object-cover opacity-60" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                 {/* Live dot */}
@@ -667,7 +667,7 @@ export function Home() {
           {UPCOMING_EVENTS.map((event) => (
             <div key={event.id} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden"
               style={{ width: "240px" }}>
-              <div className="relative" style={{ height: "130px" }}>
+              <div className="relative overflow-hidden" style={{ height: "130px" }}>
                 <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-70" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                 <span className={`absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${event.exclusive ? "bg-primary text-primary-foreground" : "bg-background/70 text-foreground"}`}>
