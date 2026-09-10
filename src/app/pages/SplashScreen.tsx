@@ -18,12 +18,14 @@ export function SplashScreen() {
     return () => [t1, t2, t3, t4, t5].forEach(clearTimeout);
   }, []);
 
-  const goStart = () => {
+    const goStart = () => {
+    sessionStorage.setItem("eliteway-splash-shown", "1");
     const seen = localStorage.getItem("eliteway-onboarded");
     navigate(seen ? "/" : "/onboarding");
   };
 
   const goLogin = () => {
+    sessionStorage.setItem("eliteway-splash-shown", "1");
     navigate("/client/login");
   };
 
