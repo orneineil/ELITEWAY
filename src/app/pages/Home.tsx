@@ -300,7 +300,7 @@ export function Home() {
                 }}
               />
               <div className="relative flex items-center rounded-2xl overflow-hidden shadow-2xl" style={{ background: "oklch(0.11 0.006 62 / 0.92)", backdropFilter: "blur(16px)" }}>
-                <Search className="absolute left-4 w-5 h-5 text-primary pointer-events-none" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none" />
                 <input
                   type="text"
                   value={query}
