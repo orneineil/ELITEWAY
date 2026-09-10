@@ -559,26 +559,32 @@ export function Home() {
           ))}
         </ScrollRow>
       </section>
-
-      {/* ── CATEGORIES VISUELLES (scroll) ────────────────────────────────── */}
+         {/* ── CATEGORIES VISUELLES (médaillons ronds) ──────────────────────── */}
       <section className="mb-8">
         <SectionHeader label="Explorer" title="Nos catégories" linkTo="/categories" />
-        <ScrollRow gap={12}>
+        <ScrollRow gap={18}>
           {CATEGORIES.map((cat) => (
             <Link key={cat.id} to={`/category/${cat.id}`}
-              className="group shrink-0 relative overflow-hidden rounded-2xl"
-              style={{ width: "120px", height: "155px" }}>
-              <img src={cat.image} alt={cat.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-75" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-              {cat.badge && (
-                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                  <Lock className="w-3 h-3 text-primary-foreground" />
-                </div>
-              )}
-              <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "0.85rem" }}>{cat.name}</p>
+              className="group shrink-0 flex flex-col items-center gap-2"
+              style={{ width: "84px" }}>
+              <div className="relative rounded-full overflow-hidden"
+                style={{
+                  width: "76px", height: "76px",
+                  border: "2px solid oklch(0.74 0.09 80 / 0.45)",
+                  boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.15)",
+                }}>
+                <img src={cat.image} alt={cat.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
+                {cat.badge && (
+                  <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                    <Lock className="w-2.5 h-2.5 text-primary-foreground" />
+                  </div>
+                )}
               </div>
+              <p className="text-center leading-tight" style={{ fontFamily: "var(--font-heading)", fontSize: "0.78rem" }}>
+                {cat.name}
+              </p>
             </Link>
           ))}
         </ScrollRow>
