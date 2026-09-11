@@ -116,19 +116,20 @@ export function AllCategories() {
         ))}
       </div>
 
-      <div className="mx-5 mt-14 p-5 bg-card border border-border/50 rounded-2xl">
-        <p className="text-xs uppercase tracking-wider text-muted-foreground/60 mb-2">Vous êtes un professionnel ?</p>
-        <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="mb-2">
-          Référencez votre établissement
-        </p>
-        <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
-          Rejoignez notre réseau de partenaires et bénéficiez d'une visibilité premium auprès d'une clientèle exigeante.
+        <div className="mx-5 mt-16 mb-6 py-8 text-center">
+        <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem" }} className="mb-4">
+          Vous êtes un professionnel ?
         </p>
         <Link
           to="/partner/register"
-          className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-transform active:scale-95"
+          style={{
+            border: "1px solid oklch(0.74 0.09 80 / 0.5)",
+            color: "oklch(0.85 0.09 80)",
+            fontSize: "0.9rem",
+          }}
         >
-          Devenir partenaire <ArrowRight className="w-3.5 h-3.5" />
+          Référencer mon établissement <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>
