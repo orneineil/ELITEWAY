@@ -82,32 +82,8 @@ export function Root() {
                 </div>
 
                 {/* Divider */}
-                                {/* Divider */}
-                <div className="border-t border-border/40 pt-10 mt-2">
-                  <p className="text-xs text-muted-foreground text-center mb-5">
-                    © 2026 EliteWay SAS · Paris, France
-                  </p>
-                  {/* Legal links */}
-                  <div className="flex items-center justify-center gap-5 flex-wrap">
-                    {[
-                      ["Mentions légales",       "/mentions-legales"],
-                      ["Confidentialité",         "/confidentialite"],
-                      ["CGU",                     "/cgu"],
-                    ].map(([label, href]) => (
-                      <Link
-                        key={label}
-                        to={href}
-                        className="text-xs text-muted-foreground/60 hover:text-primary transition-colors"
-                      >
-                        {label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
+                                       </div>
             </footer>
-
             <AIAssistant />
             <BottomNav />
             <ScrollRestoration />
