@@ -170,7 +170,7 @@ export function ProfilePage() {
         </div>
       ))}
 
-      {/* Logout */}
+           {/* Logout */}
       <div className="mx-5">
         <button
           onClick={() => { logout(); navigate("/"); }}
@@ -180,6 +180,22 @@ export function ProfilePage() {
           Se déconnecter
         </button>
       </div>
+
+      {/* Mentions légales */}
+      <div className="mt-10 mb-2 flex items-center justify-center gap-5 flex-wrap px-5">
+        <Link to="/mentions-legales" className="text-xs text-muted-foreground/60 hover:text-primary transition-colors">
+          Mentions légales
+        </Link>
+        <Link to="/confidentialite" className="text-xs text-muted-foreground/60 hover:text-primary transition-colors">
+          Confidentialité
+        </Link>
+        <Link to="/cgu" className="text-xs text-muted-foreground/60 hover:text-primary transition-colors">
+          CGU
+        </Link>
+      </div>
+      <p className="text-center text-[10px] text-muted-foreground/40 mt-3 mb-4">
+        © 2026 EliteWay SAS · Paris, France
+      </p>
 
     </div>
   );
