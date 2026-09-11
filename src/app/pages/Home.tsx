@@ -9,17 +9,6 @@ import { establishments } from "../data/establishments";
 import { useClientAuth } from "../contexts/ClientAuthContext";
 import { ScrollRow } from "../components/ScrollRow";
 
-const QUICK_CATS = [
-  { id: "heli",           name: "Hélicoptère",  icon: Wind,         link: "/establishment/heli-prestige",  highlight: true },
-  { id: "jet",            name: "Jet Privé",    icon: Plane,        link: "/establishment/jet-prive-azur", highlight: true },
-  { id: "navigation",    name: "Yacht",        icon: Sailboat,     link: "/category/navigation",          highlight: true },
-  { id: "gastronomie",   name: "Gastronomie",  icon: Utensils,     link: "/category/gastronomie" },
-  { id: "bien-etre",     name: "Spa & Bien-être", icon: Sparkles,  link: "/category/bien-etre" },
-  { id: "golf-monte-carlo", name: "Golf",       icon: Trophy,       link: "/establishment/golf-monte-carlo" },
-  { id: "evenements",    name: "Événements",   icon: CalendarDays, link: "/category/evenements" },
-  { id: "offres-exclusives", name: "Exclusif", icon: Gift,         link: "/category/offres-exclusives", vip: true },
-];
-
 const CATEGORIES = [
   { id: "gastronomie",       name: "Gastronomie",     image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
   { id: "navigation",        name: "Yachts",          image: "https://images.unsplash.com/photo-1535024966840-e7424dc2635b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
@@ -133,11 +122,10 @@ export function Home() {
           />
         </div>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-end px-5" style={{ paddingBottom: "160px", zIndex: 2 }}>
+        <div className="absolute inset-0 flex flex-col items-center justify-end px-5" style={{ paddingBottom: "60px", zIndex: 2 }}>
 
-          {/* Panneau sombre translucide derrière tout le bloc texte + recherche */}
           <div className="absolute inset-x-0" style={{
-            bottom: "160px",
+            bottom: "60px",
             height: "290px",
             background: "linear-gradient(180deg, transparent 0%, rgba(10,8,6,0.35) 20%, rgba(10,8,6,0.7) 60%, rgba(10,8,6,0.85) 100%)",
             backdropFilter: "blur(2px)",
@@ -210,30 +198,6 @@ export function Home() {
           </form>
         </div>
 
-        <div className="absolute bottom-6 left-0 right-0 px-5">
-          <div className="grid grid-cols-4 gap-2.5 max-w-sm mx-auto">
-            {[
-              { icon: Wind,     label: "Hélico",  to: "/establishment/heli-prestige",  gold: true },
-              { icon: Plane,    label: "Jet",     to: "/establishment/jet-prive-azur", gold: true },
-              { icon: Sailboat, label: "Yacht",   to: "/category/navigation",          gold: true },
-              { icon: Utensils, label: "Tables",  to: "/category/gastronomie" },
-            ].map(({ icon: Icon, label, to, gold }) => (
-              <Link key={to} to={to} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl transition-all active:scale-95"
-                style={{
-                  background: gold ? "oklch(0.10 0.006 62 / 0.88)" : "oklch(0.08 0.006 62 / 0.90)",
-                  border: gold ? "1px solid oklch(0.74 0.09 80 / 0.7)" : "1px solid oklch(0.40 0.02 65 / 0.6)",
-                  backdropFilter: "blur(14px)",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
-                }}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "oklch(0.74 0.09 80 / 0.22)", border: "1px solid oklch(0.74 0.09 80 / 0.45)" }}>
-                  <Icon className="w-4 h-4 text-primary" />
-                </div>
-                <span className="text-[10px] font-medium" style={{ color: gold ? "oklch(0.90 0.09 80)" : "#ffffff" }}>{label}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
       </div>
 
       <section className="px-5 mb-8">
@@ -257,39 +221,6 @@ export function Home() {
               Découvrir
             </button>
           </div>
-        </div>
-      </section>
-
-      <section className="px-5 mb-6">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-primary mb-2.5">Expériences signatures</p>
-        <div className="grid grid-cols-3 gap-3 mb-3">
-          {QUICK_CATS.filter((c) => (c as any).highlight).map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <Link key={cat.id} to={(cat as any).link} className="flex flex-col items-center gap-2 py-4 rounded-2xl relative overflow-hidden transition-all active:scale-95"
-                style={{ background: "linear-gradient(145deg, oklch(0.14 0.015 75), oklch(0.11 0.010 65))", border: "1px solid oklch(0.74 0.09 80 / 0.4)", boxShadow: "0 2px 20px oklch(0.74 0.09 80 / 0.12)" }}>
-                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ background: "radial-gradient(circle at 50% 0%, oklch(0.74 0.09 80) 0%, transparent 70%)" }} />
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center relative z-10" style={{ background: "oklch(0.74 0.09 80 / 0.20)", border: "1px solid oklch(0.74 0.09 80 / 0.45)" }}>
-                  <Icon className="w-5 h-5 text-primary" />
-                </div>
-                <span className="text-[11px] font-medium text-primary leading-tight text-center relative z-10">{cat.name}</span>
-              </Link>
-            );
-          })}
-        </div>
-        <div className="grid grid-cols-4 gap-3">
-          {QUICK_CATS.filter((c) => !(c as any).highlight).map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <Link key={cat.id} to={(cat as any).link} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl bg-card border border-border/50 hover:border-primary/40 transition-colors">
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${cat.vip ? "bg-primary/15" : "bg-muted/60"}`}>
-                  <Icon className={`w-4 h-4 ${cat.vip ? "text-primary" : "text-muted-foreground"}`} />
-                </div>
-                <span className="text-[9px] text-muted-foreground leading-tight text-center">{cat.name}</span>
-                {cat.vip && <span className="text-[8px] text-primary bg-primary/10 px-1.5 py-0.5 rounded-full -mt-0.5">VIP</span>}
-              </Link>
-            );
-          })}
         </div>
       </section>
 
@@ -363,183 +294,4 @@ export function Home() {
             { id: "ev-3", title: "Nice Jazz Festival", date: "9-15 Juil. 2026", badge: "Musique & Art", badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
               image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
             { id: "ev-4", title: "Fête du Citron Menton", date: "Fév. 2027", badge: "Tradition", badgeColor: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-              image: "https://images.unsplash.com/photo-1711014778280-4d3a7f58a032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-          ].map((ev) => (
-            <div key={ev.id} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: 220 }}>
-              <div className="relative overflow-hidden" style={{ height: 110 }}>
-                <img src={ev.image} alt={ev.title} className="w-full h-full object-cover opacity-65" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              </div>
-              <div className="p-3">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-tight mb-1">{ev.title}</p>
-                <p className="text-xs text-muted-foreground mb-2">{ev.date}</p>
-                <div className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] border ${ev.badgeColor}`}>{ev.badge}</div>
-                <p className="text-xs text-primary mt-2 hover:underline cursor-pointer">Voir l'événement →</p>
-              </div>
-            </div>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Explorer" title="Nos catégories" linkTo="/categories" />
-        <ScrollRow gap={18}>
-          {CATEGORIES.map((cat) => (
-            <Link key={cat.id} to={`/category/${cat.id}`} className="group shrink-0 flex flex-col items-center gap-2" style={{ width: "84px" }}>
-              <div className="relative rounded-full overflow-hidden" style={{ width: "76px", height: "76px", border: "2px solid oklch(0.74 0.09 80 / 0.45)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.15)" }}>
-                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
-                {cat.badge && (
-                  <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                    <Lock className="w-2.5 h-2.5 text-primary-foreground" />
-                  </div>
-                )}
-              </div>
-              <p className="text-center leading-tight" style={{ fontFamily: "var(--font-heading)", fontSize: "0.78rem" }}>{cat.name}</p>
-            </Link>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Disponible maintenant" title="Près de vous" />
-        <ScrollRow gap={16}>
-          {NEARBY_CITIES.map((city) => (
-            <div key={city.city} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: "230px" }}>
-              <div className="relative overflow-hidden" style={{ height: "100px" }}>
-                <img src={city.image} alt={city.city} className="w-full h-full object-cover opacity-60" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-background/70 backdrop-blur-sm rounded-full px-2 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400">Disponible</span>
-                </div>
-                <div className="absolute bottom-2 left-3">
-                  <div className="flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-primary" />
-                    <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }}>{city.city}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="px-3 py-3 space-y-2">
-                {city.services.map((svc) => {
-                  const Icon = svc.icon;
-                  return (
-                    <button key={svc.label} onClick={() => navigate(`/search?q=${encodeURIComponent(svc.q)}`)} className="w-full flex items-center gap-2.5 py-1.5 hover:opacity-80 transition-opacity text-left">
-                      <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-3 h-3 text-primary" />
-                      </div>
-                      <span className="text-xs text-muted-foreground">{svc.label}</span>
-                      <ChevronRight className="w-3 h-3 text-muted-foreground/40 ml-auto shrink-0" />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Sélection" title="Offres à saisir" linkTo="/category/offres-exclusives" />
-        <ScrollRow gap={16}>
-          {EXCLUSIVE_OFFERS.map((offer) => (
-            <Link key={offer.id} to={offer.link} className="group shrink-0 relative overflow-hidden rounded-2xl bg-card border border-border/60" style={{ width: "200px" }}>
-              <div className="relative overflow-hidden" style={{ height: "120px" }}>
-                <img src={offer.image} alt={offer.title} className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500" />
-                {offer.locked && (
-                  <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
-                    <div className="w-9 h-9 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-                      <Lock className="w-4 h-4 text-primary" />
-                    </div>
-                  </div>
-                )}
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-background/80 backdrop-blur-sm">
-                  <span className="text-[10px] text-primary tracking-wide">{offer.tag}</span>
-                </div>
-              </div>
-              <div className="p-3">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="mb-0.5">{offer.title}</p>
-                <p className="text-xs text-muted-foreground mb-2">{offer.subtitle}</p>
-                <p className="text-xs text-primary">{offer.price}</p>
-              </div>
-            </Link>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Agenda" title="Événements à venir" />
-        <ScrollRow gap={16}>
-          {UPCOMING_EVENTS.map((event) => (
-            <div key={event.id} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: "240px" }}>
-              <div className="relative overflow-hidden" style={{ height: "130px" }}>
-                <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-70" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <span className={`absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${event.exclusive ? "bg-primary text-primary-foreground" : "bg-background/70 text-foreground"}`}>
-                  {event.category}
-                </span>
-                <div className="absolute bottom-3 left-3 right-3">
-                  <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-tight">{event.title}</p>
-                </div>
-              </div>
-              <div className="px-4 py-3 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <MapPin className="w-3 h-3 shrink-0" />{event.location}
-                </div>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{event.date}</span>
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{event.time}</span>
-                </div>
-                <div className="flex items-center justify-between pt-1 border-t border-border/50">
-                  <span className="text-xs text-primary">{event.price}</span>
-                  <span className="text-xs text-muted-foreground">{event.spots} places</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Recommandés" title="Nos coups de cœur" linkTo="/categories" />
-        <ScrollRow gap={16}>
-          {featured.map((e) => (
-            <Link key={e.id} to={`/establishment/${e.id}`} className="group shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: "220px" }}>
-              <div className="relative overflow-hidden" style={{ height: "140px" }}>
-                <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute top-2 right-2 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                  <Star className="w-3 h-3 fill-primary text-primary" />
-                  <span className="text-xs">{e.rating}</span>
-                </div>
-              </div>
-              <div className="p-3">
-                <p className="text-xs text-primary mb-0.5 tracking-wider">{e.price}</p>
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="mb-1 leading-tight">{e.name}</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin className="w-3 h-3" />{e.location}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="px-5 mt-2">
-        <Link to="/membership" className="block relative overflow-hidden rounded-2xl bg-card border border-primary/20 p-6">
-          <div className="absolute inset-0 opacity-10">
-            <img src="https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800" alt="" className="w-full h-full object-cover" />
-          </div>
-          <div className="relative z-10">
-            <p className="text-xs uppercase tracking-[0.18em] text-primary mb-2">Accès exclusif</p>
-            <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem" }} className="mb-2">Rejoindre le Club EliteWay</h3>
-            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">Offres membres, conciergerie dédiée et événements privés sur la Côte d'Azur.</p>
-            <div className="inline-flex items-center gap-2 text-sm text-primary">
-              Découvrir les abonnements <ArrowRight className="w-4 h-4" />
-            </div>
-          </div>
-        </Link>
-      </section>
-
-    </div>
-  );
-}
+              image: "https://images.unsplash.com/photo-1711014778280-4d3a7f58a032?crop=entropy&cs=tinysrgb&f
