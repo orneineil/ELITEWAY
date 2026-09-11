@@ -33,8 +33,7 @@ export function Root() {
                   </p>
                 </div>
 
-                {/* Links grid */}
-                <div className="grid grid-cols-2 gap-8 mb-10">
+                               <div className="grid grid-cols-2 gap-8 mb-20">
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground/60 mb-3">Catégories</p>
                     <ul className="space-y-2.5 text-sm">
