@@ -54,64 +54,71 @@ export function ClientRegister() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-16 px-4">
+    <div className="min-h-screen flex items-center justify-center py-16 px-5">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex justify-center mb-6">
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-flex justify-center mb-7">
             <LogoFull markSize={48} />
           </Link>
-          <h1 className="mb-2">Créer un compte</h1>
+          <h1 className="mb-3" style={{ fontFamily: "var(--font-heading)", fontSize: "1.7rem" }}>Créer un compte</h1>
           <p className="text-muted-foreground text-sm">Rejoignez la communauté EliteWay</p>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
+        <div
+          className="rounded-2xl p-7"
+          style={{
+            background: "oklch(0.13 0.008 62)",
+            border: "1px solid oklch(0.74 0.09 80 / 0.22)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
+          }}
+        >
+          <form onSubmit={handleSubmit} className="space-y-7">
+            <div className="grid grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm mb-2">Prénom</label>
+                <label className="block text-sm mb-2.5">Prénom</label>
                 <input
                   type="text"
                   value={form.firstName}
                   onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                   placeholder="Jean"
-                  className="w-full px-4 py-3 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                  className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm mb-2">Nom</label>
+                <label className="block text-sm mb-2.5">Nom</label>
                 <input
                   type="text"
                   value={form.lastName}
                   onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                   placeholder="Dupont"
-                  className="w-full px-4 py-3 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                  className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm mb-2">Adresse email</label>
+              <label className="block text-sm mb-2.5">Adresse email</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="vous@exemple.fr"
-                className="w-full px-4 py-3 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm mb-2">Mot de passe</label>
+              <label className="block text-sm mb-2.5">Mot de passe</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 pr-12 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                  className="w-full px-4 py-3.5 pr-12 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
                   required
                 />
                 <button
@@ -123,7 +130,7 @@ export function ClientRegister() {
                 </button>
               </div>
               {form.password && (
-                <ul className="mt-2 space-y-1 pl-1">
+                <ul className="mt-3 space-y-1.5 pl-1">
                   <PasswordRule ok={rules.length} label="8 caractères minimum" />
                   <PasswordRule ok={rules.upper} label="Une majuscule" />
                   <PasswordRule ok={rules.digit} label="Un chiffre" />
@@ -132,23 +139,23 @@ export function ClientRegister() {
             </div>
 
             <div>
-              <label className="block text-sm mb-2">Confirmer le mot de passe</label>
+              <label className="block text-sm mb-2.5">Confirmer le mot de passe</label>
               <input
                 type="password"
                 value={form.confirm}
                 onChange={(e) => setForm({ ...form, confirm: e.target.value })}
                 placeholder="••••••••"
-                className={`w-full px-4 py-3 bg-input-background border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm ${
+                className={`w-full px-4 py-3.5 bg-input-background border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm ${
                   form.confirm && !rules.match ? "border-red-500/50" : "border-border"
                 }`}
                 required
               />
               {form.confirm && !rules.match && (
-                <p className="text-xs text-red-400 mt-1">Les mots de passe ne correspondent pas.</p>
+                <p className="text-xs text-red-400 mt-2">Les mots de passe ne correspondent pas.</p>
               )}
             </div>
 
-            <label className="flex items-start gap-3 cursor-pointer">
+            <label className="flex items-start gap-3 cursor-pointer pt-1">
               <div
                 onClick={() => setAgreed(!agreed)}
                 className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
@@ -157,7 +164,7 @@ export function ClientRegister() {
               >
                 {agreed && <Check className="w-3 h-3 text-primary-foreground" />}
               </div>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground leading-relaxed">
                 J'accepte les{" "}
                 <Link to="/cgu" className="text-primary hover:underline">conditions d'utilisation</Link>
                 {" "}et la{" "}
@@ -174,13 +181,13 @@ export function ClientRegister() {
             <button
               type="submit"
               disabled={!valid || loading}
-              className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/85 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full py-3.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/85 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading ? "Création en cours…" : "Créer mon compte"}
             </button>
           </form>
 
-          <p className="text-center text-sm text-muted-foreground mt-6">
+          <p className="text-center text-sm text-muted-foreground mt-7">
             Déjà membre ?{" "}
             <Link to="/client/login" className="text-primary hover:underline">
               Se connecter
