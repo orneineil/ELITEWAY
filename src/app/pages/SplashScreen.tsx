@@ -7,18 +7,17 @@ import { ArrowRight } from "lucide-react";
 export function SplashScreen() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  // 0=hidden 1=logo 2=title 3=tagline 4=subtitle 5=buttons
+  // 0=hidden 1=logo 2=écriture ELITEWAY 3=slogan 4=boutons
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStep(1), 300);
-    const t2 = setTimeout(() => setStep(2), 1000);
-    const t3 = setTimeout(() => setStep(3), 1500);
-    const t4 = setTimeout(() => setStep(4), 2000);
-    const t5 = setTimeout(() => setStep(5), 2600);
-    return () => [t1, t2, t3, t4, t5].forEach(clearTimeout);
+    const t1 = setTimeout(() => setStep(1), 400);
+    const t2 = setTimeout(() => setStep(2), 1100);
+    const t3 = setTimeout(() => setStep(3), 3000);
+    const t4 = setTimeout(() => setStep(4), 3700);
+    return () => [t1, t2, t3, t4].forEach(clearTimeout);
   }, []);
 
-    const goStart = () => {
+  const goStart = () => {
     sessionStorage.setItem("eliteway-splash-shown", "1");
     const seen = localStorage.getItem("eliteway-onboarded");
     navigate(seen ? "/" : "/onboarding");
@@ -31,19 +30,6 @@ export function SplashScreen() {
 
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#0d0b09" }}>
-
-      {/* ── Fond photo nocturne ── */}
-      <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1707075108813-edefd7b3308d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
-          alt=""
-          className="w-full h-full object-cover"
-         style={{ filter: "brightness(0.20) saturate(1.2)" }}
-        />
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(180deg, #0d0b09 0%, rgba(13,11,9,0.55) 28%, rgba(13,11,9,0.35) 55%, rgba(13,11,9,0.85) 85%, #0d0b09 100%)",
-        }} />
-      </div>
 
       {/* Halo doré */}
       <div className="absolute inset-0 pointer-events-none" style={{
@@ -69,7 +55,7 @@ export function SplashScreen() {
         </div>
 
         {/* ELITEWAY */}
-                <p style={{
+        <p style={{
           fontFamily: "var(--font-heading)",
           fontSize: "clamp(2.8rem, 12vw, 3.6rem)",
           fontWeight: 400,
@@ -84,12 +70,12 @@ export function SplashScreen() {
           color: "transparent",
           filter: "drop-shadow(0 2px 30px rgba(201,169,110,0.35))",
           clipPath: step >= 2 ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
-          animation: step >= 2 ? "revealLetters 0.9s ease forwards, shimmerSweep 2.5s ease-in-out 1s infinite" : "none",
+          animation: step >= 2 ? "revealLetters 1.8s ease forwards, shimmerSweep 2.5s ease-in-out 2s infinite" : "none",
         }}>
           ELITEWAY
         </p>
 
-        {/* Tagline */}
+        {/* Tagline / slogan — apparaît après l'écriture */}
         <p style={{
           fontFamily: "var(--font-body)",
           fontSize: "0.62rem",
@@ -97,8 +83,7 @@ export function SplashScreen() {
           textTransform: "uppercase",
           color: "oklch(0.60 0.02 70)",
           opacity: step >= 3 ? 1 : 0,
-          transition: "opacity 0.6s ease",
-          marginBottom: "26px",
+          transition: "opacity 0.8s ease",
           textAlign: "center",
         }}>
           Elevating Everyday Living
@@ -110,32 +95,16 @@ export function SplashScreen() {
           height: "1px",
           background: "oklch(0.74 0.09 80)",
           transition: "width 0.6s ease",
-          marginBottom: "26px",
+          marginTop: "20px",
           boxShadow: "0 0 10px oklch(0.74 0.09 80 / 0.6)",
         }} />
-
-        {/* Sous-titre */}
-        <p style={{
-          fontFamily: "var(--font-heading)",
-          fontSize: "1.4rem",
-          fontWeight: 400,
-          lineHeight: 1.35,
-          color: "rgba(255,255,255,0.92)",
-          opacity: step >= 4 ? 1 : 0,
-          transform: step >= 4 ? "translateY(0)" : "translateY(10px)",
-          transition: "opacity 0.7s ease, transform 0.7s ease",
-          textAlign: "center",
-          textShadow: "0 2px 20px rgba(0,0,0,0.6)",
-        }}>
-          Un monde d'exception<br />à portée de main.
-        </p>
       </div>
 
       {/* ── Boutons ── */}
       <div className="relative z-10 px-6" style={{
         paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 28px)",
-        opacity: step >= 5 ? 1 : 0,
-        transform: step >= 5 ? "translateY(0)" : "translateY(16px)",
+        opacity: step >= 4 ? 1 : 0,
+        transform: step >= 4 ? "translateY(0)" : "translateY(16px)",
         transition: "opacity 0.6s ease, transform 0.6s ease",
       }}>
         <button
