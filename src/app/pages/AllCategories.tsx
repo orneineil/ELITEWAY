@@ -34,7 +34,7 @@ const CATEGORIES = [
     name: "Aviation",
     subtitle: "Hélicoptères & jets",
     description: "Vols panoramiques et transferts VIP.",
-    image: "https://images.unsplash.com/photo-1607525884336-66ccfac7ab56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     count: 3,
     priceFrom: "Dès 79€",
   },
@@ -70,7 +70,7 @@ const CATEGORIES = [
 
 export function AllCategories() {
   return (
-       <div className="max-w-lg mx-auto pb-28 pt-4 overflow-x-hidden">
+    <div className="max-w-lg mx-auto pb-28 pt-4 overflow-x-hidden">
       <div className="px-5 mb-7">
         <p className="text-xs uppercase tracking-[0.2em] text-primary mb-2">Explorer</p>
         <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", lineHeight: 1.1 }} className="mb-2">
@@ -81,9 +81,9 @@ export function AllCategories() {
         </p>
       </div>
 
-           <div className="px-5 grid grid-cols-2 gap-4 min-w-0">
+      <div className="px-5 grid grid-cols-2 gap-4 min-w-0">
         {CATEGORIES.map((cat) => (
-                  <Link
+          <Link
             key={cat.id}
             to={`/category/${cat.id}`}
             className="group block relative overflow-hidden rounded-2xl bg-card border border-border/60 hover:border-primary/30 transition-all min-w-0"
@@ -92,7 +92,8 @@ export function AllCategories() {
               <img
                 src={cat.image}
                 alt={cat.name}
-                className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                style={{ minWidth: "100%", minHeight: "100%" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/10 to-transparent" />
               {cat.vip && (
@@ -100,12 +101,12 @@ export function AllCategories() {
                   <Gift className="w-3 h-3 text-primary-foreground" />
                 </div>
               )}
-                            <div className="absolute bottom-0 left-0 right-0 p-3 overflow-hidden">
+              <div className="absolute bottom-0 left-0 right-0 p-3 overflow-hidden">
                 <p className="text-[9px] uppercase tracking-[0.15em] text-primary mb-1">{cat.subtitle}</p>
                 <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="leading-tight mb-1">
                   {cat.name}
                 </p>
-                                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-[10px] text-muted-foreground whitespace-nowrap">{cat.count} exp.</span>
                   <span className="text-[10px] text-primary whitespace-nowrap">{cat.priceFrom}</span>
                 </div>
@@ -115,7 +116,7 @@ export function AllCategories() {
         ))}
       </div>
 
-      <div className="mx-5 mt-8 p-5 bg-card border border-border/50 rounded-2xl">
+      <div className="mx-5 mt-14 p-5 bg-card border border-border/50 rounded-2xl">
         <p className="text-xs uppercase tracking-wider text-muted-foreground/60 mb-2">Vous êtes un professionnel ?</p>
         <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="mb-2">
           Référencez votre établissement
