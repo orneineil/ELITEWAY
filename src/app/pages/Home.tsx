@@ -2,8 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import {
   Search, ArrowRight, MapPin, Star, Lock, ChevronRight, ChevronDown,
-  Clock, Calendar, SlidersHorizontal, Crown, Utensils,
-  Sailboat, Sparkles, Plane, CalendarDays, Gift, Trophy, Wind,
+  Clock, Calendar, SlidersHorizontal, Crown,
 } from "lucide-react";
 import { establishments } from "../data/establishments";
 import { useClientAuth } from "../contexts/ClientAuthContext";
@@ -19,51 +18,33 @@ const CATEGORIES = [
   { id: "offres-exclusives", name: "Exclusif",        image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", badge: true },
 ];
 
-const NEARBY_CITIES = [
-  { city: "Cannes", image: "https://images.unsplash.com/photo-1593351415075-3bac9f45c877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    services: [
-      { label: "3 tables disponibles", icon: Utensils,  q: "gastronomie Cannes" },
-      { label: "2 yachts aujourd'hui",  icon: Sailboat,  q: "yacht Cannes" },
-      { label: "Spa partenaire",         icon: Sparkles,  q: "spa Cannes" },
-    ],
-  },
-  { city: "Nice", image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    services: [
-      { label: "5 restaurants ouverts",  icon: Utensils,  q: "gastronomie Nice" },
-      { label: "Vol panoramique 20 min", icon: Plane,      q: "hélicoptère Nice" },
-      { label: "Bien-être & thalasso",   icon: Sparkles,  q: "spa Nice" },
-    ],
-  },
-  { city: "Monaco", image: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    services: [
-      { label: "Sunset cruise ce soir", icon: Sailboat,   q: "yacht Monaco" },
-      { label: "Soirée privée membres", icon: Gift,       q: "exclusif Monaco" },
-      { label: "Dégustation de vins",   icon: CalendarDays, q: "oenologie Monaco" },
-    ],
-  },
-  { city: "Saint-Tropez", image: "https://images.unsplash.com/photo-1569282066844-679ec34e3416?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    services: [
-      { label: "Yacht privatisé dès 1 800€", icon: Sailboat, q: "yacht Saint-Tropez" },
-      { label: "Gastronomie port",       icon: Utensils,  q: "gastronomie Saint-Tropez" },
-      { label: "Événement partenaire",  icon: CalendarDays, q: "événement" },
-    ],
-  },
-];
-
-const UPCOMING_EVENTS = [
-  { id: "ev-1", title: "Dîner Secret — Chef", location: "Nice, Côte d'Azur", date: "28 Juin 2026", time: "20h00", price: "€€", spots: 8,
+// ── Tous les événements regroupés en une seule liste ──────────────────────────
+const ALL_EVENTS = [
+  { id: "ev-gp",  title: "Grand Prix de Monaco",   location: "Monaco",              date: "25-28 Mai 2027",  price: "€€€€", spots: 6,
+    badgeColor: "bg-red-500/20 text-red-400 border-red-500/30",
+    image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Sport & Prestige", exclusive: true },
+  { id: "ev-cannes", title: "Festival de Cannes",  location: "Cannes",              date: "13-24 Mai 2027",  price: "€€€", spots: 10,
+    badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+    image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Culture & Glamour", exclusive: true },
+  { id: "ev-jazz", title: "Nice Jazz Festival",    location: "Nice",                date: "9-15 Juil. 2026", price: "€€",  spots: 35,
+    badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Musique & Art" },
+  { id: "ev-citron", title: "Fête du Citron",      location: "Menton",              date: "Fév. 2027",       price: "€",   spots: 50,
+    badgeColor: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+    image: "https://images.unsplash.com/photo-1711014778280-4d3a7f58a032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Tradition" },
+  { id: "ev-1", title: "Dîner Secret — Chef",      location: "Nice, Côte d'Azur",   date: "28 Juin 2026", time: "20h00", price: "€€", spots: 8,
     image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gastronomie" },
-  { id: "ev-2", title: "Soirée Rooftop Éclat", location: "Nice, Côte d'Azur", date: "5 Juil. 2026", time: "21h30", price: "€€", spots: 40,
+  { id: "ev-2", title: "Soirée Rooftop Éclat",     location: "Nice, Côte d'Azur",   date: "5 Juil. 2026", time: "21h30", price: "€€", spots: 40,
     image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Membres", exclusive: true },
-  { id: "ev-3", title: "Croisière Champagne", location: "Cannes, Côte d'Azur", date: "12 Juil. 2026", time: "17h00", price: "€€", spots: 12,
+  { id: "ev-3", title: "Croisière Champagne",      location: "Cannes, Côte d'Azur", date: "12 Juil. 2026", time: "17h00", price: "€€", spots: 12,
     image: "https://images.unsplash.com/photo-1574504212584-29a03eb6e41e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Navigation" },
-  { id: "ev-4", title: "Nuits de l'Èze", location: "Èze, Côte d'Azur", date: "19 Juil. 2026", time: "21h00", price: "€", spots: 80,
+  { id: "ev-4", title: "Nuits de l'Èze",           location: "Èze, Côte d'Azur",    date: "19 Juil. 2026", time: "21h00", price: "€", spots: 80,
     image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Événements" },
   { id: "ev-rg", title: "Roland Garros — Loge VIP", location: "Paris — vol depuis Nice", date: "26 Mai 2026", time: "11h00", price: "€€€€", spots: 4,
     image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Exclusif", exclusive: true },
-  { id: "ev-5", title: "Monaco Yacht Show", location: "Port Hercule, Monaco", date: "24 Sep. 2026", time: "10h00", price: "€€€", spots: 20,
+  { id: "ev-5", title: "Monaco Yacht Show",        location: "Port Hercule, Monaco", date: "24 Sep. 2026", time: "10h00", price: "€€€", spots: 20,
     image: "https://images.unsplash.com/photo-1563642421748-5047b6585a4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Exclusif", exclusive: true },
-  { id: "ev-6", title: "Gala de la Riviera", location: "Palais des Festivals, Cannes", date: "15 Nov. 2026", time: "19h30", price: "€€€", spots: 12,
+  { id: "ev-6", title: "Gala de la Riviera",       location: "Palais des Festivals, Cannes", date: "15 Nov. 2026", time: "19h30", price: "€€€", spots: 12,
     image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gala Prestige", exclusive: true },
 ];
 
@@ -189,91 +170,41 @@ export function Home() {
 
       </div>
 
-      <section className="px-5 mb-10 mt-2">
-        <div className="relative overflow-hidden rounded-2xl" style={{ height: "170px" }}>
-          <img
-            src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900"
-            alt="Découvrir EliteWay"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "brightness(0.55)" }}
-          />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.25) 70%, transparent 100%)" }} />
-          <div className="relative z-10 h-full flex flex-col justify-center px-6">
-            <button
-              onClick={() => navigate("/categories")}
-              className="self-start px-5 py-2 rounded-full transition-transform active:scale-95"
-              style={{ background: "oklch(0.74 0.09 80)", color: "oklch(0.10 0.006 60)", fontFamily: "var(--font-heading)", fontSize: "0.85rem", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.35)" }}
-            >
-              Découvrir
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <section className="mb-10">
+      <section className="mb-12 mt-6">
         <SectionHeader label="Disponible" title="Expériences du moment" />
         <ScrollRow gap={16}>
           {[
-            { id: "exp-1", title: "Dîner Gastronomique", subtitle: "Ce soir · Nice", price: "dès 180€/pers.", link: "/establishment/restaurant-le-grand",
+            { id: "exp-1", title: "Dîner Gastronomique", subtitle: "Ce soir · Nice", price: "dès 180 €/pers.", link: "/establishment/restaurant-le-grand",
               image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "exp-2", title: "Spa Vue Mer", subtitle: "Disponible aujourd'hui · Nice", price: "dès 180€/soin", link: "/establishment/spa-serenite",
+            { id: "exp-2", title: "Spa Vue Mer", subtitle: "Disponible aujourd'hui · Nice", price: "dès 180 €/soin", link: "/establishment/spa-serenite",
               image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "exp-3", title: "Sortie Yacht Cannes", subtitle: "Demain · Cannes", price: "dès 800€/demi-journée", link: "/establishment/yacht-azur",
+            { id: "exp-3", title: "Sortie Yacht Cannes", subtitle: "Demain · Cannes", price: "dès 800 €/demi-journée", link: "/establishment/yacht-azur",
               image: "https://images.unsplash.com/photo-1593351415075-3bac9f45c877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
           ].map((exp) => (
-            <Link key={exp.id} to={exp.link} className="group shrink-0 rounded-2xl overflow-hidden bg-card border border-border/60 relative" style={{ width: 280 }}>
-              <div className="relative overflow-hidden" style={{ height: 160 }}>
+            <Link key={exp.id} to={exp.link} className="group shrink-0 rounded-2xl bg-card border border-border/60 relative" style={{ width: 290 }}>
+              <div className="relative overflow-hidden rounded-t-2xl" style={{ height: 160 }}>
                 <img src={exp.image} alt={exp.title} className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-transparent to-transparent" />
                 <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-2.5 py-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400">Disponible</span>
+                  <span className="text-[10px] text-emerald-400 whitespace-nowrap">Disponible</span>
                 </div>
               </div>
               <div className="p-4">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-tight mb-1">{exp.title}</p>
-                <p className="text-xs text-muted-foreground mb-2">{exp.subtitle}</p>
-                <p className="text-xs text-primary">{exp.price}</p>
+                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-snug mb-1.5">{exp.title}</p>
+                <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{exp.subtitle}</p>
+                <p className="text-xs text-primary whitespace-nowrap">{exp.price}</p>
               </div>
             </Link>
           ))}
         </ScrollRow>
       </section>
 
-      <section className="mb-8">
-        <SectionHeader label="Agenda" title="Événements emblématiques" />
-        <ScrollRow gap={12}>
-          {[
-            { id: "ev-1", title: "Grand Prix de Monaco", date: "25-28 Mai 2027", badge: "Sport & Prestige", badgeColor: "bg-red-500/20 text-red-400 border-red-500/30",
-              image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "ev-2", title: "Festival de Cannes", date: "13-24 Mai 2027", badge: "Culture & Glamour", badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-              image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "ev-3", title: "Nice Jazz Festival", date: "9-15 Juil. 2026", badge: "Musique & Art", badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-              image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "ev-4", title: "Fête du Citron Menton", date: "Fév. 2027", badge: "Tradition", badgeColor: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-              image: "https://images.unsplash.com/photo-1711014778280-4d3a7f58a032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-          ].map((ev) => (
-            <div key={ev.id} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: 220 }}>
-              <div className="relative overflow-hidden" style={{ height: 110 }}>
-                <img src={ev.image} alt={ev.title} className="w-full h-full object-cover opacity-65" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              </div>
-              <div className="p-3">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-tight mb-1">{ev.title}</p>
-                <p className="text-xs text-muted-foreground mb-2">{ev.date}</p>
-                <div className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] border ${ev.badgeColor}`}>{ev.badge}</div>
-                <p className="text-xs text-primary mt-2 hover:underline cursor-pointer">Voir l'événement →</p>
-              </div>
-            </div>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
+      <section className="mb-12">
         <SectionHeader label="Explorer" title="Nos catégories" linkTo="/categories" />
-        <ScrollRow gap={18}>
+        <ScrollRow gap={20}>
           {CATEGORIES.map((cat) => (
-            <Link key={cat.id} to={`/category/${cat.id}`} className="group shrink-0 flex flex-col items-center gap-2" style={{ width: "84px" }}>
+            <Link key={cat.id} to={`/category/${cat.id}`} className="group shrink-0 flex flex-col items-center gap-2.5" style={{ width: "88px" }}>
               <div className="relative rounded-full overflow-hidden" style={{ width: "76px", height: "76px", border: "2px solid oklch(0.74 0.09 80 / 0.45)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.15)" }}>
                 <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
@@ -283,76 +214,38 @@ export function Home() {
                   </div>
                 )}
               </div>
-              <p className="text-center leading-tight" style={{ fontFamily: "var(--font-heading)", fontSize: "0.78rem" }}>{cat.name}</p>
+              <p className="text-center leading-snug" style={{ fontFamily: "var(--font-heading)", fontSize: "0.78rem" }}>{cat.name}</p>
             </Link>
           ))}
         </ScrollRow>
       </section>
 
-      <section className="mb-8">
-        <SectionHeader label="Disponible maintenant" title="Près de vous" />
+      <section className="mb-12">
+        <SectionHeader label="Agenda" title="Événements" />
         <ScrollRow gap={16}>
-          {NEARBY_CITIES.map((city) => (
-            <div key={city.city} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: "230px" }}>
-              <div className="relative overflow-hidden" style={{ height: "100px" }}>
-                <img src={city.image} alt={city.city} className="w-full h-full object-cover opacity-60" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-background/70 backdrop-blur-sm rounded-full px-2 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400">Disponible</span>
-                </div>
-                <div className="absolute bottom-2 left-3">
-                  <div className="flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-primary" />
-                    <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }}>{city.city}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="px-3 py-3 space-y-2">
-                {city.services.map((svc) => {
-                  const Icon = svc.icon;
-                  return (
-                    <button key={svc.label} onClick={() => navigate(`/search?q=${encodeURIComponent(svc.q)}`)} className="w-full flex items-center gap-2.5 py-1.5 hover:opacity-80 transition-opacity text-left">
-                      <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-3 h-3 text-primary" />
-                      </div>
-                      <span className="text-xs text-muted-foreground">{svc.label}</span>
-                      <ChevronRight className="w-3 h-3 text-muted-foreground/40 ml-auto shrink-0" />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Agenda" title="Événements à venir" />
-        <ScrollRow gap={16}>
-          {UPCOMING_EVENTS.map((event) => (
-            <div key={event.id} className="shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: "240px" }}>
-              <div className="relative overflow-hidden" style={{ height: "130px" }}>
+          {ALL_EVENTS.map((event) => (
+            <div key={event.id} className="shrink-0 bg-card border border-border/60 rounded-2xl" style={{ width: "250px" }}>
+              <div className="relative overflow-hidden rounded-t-2xl" style={{ height: 130 }}>
                 <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-70" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <span className={`absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${event.exclusive ? "bg-primary text-primary-foreground" : "bg-background/70 text-foreground"}`}>
+                <div className="absolute inset-0 bg-gradient-to-t from-background/85 to-transparent" />
+                <span className={`absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap ${event.exclusive ? "bg-primary text-primary-foreground" : (event.badgeColor || "bg-background/70 text-foreground")}`}>
                   {event.category}
                 </span>
                 <div className="absolute bottom-3 left-3 right-3">
-                  <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-tight">{event.title}</p>
+                  <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-snug">{event.title}</p>
                 </div>
               </div>
-              <div className="px-4 py-3 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <MapPin className="w-3 h-3 shrink-0" />{event.location}
+              <div className="px-4 py-3 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground leading-relaxed">
+                  <MapPin className="w-3 h-3 shrink-0" /><span>{event.location}</span>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{event.date}</span>
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{event.time}</span>
+                <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+                  <span className="flex items-center gap-1 whitespace-nowrap"><Calendar className="w-3 h-3" />{event.date}</span>
+                  {event.time && <span className="flex items-center gap-1 whitespace-nowrap"><Clock className="w-3 h-3" />{event.time}</span>}
                 </div>
-                <div className="flex items-center justify-between pt-1 border-t border-border/50">
-                  <span className="text-xs text-primary">{event.price}</span>
-                  <span className="text-xs text-muted-foreground">{event.spots} places</span>
+                <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                  <span className="text-xs text-primary whitespace-nowrap">{event.price}</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">{event.spots} places</span>
                 </div>
               </div>
             </div>
@@ -360,23 +253,23 @@ export function Home() {
         </ScrollRow>
       </section>
 
-      <section className="mb-8">
+      <section className="mb-12">
         <SectionHeader label="Recommandés" title="Nos coups de cœur" linkTo="/categories" />
         <ScrollRow gap={16}>
           {featured.map((e) => (
-            <Link key={e.id} to={`/establishment/${e.id}`} className="group shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden" style={{ width: "220px" }}>
-              <div className="relative overflow-hidden" style={{ height: "140px" }}>
+            <Link key={e.id} to={`/establishment/${e.id}`} className="group shrink-0 bg-card border border-border/60 rounded-2xl" style={{ width: "230px" }}>
+              <div className="relative overflow-hidden rounded-t-2xl" style={{ height: 140 }}>
                 <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute top-2 right-2 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded-full">
                   <Star className="w-3 h-3 fill-primary text-primary" />
-                  <span className="text-xs">{e.rating}</span>
+                  <span className="text-xs whitespace-nowrap">{e.rating}</span>
                 </div>
               </div>
               <div className="p-3">
-                <p className="text-xs text-primary mb-0.5 tracking-wider">{e.price}</p>
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="mb-1 leading-tight">{e.name}</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin className="w-3 h-3" />{e.location}
+                <p className="text-xs text-primary mb-1 tracking-wider whitespace-nowrap">{e.price}</p>
+                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="mb-1.5 leading-snug">{e.name}</p>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground leading-relaxed">
+                  <MapPin className="w-3 h-3 shrink-0" /><span>{e.location}</span>
                 </div>
               </div>
             </Link>
