@@ -58,6 +58,14 @@ const CATEGORY_CONFIG: Record<string, {
   },
 };
 
+const KEYWORD_GROUPS: { label: string; match: RegExp }[] = [
+  { label: "Vue mer",       match: /vue (mer|baie|promenade|croisette|monaco)/i },
+  { label: "Terrasse",      match: /terrasse/i },
+  { label: "Menu Prestige", match: /prestige/i },
+  { label: "Vin & Cave",    match: /(vin|cuvée|cave|champagne)/i },
+  { label: "Privatisation", match: /priv(é|atis)/i },
+];
+
 export function CategoryPage() {
   const { categoryId } = useParams();
   const [activeFilter, setActiveFilter] = useState("Tous");
@@ -68,10 +76,10 @@ export function CategoryPage() {
   const filterPills = useMemo(() => {
     const counts: Record<string, number> = {};
     baseList.forEach((e) => {
-      const combined = [...(e.tags || []), ...(e.features || [])];
-      combined.forEach((raw) => {
-        if (!/\d/.test(raw)) {
-          counts[raw] = (counts[raw] || 0) + 1;
+      const combined = [...(e.tags || []), ...(e.features || [])].join(" | ");
+      KEYWORD_GROUPS.forEach(({ label, match }) => {
+        if (match.test(combined)) {
+          counts[label] = (counts[label] || 0) + 1;
         }
       });
     });
@@ -83,12 +91,16 @@ export function CategoryPage() {
     return ["Tous", ...top];
   }, [baseList]);
 
+  const matchesKeyword = (e: typeof baseList[number], label: string) => {
+    const group = KEYWORD_GROUPS.find((g) => g.label === label);
+    if (!group) return false;
+    const combined = [...(e.tags || []), ...(e.features || [])].join(" | ");
+    return group.match.test(combined);
+  };
+
   const list = activeFilter === "Tous"
     ? baseList
-    : baseList.filter((e) => {
-        const combined = [...(e.tags || []), ...(e.features || [])];
-        return combined.includes(activeFilter);
-      });
+    : baseList.filter((e) => matchesKeyword(e, activeFilter));
 
   if (!categoryId || !config) {
     return (
