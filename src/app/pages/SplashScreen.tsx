@@ -39,19 +39,20 @@ export function SplashScreen() {
       {/* ── Contenu ── */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8" style={{ paddingBottom: "10%" }}>
 
-        {/* Logo */}
-        <div style={{
-          opacity: step >= 1 ? 1 : 0,
-          transform: step >= 1 ? "scale(1) translateY(0)" : "scale(0.7) translateY(10px)",
-          transition: "opacity 0.8s ease, transform 0.8s ease",
-          marginBottom: "18px",
-        }}>
-          <ImageWithFallback
-            src={elitewayLogo}
-            alt="EliteWay"
-            className="w-20 h-20 object-contain"
-            style={{ filter: "drop-shadow(0 4px 24px rgba(201,169,110,0.6))" }}
-          />
+               {/* Logo — effet pièce lancée */}
+        <div style={{ perspective: "800px", marginBottom: "18px" }}>
+          <div style={{
+            animation: step >= 1 ? "coinFlip 1.4s cubic-bezier(0.25, 0.8, 0.4, 1) forwards" : "none",
+            opacity: step >= 1 ? undefined : 0,
+            transformStyle: "preserve-3d",
+          }}>
+            <ImageWithFallback
+              src={elitewayLogo}
+              alt="EliteWay"
+              className="w-20 h-20 object-contain"
+              style={{ filter: "drop-shadow(0 4px 24px rgba(201,169,110,0.6))" }}
+            />
+          </div>
         </div>
 
         {/* ELITEWAY */}
