@@ -82,8 +82,9 @@ export function Root() {
                 </div>
 
                 {/* Divider */}
-                <div className="border-t border-border/40 pt-6">
-                  <p className="text-xs text-muted-foreground text-center mb-3">
+                                {/* Divider */}
+                <div className="border-t border-border/40 pt-10 mt-2">
+                  <p className="text-xs text-muted-foreground text-center mb-5">
                     © 2026 EliteWay SAS · Paris, France
                   </p>
                   {/* Legal links */}
