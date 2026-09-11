@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import {
-  Search, ArrowRight, MapPin, Star, Lock, ChevronRight, ChevronDown,
+  Search, ArrowRight, MapPin, Star, Lock, ChevronRight,
   Clock, Calendar, SlidersHorizontal, Crown,
 } from "lucide-react";
 import { establishments } from "../data/establishments";
@@ -19,31 +19,31 @@ const CATEGORIES = [
 ];
 
 const ALL_EVENTS = [
-  { id: "ev-gp",  title: "Grand Prix de Monaco",   location: "Monaco",              date: "25-28 Mai 2027",  price: "€€€€", spots: 6,
+  { id: "ev-gp",  title: "Grand Prix de Monaco",   location: "Monaco",              date: "25-28 Mai 2027",  price: "€€€€", spots: 6,  status: "disponible",
     badgeColor: "bg-red-500/20 text-red-400 border-red-500/30",
     image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Sport & Prestige", exclusive: true },
-  { id: "ev-cannes", title: "Festival de Cannes",  location: "Cannes",              date: "13-24 Mai 2027",  price: "€€€", spots: 10,
+  { id: "ev-cannes", title: "Festival de Cannes",  location: "Cannes",              date: "13-24 Mai 2027",  price: "€€€", spots: 0,  status: "complet",
     badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
     image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Culture & Glamour", exclusive: true },
-  { id: "ev-jazz", title: "Nice Jazz Festival",    location: "Nice",                date: "9-15 Juil. 2026", price: "€€",  spots: 35,
+  { id: "ev-jazz", title: "Nice Jazz Festival",    location: "Nice",                date: "9-15 Juil. 2026", price: "€€",  spots: 35, status: "disponible",
     badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
     image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Musique & Art" },
-  { id: "ev-citron", title: "Fête du Citron",      location: "Menton",              date: "Fév. 2027",       price: "€",   spots: 50,
+  { id: "ev-citron", title: "Fête du Citron",      location: "Menton",              date: "Fév. 2027",       price: "€",   spots: 50, status: "disponible",
     badgeColor: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
     image: "https://images.unsplash.com/photo-1711014778280-4d3a7f58a032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Tradition" },
-  { id: "ev-1", title: "Dîner Secret — Chef",      location: "Nice, Côte d'Azur",   date: "28 Juin 2026", time: "20h00", price: "€€", spots: 8,
+  { id: "ev-1", title: "Dîner Secret — Chef",      location: "Nice, Côte d'Azur",   date: "28 Juin 2026", time: "20h00", price: "€€", spots: 8, status: "disponible",
     image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gastronomie" },
-  { id: "ev-2", title: "Soirée Rooftop Éclat",     location: "Nice, Côte d'Azur",   date: "5 Juil. 2026", time: "21h30", price: "€€", spots: 40,
+  { id: "ev-2", title: "Soirée Rooftop Éclat",     location: "Nice, Côte d'Azur",   date: "5 Juil. 2026", time: "21h30", price: "€€", spots: 0, status: "complet",
     image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Membres", exclusive: true },
-  { id: "ev-3", title: "Croisière Champagne",      location: "Cannes, Côte d'Azur", date: "12 Juil. 2026", time: "17h00", price: "€€", spots: 12,
+  { id: "ev-3", title: "Croisière Champagne",      location: "Cannes, Côte d'Azur", date: "12 Juil. 2026", time: "17h00", price: "€€", spots: 12, status: "disponible",
     image: "https://images.unsplash.com/photo-1574504212584-29a03eb6e41e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Navigation" },
-  { id: "ev-4", title: "Nuits de l'Èze",           location: "Èze, Côte d'Azur",    date: "19 Juil. 2026", time: "21h00", price: "€", spots: 80,
+  { id: "ev-4", title: "Nuits de l'Èze",           location: "Èze, Côte d'Azur",    date: "19 Juil. 2026", time: "21h00", price: "€", spots: 80, status: "disponible",
     image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Événements" },
-  { id: "ev-rg", title: "Roland Garros — Loge VIP", location: "Paris — vol depuis Nice", date: "26 Mai 2026", time: "11h00", price: "€€€€", spots: 4,
+  { id: "ev-rg", title: "Roland Garros — Loge VIP", location: "Paris — vol depuis Nice", date: "26 Mai 2026", time: "11h00", price: "€€€€", spots: 4, status: "disponible",
     image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Exclusif", exclusive: true },
-  { id: "ev-5", title: "Monaco Yacht Show",        location: "Port Hercule, Monaco", date: "24 Sep. 2026", time: "10h00", price: "€€€", spots: 20,
+  { id: "ev-5", title: "Monaco Yacht Show",        location: "Port Hercule, Monaco", date: "24 Sep. 2026", time: "10h00", price: "€€€", spots: 20, status: "disponible",
     image: "https://images.unsplash.com/photo-1563642421748-5047b6585a4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Exclusif", exclusive: true },
-  { id: "ev-6", title: "Gala de la Riviera",       location: "Palais des Festivals, Cannes", date: "15 Nov. 2026", time: "19h30", price: "€€€", spots: 12,
+  { id: "ev-6", title: "Gala de la Riviera",       location: "Palais des Festivals, Cannes", date: "15 Nov. 2026", time: "19h30", price: "€€€", spots: 0, status: "complet",
     image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gala Prestige", exclusive: true },
 ];
 
@@ -65,7 +65,6 @@ function SectionHeader({ label, title, linkTo }: { label: string; title: string;
 
 export function Home() {
   const [query, setQuery] = useState("");
-  const [selectedCity, setSelectedCity] = useState("Nice");
   const navigate = useNavigate();
   const { client } = useClientAuth();
   const featured = establishments.filter((e) => e.category !== "offres-exclusives").slice(0, 5);
@@ -95,31 +94,9 @@ export function Home() {
 
           <div className="absolute inset-x-0" style={{
             bottom: "60px",
-            height: "230px",
+            height: "180px",
             background: "linear-gradient(180deg, transparent 0%, rgba(10,8,6,0.5) 30%, rgba(10,8,6,0.82) 70%, rgba(10,8,6,0.92) 100%)",
           }} />
-
-          <div className="relative">
-            <button
-              onClick={() => {
-                const cities = ["Nice", "Cannes", "Monaco", "Saint-Tropez"];
-                const idx = cities.indexOf(selectedCity);
-                setSelectedCity(cities[(idx + 1) % cities.length]);
-              }}
-              className="flex items-center gap-2 mb-5 px-5 py-2.5 rounded-full transition-colors"
-              style={{
-                border: "1px solid oklch(0.74 0.09 80 / 0.6)",
-                background: "oklch(0.09 0.006 60 / 0.9)",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-              }}
-            >
-              <MapPin className="w-4 h-4 text-primary" />
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem", color: "oklch(0.92 0.09 80)" }}>
-                {selectedCity}
-              </span>
-              <ChevronDown className="w-4 h-4 text-primary" />
-            </button>
-          </div>
 
           <form onSubmit={handleSearch} style={{ width: "90%", maxWidth: "440px" }}>
             <div className="relative">
@@ -226,9 +203,17 @@ export function Home() {
                   <span className="flex items-center gap-1 whitespace-nowrap"><Calendar className="w-3 h-3" />{event.date}</span>
                   {event.time && <span className="flex items-center gap-1 whitespace-nowrap"><Clock className="w-3 h-3" />{event.time}</span>}
                 </div>
+                <div className="flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full ${event.status === "complet" ? "bg-red-500" : "bg-emerald-400 animate-pulse"}`} />
+                  <span className={`text-[10px] ${event.status === "complet" ? "text-red-400" : "text-emerald-400"}`}>
+                    {event.status === "complet" ? "Complet" : "Disponible"}
+                  </span>
+                </div>
                 <div className="flex items-center justify-between pt-2 border-t border-border/50">
                   <span className="text-xs text-primary whitespace-nowrap">{event.price}</span>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">{event.spots} places</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    {event.status === "complet" ? "0 place" : `${event.spots} places`}
+                  </span>
                 </div>
               </div>
             </div>
@@ -236,7 +221,7 @@ export function Home() {
         </ScrollRow>
       </section>
 
-      <section className="mb-12">
+      <section className="mb-16">
         <SectionHeader label="Recommandés" title="Nos coups de cœur" linkTo="/categories" />
         <ScrollRow gap={16}>
           {featured.map((e) => (
@@ -260,13 +245,13 @@ export function Home() {
         </ScrollRow>
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 mt-4 mb-2">
         <Link to="/membership" className="block relative overflow-hidden rounded-2xl bg-card border border-primary/20 p-6">
           <div className="absolute inset-0 opacity-10">
             <img src="https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="relative z-10">
-            <p className="text-xs uppercase tracking-[0.18em] text-primary mb-2">Accès exclusif</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-primary mb-2 pl-0.5">Accès exclusif</p>
             <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem" }} className="mb-2">Rejoindre le Club EliteWay</h3>
             <p className="text-xs text-muted-foreground mb-4 leading-relaxed">Offres membres, conciergerie dédiée et événements privés sur la Côte d'Azur.</p>
             <div className="inline-flex items-center gap-2 text-sm text-primary">
