@@ -70,7 +70,7 @@ const CATEGORIES = [
 
 export function AllCategories() {
   return (
-    <div className="max-w-lg mx-auto pb-28 pt-4">
+       <div className="max-w-lg mx-auto pb-28 pt-4 overflow-x-hidden">
       <div className="px-5 mb-7">
         <p className="text-xs uppercase tracking-[0.2em] text-primary mb-2">Explorer</p>
         <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", lineHeight: 1.1 }} className="mb-2">
@@ -81,12 +81,12 @@ export function AllCategories() {
         </p>
       </div>
 
-      <div className="px-5 grid grid-cols-2 gap-4">
+           <div className="px-5 grid grid-cols-2 gap-4 min-w-0">
         {CATEGORIES.map((cat) => (
-          <Link
+                  <Link
             key={cat.id}
             to={`/category/${cat.id}`}
-            className="group block relative overflow-hidden rounded-2xl bg-card border border-border/60 hover:border-primary/30 transition-all"
+            className="group block relative overflow-hidden rounded-2xl bg-card border border-border/60 hover:border-primary/30 transition-all min-w-0"
           >
             <div className="relative w-full overflow-hidden" style={{ aspectRatio: "1 / 1" }}>
               <img
