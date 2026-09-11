@@ -34,52 +34,66 @@ export function SplashScreen() {
       }} />
 
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8" style={{ paddingBottom: "10%" }}>
-
         {/* Zone du logo qui tourne, puis se sépare */}
         <div className="relative flex items-center justify-center" style={{ height: "70px", marginBottom: "14px", perspective: "800px" }}>
 
           {/* Pièce centrale qui tourne (step 1), disparaît au step 2 */}
-          <img
-            src="/eliteway-ew-logo.png"
-            alt=""
-            className="absolute w-14 h-14 object-contain"
-            style={{
-              opacity: step === 1 ? 1 : 0,
-              animation: step === 1 ? "coinFlip 1.0s cubic-bezier(0.25, 0.8, 0.4, 1) forwards" : "none",
-              transition: step >= 2 ? "opacity 0.25s ease" : "none",
-              transformStyle: "preserve-3d",
-            }}
-          />
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}>
+            <img
+              src="/eliteway-ew-logo.png"
+              alt=""
+              className="object-contain"
+              style={{
+                width: "56px", height: "56px",
+                opacity: step === 1 ? 1 : 0,
+                animation: step === 1 ? "coinFlip 1.0s cubic-bezier(0.25, 0.8, 0.4, 1) forwards" : "none",
+                transition: step >= 2 ? "opacity 0.25s ease" : "none",
+              }}
+            />
+          </div>
 
           {/* Moitié gauche — se sépare vers la gauche du mot */}
-          <img
-            src="/eliteway-ew-logo.png"
-            alt=""
-            className="absolute object-contain"
-            style={{
-              width: "34px", height: "34px",
-              opacity: step >= 2 ? 1 : 0,
-              transform: step >= 2 ? "translateX(-165px)" : "translateX(0)",
-              transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.5s ease",
-              clipPath: "inset(0 50% 0 0)",
-              filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
-            }}
-          />
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: step >= 2 ? "translate(calc(-50% - 165px), -50%)" : "translate(-50%, -50%)",
+            transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1)",
+          }}>
+            <img
+              src="/eliteway-ew-logo.png"
+              alt=""
+              className="object-contain"
+              style={{
+                width: "34px", height: "34px",
+                opacity: step >= 2 ? 1 : 0,
+                transition: "opacity 0.5s ease",
+                clipPath: "inset(0 50% 0 0)",
+                filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
+              }}
+            />
+          </div>
 
           {/* Moitié droite — se sépare vers la droite du mot */}
-          <img
-            src="/eliteway-ew-logo.png"
-            alt=""
-            className="absolute object-contain"
-            style={{
-              width: "34px", height: "34px",
-              opacity: step >= 2 ? 1 : 0,
-              transform: step >= 2 ? "translateX(165px)" : "translateX(0)",
-              transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.5s ease",
-              clipPath: "inset(0 0 0 50%)",
-              filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
-            }}
-          />
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: step >= 2 ? "translate(calc(-50% + 165px), -50%)" : "translate(-50%, -50%)",
+            transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1)",
+          }}>
+            <img
+              src="/eliteway-ew-logo.png"
+              alt=""
+              className="object-contain"
+              style={{
+                width: "34px", height: "34px",
+                opacity: step >= 2 ? 1 : 0,
+                transition: "opacity 0.5s ease",
+                clipPath: "inset(0 0 0 50%)",
+                filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
+              }}
+            />
+          </div>
         </div>
 
         {/* ELITEWAY */}
