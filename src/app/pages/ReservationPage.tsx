@@ -29,7 +29,7 @@ export function ReservationPage() {
   const [selectedTime, setSelectedTime] = useState("");
   const [guests, setGuests] = useState(2);
   const [note, setNote] = useState("");
-  const [step, setStep] = useState(0); // 0=date 1=heure 2=personnes 3=recap
+  const [step, setStep] = useState(0);
 
   const days = getNextDays(14);
 
@@ -61,7 +61,6 @@ export function ReservationPage() {
   return (
     <div className="max-w-sm mx-auto px-5 pb-24 pt-4">
 
-      {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button onClick={goBack} className="w-9 h-9 rounded-xl bg-card border border-border/60 flex items-center justify-center">
           <ArrowLeft className="w-4 h-4" />
@@ -72,7 +71,6 @@ export function ReservationPage() {
         </div>
       </div>
 
-      {/* Step indicator avec icônes */}
       <div className="flex items-center justify-between mb-8 px-1">
         {STEPS.map((s, i) => {
           const Icon = s.icon;
@@ -91,7 +89,6 @@ export function ReservationPage() {
         })}
       </div>
 
-      {/* ── Étape Date ── */}
       {step === 0 && (
         <div>
           <p className="text-sm font-medium mb-4">Sélectionnez une date</p>
@@ -114,7 +111,6 @@ export function ReservationPage() {
         </div>
       )}
 
-      {/* ── Étape Heure ── */}
       {step === 1 && (
         <div>
           <p className="text-sm font-medium mb-4">Sélectionnez une heure</p>
@@ -132,7 +128,6 @@ export function ReservationPage() {
         </div>
       )}
 
-      {/* ── Étape Personnes ── */}
       {step === 2 && (
         <div>
           <p className="text-sm font-medium mb-4">Nombre de personnes</p>
@@ -162,11 +157,10 @@ export function ReservationPage() {
         </div>
       )}
 
-      {/* ── Étape Récapitulatif ── */}
       {step === 3 && (
         <div>
           <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-5">
-            <div className="relative h-28">
+            <div className="relative" style={{ height: 112 }}>
               <img src={establishment.imageUrl} alt="" className="w-full h-full object-cover opacity-60" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
               <div className="absolute bottom-3 left-4">
@@ -210,7 +204,6 @@ export function ReservationPage() {
         </div>
       )}
 
-      {/* CTA — commun à toutes les étapes */}
       <button
         onClick={step === 3
           ? () => navigate(`/establishment/${id}/payment?total=${total}&guests=${guests}&date=${selectedDate?.toISOString()}&time=${selectedTime}`)
