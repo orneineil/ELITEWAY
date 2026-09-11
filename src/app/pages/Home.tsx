@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import {
-  Search, ArrowRight, MapPin, Star, Lock, ChevronRight,
+  Search, ArrowRight, MapPin, Star, Lock, ChevronRight, ChevronDown,
   Clock, Calendar, SlidersHorizontal, Crown, Utensils,
   Sailboat, Sparkles, Plane, CalendarDays, Gift, Trophy, Wind,
 } from "lucide-react";
@@ -168,6 +168,7 @@ function SectionHeader({ label, title, linkTo }: { label: string; title: string;
 // ── Main ──────────────────────────────────────────────────────────────────────
 export function Home() {
   const [query, setQuery] = useState("");
+    const [selectedCity, setSelectedCity] = useState("Nice");
   const navigate = useNavigate();
   const { client } = useClientAuth();
   const featured = establishments.filter((e) => e.category !== "offres-exclusives").slice(0, 5);
@@ -245,7 +246,25 @@ export function Home() {
               style={{ filter: "drop-shadow(0 6px 24px rgba(201,169,110,0.55)) drop-shadow(0 2px 8px rgba(0,0,0,0.6))" }}
             />
           </div>
-
+          {/* Sélecteur de ville */}
+          <button
+            onClick={() => {
+              const cities = ["Nice", "Cannes", "Monaco", "Saint-Tropez"];
+              const idx = cities.indexOf(selectedCity);
+              setSelectedCity(cities[(idx + 1) % cities.length]);
+            }}
+            className="flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full transition-colors"
+            style={{
+              border: "1px solid oklch(0.74 0.09 80 / 0.35)",
+              background: "oklch(0.12 0.006 62 / 0.6)",
+            }}
+          >
+            <MapPin className="w-3 h-3 text-primary" />
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: "0.85rem", color: "oklch(0.85 0.09 80)" }}>
+              {selectedCity}
+            </span>
+            <ChevronDown className="w-3 h-3 text-primary" />
+          </button>
           {/* Eyebrow */}
           <p
             className="text-center uppercase mb-4"
