@@ -393,6 +393,45 @@ export function Home() {
 
       </div>
 
+        {/* ── BANDEAU DÉCOUVRIR ─────────────────────────────────────────────── */}
+      <section className="px-5 mb-8">
+        <div className="relative overflow-hidden rounded-2xl" style={{ height: "170px" }}>
+          <img
+            src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900"
+            alt="Découvrir EliteWay"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: "brightness(0.55)" }}
+          />
+          <div className="absolute inset-0" style={{
+            background: "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.25) 70%, transparent 100%)",
+          }} />
+          <div className="relative z-10 h-full flex flex-col justify-center px-6" style={{ maxWidth: "70%" }}>
+            <p style={{
+              fontFamily: "var(--font-heading)",
+              fontSize: "1.3rem",
+              lineHeight: 1.25,
+              color: "#ffffff",
+              marginBottom: "14px",
+              textShadow: "0 2px 12px rgba(0,0,0,0.6)",
+            }}>
+              Des expériences d'exception à portée de main
+            </p>
+            <button
+              onClick={() => navigate("/categories")}
+              className="self-start px-5 py-2 rounded-full transition-transform active:scale-95"
+              style={{
+                background: "oklch(0.74 0.09 80)",
+                color: "oklch(0.10 0.006 60)",
+                fontFamily: "var(--font-heading)",
+                fontSize: "0.85rem",
+                boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.35)",
+              }}
+            >
+              Découvrir
+            </button>
+          </div>
+        </div>
+      </section>
       {/* ── QUICK CATEGORIES ──────────────────────────────────────────────── */}
       <section className="px-5 mb-6">
         {/* ── Hélico / Jet / Yacht — trio premium gold ── */}
