@@ -65,13 +65,18 @@ export function CategoryPage() {
   const config = categoryId ? CATEGORY_CONFIG[categoryId] : null;
   const baseList = establishments.filter((e) => e.category === categoryId);
 
-  // ── Construit des pilules de filtre à partir des tags/features réels ──
   const filterPills = useMemo(() => {
     const counts: Record<string, number> = {};
     baseList.forEach((e) => {
-      (e.tags || []).forEach((t) => { counts[t] = (counts[t] || 0) + 1; });
+      const combined = [...(e.tags || []), ...(e.features || [])];
+      combined.forEach((raw) => {
+        if (!/\d/.test(raw)) {
+          counts[raw] = (counts[raw] || 0) + 1;
+        }
+      });
     });
     const top = Object.entries(counts)
+      .filter(([, count]) => count > 1)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 4)
       .map(([t]) => t);
@@ -80,7 +85,10 @@ export function CategoryPage() {
 
   const list = activeFilter === "Tous"
     ? baseList
-    : baseList.filter((e) => (e.tags || []).includes(activeFilter));
+    : baseList.filter((e) => {
+        const combined = [...(e.tags || []), ...(e.features || [])];
+        return combined.includes(activeFilter);
+      });
 
   if (!categoryId || !config) {
     return (
@@ -140,7 +148,6 @@ export function CategoryPage() {
         )}
       </div>
 
-      {/* ── Filtres en pilules ────────────────────────────────────────── */}
       <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 py-4">
         {filterPills.map((pill) => (
           <button
