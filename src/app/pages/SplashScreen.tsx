@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import elitewayLogo from "@/imports/eliteway-logo-1000x1000.png";
-import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 import { ArrowRight } from "lucide-react";
 
 export function SplashScreen() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  // 0=hidden 1=logo 2=écriture ELITEWAY 3=slogan 4=boutons
+  // 0=hidden 1=piece tourne 2=écriture + séparation 3=slogan 4=boutons
 
   useEffect(() => {
     const t1 = setTimeout(() => setStep(1), 400);
-    const t2 = setTimeout(() => setStep(2), 1100);
-    const t3 = setTimeout(() => setStep(3), 3000);
-    const t4 = setTimeout(() => setStep(4), 3700);
+    const t2 = setTimeout(() => setStep(2), 1400);
+    const t3 = setTimeout(() => setStep(3), 3300);
+    const t4 = setTimeout(() => setStep(4), 4000);
     return () => [t1, t2, t3, t4].forEach(clearTimeout);
   }, []);
 
@@ -31,28 +29,57 @@ export function SplashScreen() {
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#0d0b09" }}>
 
-      {/* Halo doré */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 60% 40% at 50% 28%, oklch(0.74 0.09 80 / 0.14) 0%, transparent 70%)",
+        background: "radial-gradient(ellipse 60% 40% at 50% 40%, oklch(0.74 0.09 80 / 0.14) 0%, transparent 70%)",
       }} />
 
-      {/* ── Contenu ── */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8" style={{ paddingBottom: "10%" }}>
 
-               {/* Logo — effet pièce lancée */}
-        <div style={{ perspective: "800px", marginBottom: "18px" }}>
-          <div style={{
-            animation: step >= 1 ? "coinFlip 1.4s cubic-bezier(0.25, 0.8, 0.4, 1) forwards" : "none",
-            opacity: step >= 1 ? undefined : 0,
-            transformStyle: "preserve-3d",
-          }}>
-            <ImageWithFallback
-              src={elitewayLogo}
-              alt="EliteWay"
-              className="w-20 h-20 object-contain"
-              style={{ filter: "drop-shadow(0 4px 24px rgba(201,169,110,0.6))" }}
-            />
-          </div>
+        {/* Zone du logo qui tourne, puis se sépare */}
+        <div className="relative flex items-center justify-center" style={{ height: "70px", marginBottom: "14px", perspective: "800px" }}>
+
+          {/* Pièce centrale qui tourne (step 1), disparaît au step 2 */}
+          <img
+            src="/eliteway-ew-logo.png"
+            alt=""
+            className="absolute w-14 h-14 object-contain"
+            style={{
+              opacity: step === 1 ? 1 : 0,
+              animation: step === 1 ? "coinFlip 1.0s cubic-bezier(0.25, 0.8, 0.4, 1) forwards" : "none",
+              transition: step >= 2 ? "opacity 0.25s ease" : "none",
+              transformStyle: "preserve-3d",
+            }}
+          />
+
+          {/* Moitié gauche — se sépare vers la gauche du mot */}
+          <img
+            src="/eliteway-ew-logo.png"
+            alt=""
+            className="absolute object-contain"
+            style={{
+              width: "34px", height: "34px",
+              opacity: step >= 2 ? 1 : 0,
+              transform: step >= 2 ? "translateX(-165px)" : "translateX(0)",
+              transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.5s ease",
+              clipPath: "inset(0 50% 0 0)",
+              filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
+            }}
+          />
+
+          {/* Moitié droite — se sépare vers la droite du mot */}
+          <img
+            src="/eliteway-ew-logo.png"
+            alt=""
+            className="absolute object-contain"
+            style={{
+              width: "34px", height: "34px",
+              opacity: step >= 2 ? 1 : 0,
+              transform: step >= 2 ? "translateX(165px)" : "translateX(0)",
+              transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.5s ease",
+              clipPath: "inset(0 0 0 50%)",
+              filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
+            }}
+          />
         </div>
 
         {/* ELITEWAY */}
@@ -76,7 +103,7 @@ export function SplashScreen() {
           ELITEWAY
         </p>
 
-        {/* Tagline / slogan — apparaît après l'écriture */}
+        {/* Slogan */}
         <p style={{
           fontFamily: "var(--font-body)",
           fontSize: "0.62rem",
@@ -90,7 +117,6 @@ export function SplashScreen() {
           Elevating Everyday Living
         </p>
 
-        {/* Ligne dorée */}
         <div style={{
           width: step >= 3 ? "56px" : "0px",
           height: "1px",
@@ -101,7 +127,6 @@ export function SplashScreen() {
         }} />
       </div>
 
-      {/* ── Boutons ── */}
       <div className="relative z-10 px-6" style={{
         paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 28px)",
         opacity: step >= 4 ? 1 : 0,
