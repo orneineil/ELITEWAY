@@ -100,14 +100,14 @@ export function AllCategories() {
                   <Gift className="w-3 h-3 text-primary-foreground" />
                 </div>
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-3">
+                            <div className="absolute bottom-0 left-0 right-0 p-3 overflow-hidden">
                 <p className="text-[9px] uppercase tracking-[0.15em] text-primary mb-1">{cat.subtitle}</p>
                 <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="leading-tight mb-1">
                   {cat.name}
                 </p>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-muted-foreground">{cat.count} exp.</span>
-                  <span className="text-[10px] text-primary">{cat.priceFrom}</span>
+                                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] text-muted-foreground whitespace-nowrap">{cat.count} exp.</span>
+                  <span className="text-[10px] text-primary whitespace-nowrap">{cat.priceFrom}</span>
                 </div>
               </div>
             </div>
