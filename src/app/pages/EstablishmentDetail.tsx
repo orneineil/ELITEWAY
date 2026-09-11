@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { establishments } from "../data/establishments";
 import { useFavorites } from "../contexts/FavoritesContext";
 import {
-  ArrowLeft, Heart, MapPin, Star, Clock, Car, Shirt,
-  ChevronLeft, ChevronRight, Users,
+  ArrowLeft, Heart, MapPin, Star,
+  ChevronLeft, ChevronRight,
 } from "lucide-react";
 
 function StarRating({ rating, size = 14 }: { rating: number; size?: number }) {
@@ -36,16 +36,15 @@ function EstablishmentMap({
   const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-border/60 relative" style={{ height: 200 }}>
+    <div className="rounded-2xl overflow-hidden border border-border/60 relative" style={{ height: 160 }}>
       <iframe
         title={`Carte ${name}`}
         src={src}
         width="100%"
-        height="200"
+        height="160"
         style={{ border: 0, display: "block" }}
         loading="lazy"
       />
-      {/* Overlay for address */}
       {address && (
         <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-background/80 backdrop-blur-sm">
           <p className="text-xs text-muted-foreground truncate">📍 {address}</p>
@@ -61,6 +60,7 @@ export function EstablishmentDetail() {
   const establishment = establishments.find((e) => e.id === id);
   const { isFavorite, toggleFavorite } = useFavorites();
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -101,16 +101,16 @@ export function EstablishmentDetail() {
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : establishment.rating;
 
-  const ratingCounts = [5, 4, 3, 2, 1].map((star) => ({
-    star,
-    count: reviews.filter((r) => r.rating === star).length,
-  }));
+  const description = establishment.longDescription;
+  const shortDescription = description.length > 160 && !showFullDescription
+    ? description.slice(0, 160).trim() + "…"
+    : description;
 
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      {/* 1. GALLERY */}
-      <div className="relative" style={{ height: 280 }}>
+      {/* GALLERY */}
+      <div className="relative" style={{ height: 300 }}>
         <img
           src={galleryImages[galleryIndex]}
           alt={establishment.name}
@@ -170,9 +170,9 @@ export function EstablishmentDetail() {
         )}
       </div>
 
-      <div className="px-5 pt-5 space-y-5">
+      <div className="px-5 pt-5 space-y-6">
 
-        {/* 2. INFOS PRINCIPALES */}
+        {/* INFOS PRINCIPALES */}
         <div>
           <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }} className="leading-tight mb-2">
             {establishment.name}
@@ -199,7 +199,22 @@ export function EstablishmentDetail() {
           )}
         </div>
 
-        {/* 3. PRIX & RÉSERVATION */}
+        {/* DESCRIPTION (courte, extensible) */}
+        <div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {shortDescription}
+            {description.length > 160 && (
+              <button
+                onClick={() => setShowFullDescription((v) => !v)}
+                className="text-primary ml-1 hover:underline"
+              >
+                {showFullDescription ? "Voir moins" : "Voir plus"}
+              </button>
+            )}
+          </p>
+        </div>
+
+        {/* PRIX & RÉSERVATION */}
         <div className="bg-card border border-border/60 rounded-2xl p-4">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -214,12 +229,6 @@ export function EstablishmentDetail() {
                 </p>
               )}
             </div>
-            {establishment.capacity && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Users className="w-3.5 h-3.5" />
-                {establishment.capacity}
-              </div>
-            )}
           </div>
           <Link
             to={`/establishment/${establishment.id}/reserve`}
@@ -229,157 +238,41 @@ export function EstablishmentDetail() {
           </Link>
         </div>
 
-        {/* 4. DESCRIPTION */}
-        <div className="bg-card border border-border/60 rounded-2xl p-4">
-          <p className="text-sm text-muted-foreground leading-relaxed">{establishment.longDescription}</p>
-        </div>
-
-        {/* 5. POURQUOI ELITEWAY RECOMMANDE */}
-        {establishment.whyEliteWay && (
-          <div className="border border-primary/20 rounded-2xl p-4 bg-primary/5">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 mt-0.5">
-                <Star className="w-4 h-4 fill-primary text-primary" />
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-wider text-primary mb-1.5">Pourquoi EliteWay recommande</p>
-                <p className="text-sm leading-relaxed">{establishment.whyEliteWay}</p>
-              </div>
-            </div>
-          </div>
+        {/* CARTE INTERACTIVE */}
+        {establishment.mapCoords && (
+          <EstablishmentMap
+            coords={establishment.mapCoords}
+            name={establishment.name}
+            address={establishment.address}
+          />
         )}
 
-        {/* 6. INFOS PRATIQUES */}
-        {(establishment.hours || establishment.address || establishment.parking || establishment.dressCode) && (
-          <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Infos pratiques</p>
-            <div className="grid grid-cols-2 gap-3">
-              {establishment.hours && (
-                <div className="bg-card border border-border/60 rounded-2xl p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Clock className="w-4 h-4 text-primary shrink-0" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Horaires</span>
-                  </div>
-                  <p className="text-xs font-medium">{establishment.hours.days}</p>
-                  <p className="text-xs text-muted-foreground">{establishment.hours.open} – {establishment.hours.close}</p>
-                  {establishment.hours.note && (
-                    <p className="text-[10px] text-muted-foreground/70 mt-1">{establishment.hours.note}</p>
-                  )}
-                </div>
-              )}
-              {establishment.address && (
-                <div className="bg-card border border-border/60 rounded-2xl p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <MapPin className="w-4 h-4 text-primary shrink-0" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Adresse</span>
-                  </div>
-                  <p className="text-xs leading-relaxed">{establishment.address}</p>
-                </div>
-              )}
-              {establishment.parking && (
-                <div className="bg-card border border-border/60 rounded-2xl p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Car className="w-4 h-4 text-primary shrink-0" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Parking</span>
-                  </div>
-                  <p className="text-xs leading-relaxed">{establishment.parking}</p>
-                </div>
-              )}
-              {establishment.dressCode && (
-                <div className="bg-card border border-border/60 rounded-2xl p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Shirt className="w-4 h-4 text-primary shrink-0" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Dress code</span>
-                  </div>
-                  <p className="text-xs leading-relaxed">{establishment.dressCode}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* 7. FEATURES */}
-        {establishment.features.length > 0 && (
-          <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Prestations</p>
-            <div className="flex flex-wrap gap-2">
-              {establishment.features.map((feature) => (
-                <span key={feature} className="px-3 py-1.5 rounded-xl text-xs bg-card border border-border/60">
-                  {feature}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 8. AVIS CLIENTS */}
+        {/* AVIS — condensé */}
         {reviews.length > 0 && (
           <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Avis clients</p>
-            <div className="bg-card border border-border/60 rounded-2xl p-4 mb-4">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="text-center">
-                  <p style={{ fontFamily: "var(--font-heading)", fontSize: "2.5rem" }} className="text-primary leading-none">
-                    {avgRating.toFixed(1)}
-                  </p>
-                  <StarRating rating={avgRating} />
-                  <p className="text-xs text-muted-foreground mt-1">{reviews.length} avis</p>
-                </div>
-                <div className="flex-1 space-y-1.5">
-                  {ratingCounts.map(({ star, count }) => (
-                    <div key={star} className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground w-3">{star}</span>
-                      <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary rounded-full"
-                          style={{ width: reviews.length ? `${(count / reviews.length) * 100}%` : "0%" }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            <div className="flex items-center gap-3 mb-4">
+              <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }} className="text-primary leading-none">
+                {avgRating.toFixed(1)}
+              </p>
+              <div>
+                <StarRating rating={avgRating} />
+                <p className="text-xs text-muted-foreground mt-0.5">{reviews.length} avis</p>
               </div>
             </div>
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <div key={review.id} className="bg-card border border-border/60 rounded-2xl p-4">
-                  <div className="flex items-start gap-3 mb-3">
-                    <img src={review.avatar} alt={review.author} className="w-9 h-9 rounded-xl object-cover shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium leading-tight">{review.author}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <StarRating rating={review.rating} size={11} />
-                        <span className="text-xs text-muted-foreground">{review.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">{review.comment}</p>
-                  {review.photos && review.photos.length > 0 && (
-                    <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                      {review.photos.map((photo, idx) => (
-                        <img key={idx} src={photo} alt="" className="w-16 h-16 rounded-xl object-cover shrink-0" />
-                      ))}
-                    </div>
-                  )}
+            <div className="bg-card border border-border/60 rounded-2xl p-4">
+              <div className="flex items-start gap-3 mb-2">
+                <img src={reviews[0].avatar} alt={reviews[0].author} className="w-9 h-9 rounded-xl object-cover shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-tight">{reviews[0].author}</p>
+                  <StarRating rating={reviews[0].rating} size={11} />
                 </div>
-              ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">{reviews[0].comment}</p>
             </div>
           </div>
         )}
 
-        {/* 9. CARTE INTERACTIVE */}
-        {establishment.mapCoords && (
-          <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Localisation</p>
-            <EstablishmentMap
-              coords={establishment.mapCoords}
-              name={establishment.name}
-              address={establishment.address}
-            />
-          </div>
-        )}
-
-        {/* 10. ÉTABLISSEMENTS SIMILAIRES */}
+        {/* ÉTABLISSEMENTS SIMILAIRES */}
         {similar.length > 0 && (
           <div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Vous aimerez aussi</p>
