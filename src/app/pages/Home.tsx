@@ -8,8 +8,6 @@ import {
 import { establishments } from "../data/establishments";
 import { useClientAuth } from "../contexts/ClientAuthContext";
 import { ScrollRow } from "../components/ScrollRow";
-import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
-import elitewayLogo from "@/imports/eliteway-logo-1000x1000.png";
 
 const QUICK_CATS = [
   { id: "heli",           name: "Hélicoptère",  icon: Wind,         link: "/establishment/heli-prestige",  highlight: true },
@@ -130,39 +128,13 @@ export function Home() {
             style={{
               backgroundImage: "url('/ChatGPT%20Image%2011%20sept.%202026%2C%2003_27_42.png')",
               animation: "heroZoom1 22s ease-in-out infinite alternate",
+              filter: "brightness(1.35) contrast(1.05) saturate(1.1)",
             }}
           />
         </div>
 
-        <div className="absolute inset-0" style={{ zIndex: 1, background: "rgba(0,0,0,0.52)" }} />
-        <div className="absolute inset-0" style={{ zIndex: 1, background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.75) 100%)" }} />
+        <div className="absolute inset-0 flex flex-col items-center justify-end px-5" style={{ paddingBottom: "160px", zIndex: 2 }}>
 
-        <div className="absolute top-4 left-5 flex items-center gap-2" style={{ paddingTop: "env(safe-area-inset-top, 0px)", zIndex: 2 }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shrink-0" />
-          <span className="text-[10px] uppercase tracking-[0.22em]" style={{ color: "oklch(0.74 0.09 80 / 0.9)" }}>
-            Expériences d'exception
-          </span>
-        </div>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-5" style={{ paddingBottom: "160px", zIndex: 2 }}>
-          <div className="mb-5 flex flex-col items-center relative">
-            <div className="absolute inset-0 rounded-full pointer-events-none" style={{
-              background: "radial-gradient(ellipse 80% 80% at 50% 50%, oklch(0.74 0.09 80 / 0.28) 0%, transparent 70%)",
-              animation: "logoPulse 3s ease-in-out infinite",
-              transform: "scale(1.8)",
-            }} />
-            <div className="absolute rounded-full border border-primary/30 pointer-events-none" style={{
-              width: "112px", height: "112px",
-              animation: "logoRing 8s linear infinite",
-              boxShadow: "0 0 20px oklch(0.74 0.09 80 / 0.2)",
-            }} />
-            <ImageWithFallback
-              src={elitewayLogo}
-              alt="EliteWay"
-              className="w-24 h-24 object-contain relative z-10"
-              style={{ filter: "drop-shadow(0 6px 24px rgba(201,169,110,0.55)) drop-shadow(0 2px 8px rgba(0,0,0,0.6))" }}
-            />
-          </div>
           <button
             onClick={() => {
               const cities = ["Nice", "Cannes", "Monaco", "Saint-Tropez"];
@@ -178,22 +150,15 @@ export function Home() {
             </span>
             <ChevronDown className="w-3 h-3 text-primary" />
           </button>
-          <p className="text-center uppercase mb-4" style={{
+
+          <p className="text-center uppercase mb-3" style={{
             fontFamily: "var(--font-body)", fontSize: "0.65rem", letterSpacing: "0.28em",
             color: "oklch(0.85 0.09 80)", textShadow: "0 2px 12px rgba(0,0,0,0.8)",
           }}>
             La mer · Le luxe · La liberté
           </p>
 
-          <h1 className="text-center text-white mb-3" style={{
-            fontFamily: "var(--font-heading)", fontSize: "clamp(2.8rem, 11vw, 4rem)", lineHeight: 1.0,
-            letterSpacing: "-0.02em", fontWeight: 400,
-            textShadow: "0 4px 40px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.8)",
-          }}>
-            L'exception,<br />à portée de main
-          </h1>
-
-          <p className="text-center mb-8" style={{
+          <p className="text-center mb-5" style={{
             fontSize: "0.8rem", letterSpacing: "0.06em", color: "rgba(255,255,255,0.85)",
             textShadow: "0 2px 12px rgba(0,0,0,0.8)",
           }}>
@@ -223,19 +188,6 @@ export function Home() {
               </div>
             </div>
           </form>
-
-          <div className="flex gap-2 mt-4 overflow-x-auto no-scrollbar justify-center">
-            {["Cannes", "Nice", "Monaco", "Yacht", "Spa", "Hélico"].map((tag) => (
-              <button
-                key={tag}
-                onClick={() => navigate(`/search?q=${tag}`)}
-                className="shrink-0 px-3.5 py-1.5 text-xs rounded-full transition-colors hover:text-primary"
-                style={{ background: "oklch(0.12 0.006 62 / 0.75)", border: "1px solid oklch(0.28 0.008 65 / 0.55)", backdropFilter: "blur(10px)", color: "oklch(0.58 0.01 60)" }}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="absolute bottom-6 left-0 right-0 px-5">
