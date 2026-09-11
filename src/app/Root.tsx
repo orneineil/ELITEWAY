@@ -21,11 +21,11 @@ export function Root() {
             </main>
 
             {/* ── Footer ─────────────────────────────────────────────── */}
-            <footer className="border-t border-border/40 pt-12 pb-32 mt-16">
+            <footer className="border-t border-border/40 pt-12 pb-32 mt-24">
               <div className="max-w-lg mx-auto px-5">
 
                 {/* Logo + tagline */}
-                            <div className="flex flex-col items-center text-center mb-16">
+                <div className="flex flex-col items-center text-center mb-16">
                   <LogoFull markSize={40} className="mb-3" />
                   <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
                     La plateforme des expériences haut de gamme — gastronomie, navigation,
