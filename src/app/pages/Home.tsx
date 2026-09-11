@@ -18,7 +18,6 @@ const CATEGORIES = [
   { id: "offres-exclusives", name: "Exclusif",        image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", badge: true },
 ];
 
-// ── Tous les événements regroupés en une seule liste ──────────────────────────
 const ALL_EVENTS = [
   { id: "ev-gp",  title: "Grand Prix de Monaco",   location: "Monaco",              date: "25-28 Mai 2027",  price: "€€€€", spots: 6,
     badgeColor: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -96,9 +95,8 @@ export function Home() {
 
           <div className="absolute inset-x-0" style={{
             bottom: "60px",
-            height: "290px",
-            background: "linear-gradient(180deg, transparent 0%, rgba(10,8,6,0.35) 20%, rgba(10,8,6,0.7) 60%, rgba(10,8,6,0.85) 100%)",
-            backdropFilter: "blur(2px)",
+            height: "230px",
+            background: "linear-gradient(180deg, transparent 0%, rgba(10,8,6,0.5) 30%, rgba(10,8,6,0.82) 70%, rgba(10,8,6,0.92) 100%)",
           }} />
 
           <div className="relative">
@@ -108,36 +106,20 @@ export function Home() {
                 const idx = cities.indexOf(selectedCity);
                 setSelectedCity(cities[(idx + 1) % cities.length]);
               }}
-              className="flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full transition-colors"
+              className="flex items-center gap-2 mb-5 px-5 py-2.5 rounded-full transition-colors"
               style={{
-                border: "1px solid oklch(0.74 0.09 80 / 0.55)",
-                background: "oklch(0.09 0.006 60 / 0.85)",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
+                border: "1px solid oklch(0.74 0.09 80 / 0.6)",
+                background: "oklch(0.09 0.006 60 / 0.9)",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
               }}
             >
-              <MapPin className="w-3 h-3 text-primary" />
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: "0.85rem", color: "oklch(0.90 0.09 80)" }}>
+              <MapPin className="w-4 h-4 text-primary" />
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem", color: "oklch(0.92 0.09 80)" }}>
                 {selectedCity}
               </span>
-              <ChevronDown className="w-3 h-3 text-primary" />
+              <ChevronDown className="w-4 h-4 text-primary" />
             </button>
           </div>
-
-          <p className="text-center uppercase mb-3" style={{
-            fontFamily: "var(--font-body)", fontSize: "0.68rem", letterSpacing: "0.28em",
-            color: "oklch(0.92 0.09 80)", textShadow: "0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)",
-            fontWeight: 600,
-          }}>
-            La mer · Le luxe · La liberté
-          </p>
-
-          <p className="text-center mb-5" style={{
-            fontSize: "0.85rem", letterSpacing: "0.06em", color: "#ffffff",
-            textShadow: "0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)",
-            fontWeight: 500,
-          }}>
-            {client ? `Bonjour ${client.firstName} · ` : ""}Gastronomie · Yachts · Bien-être · Aviation
-          </p>
 
           <form onSubmit={handleSearch} style={{ width: "90%", maxWidth: "440px" }}>
             <div className="relative">
@@ -146,18 +128,19 @@ export function Home() {
                 boxShadow: "0 0 30px oklch(0.74 0.09 80 / 0.35)", borderRadius: "18px",
               }} />
               <div className="relative flex items-center rounded-2xl overflow-hidden" style={{
-                background: "oklch(0.08 0.005 60 / 0.97)",
-                backdropFilter: "blur(16px)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+                background: "oklch(0.07 0.005 60 / 0.98)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.55)",
               }}>
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none" />
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "oklch(0.74 0.09 80 / 0.25)" }}>
+                  <Search className="w-4 h-4 text-primary" />
+                </div>
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Expérience, ville, catégorie…"
                   style={{ minHeight: "58px", fontFamily: "var(--font-body)", fontSize: "0.9rem" }}
-                  className="w-full pl-12 pr-14 py-3 bg-transparent focus:outline-none placeholder:text-muted-foreground/60 text-foreground"
+                  className="w-full pl-14 pr-14 py-3 bg-transparent focus:outline-none placeholder:text-muted-foreground/60 text-foreground"
                 />
                 <button type="submit" className="absolute right-2.5 w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity"
                   style={{ background: "oklch(0.74 0.09 80)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.5)" }}>
