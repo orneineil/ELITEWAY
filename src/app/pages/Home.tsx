@@ -135,32 +135,48 @@ export function Home() {
 
         <div className="absolute inset-0 flex flex-col items-center justify-end px-5" style={{ paddingBottom: "160px", zIndex: 2 }}>
 
-          <button
-            onClick={() => {
-              const cities = ["Nice", "Cannes", "Monaco", "Saint-Tropez"];
-              const idx = cities.indexOf(selectedCity);
-              setSelectedCity(cities[(idx + 1) % cities.length]);
-            }}
-            className="flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full transition-colors"
-            style={{ border: "1px solid oklch(0.74 0.09 80 / 0.35)", background: "oklch(0.12 0.006 62 / 0.6)" }}
-          >
-            <MapPin className="w-3 h-3 text-primary" />
-            <span style={{ fontFamily: "var(--font-heading)", fontSize: "0.85rem", color: "oklch(0.85 0.09 80)" }}>
-              {selectedCity}
-            </span>
-            <ChevronDown className="w-3 h-3 text-primary" />
-          </button>
+          {/* Panneau sombre translucide derrière tout le bloc texte + recherche */}
+          <div className="absolute inset-x-0" style={{
+            bottom: "160px",
+            height: "290px",
+            background: "linear-gradient(180deg, transparent 0%, rgba(10,8,6,0.35) 20%, rgba(10,8,6,0.7) 60%, rgba(10,8,6,0.85) 100%)",
+            backdropFilter: "blur(2px)",
+          }} />
+
+          <div className="relative">
+            <button
+              onClick={() => {
+                const cities = ["Nice", "Cannes", "Monaco", "Saint-Tropez"];
+                const idx = cities.indexOf(selectedCity);
+                setSelectedCity(cities[(idx + 1) % cities.length]);
+              }}
+              className="flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full transition-colors"
+              style={{
+                border: "1px solid oklch(0.74 0.09 80 / 0.55)",
+                background: "oklch(0.09 0.006 60 / 0.85)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
+              }}
+            >
+              <MapPin className="w-3 h-3 text-primary" />
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: "0.85rem", color: "oklch(0.90 0.09 80)" }}>
+                {selectedCity}
+              </span>
+              <ChevronDown className="w-3 h-3 text-primary" />
+            </button>
+          </div>
 
           <p className="text-center uppercase mb-3" style={{
-            fontFamily: "var(--font-body)", fontSize: "0.65rem", letterSpacing: "0.28em",
-            color: "oklch(0.85 0.09 80)", textShadow: "0 2px 12px rgba(0,0,0,0.8)",
+            fontFamily: "var(--font-body)", fontSize: "0.68rem", letterSpacing: "0.28em",
+            color: "oklch(0.92 0.09 80)", textShadow: "0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)",
+            fontWeight: 600,
           }}>
             La mer · Le luxe · La liberté
           </p>
 
           <p className="text-center mb-5" style={{
-            fontSize: "0.8rem", letterSpacing: "0.06em", color: "rgba(255,255,255,0.85)",
-            textShadow: "0 2px 12px rgba(0,0,0,0.8)",
+            fontSize: "0.85rem", letterSpacing: "0.06em", color: "#ffffff",
+            textShadow: "0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)",
+            fontWeight: 500,
           }}>
             {client ? `Bonjour ${client.firstName} · ` : ""}Gastronomie · Yachts · Bien-être · Aviation
           </p>
@@ -168,10 +184,14 @@ export function Home() {
           <form onSubmit={handleSearch} style={{ width: "90%", maxWidth: "440px" }}>
             <div className="relative">
               <div className="absolute -inset-[2px] rounded-[18px] pointer-events-none" style={{
-                background: "linear-gradient(135deg, oklch(0.74 0.09 80 / 0.7), oklch(0.74 0.09 80 / 0.15))",
-                boxShadow: "0 0 30px oklch(0.74 0.09 80 / 0.25)", borderRadius: "18px",
+                background: "linear-gradient(135deg, oklch(0.74 0.09 80 / 0.9), oklch(0.74 0.09 80 / 0.25))",
+                boxShadow: "0 0 30px oklch(0.74 0.09 80 / 0.35)", borderRadius: "18px",
               }} />
-              <div className="relative flex items-center rounded-2xl overflow-hidden shadow-2xl" style={{ background: "oklch(0.11 0.006 62 / 0.92)", backdropFilter: "blur(16px)" }}>
+              <div className="relative flex items-center rounded-2xl overflow-hidden" style={{
+                background: "oklch(0.08 0.005 60 / 0.97)",
+                backdropFilter: "blur(16px)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              }}>
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none" />
                 <input
                   type="text"
@@ -179,10 +199,10 @@ export function Home() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Expérience, ville, catégorie…"
                   style={{ minHeight: "58px", fontFamily: "var(--font-body)", fontSize: "0.9rem" }}
-                  className="w-full pl-12 pr-14 py-3 bg-transparent focus:outline-none placeholder:text-muted-foreground/50 text-foreground"
+                  className="w-full pl-12 pr-14 py-3 bg-transparent focus:outline-none placeholder:text-muted-foreground/60 text-foreground"
                 />
                 <button type="submit" className="absolute right-2.5 w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity"
-                  style={{ background: "oklch(0.74 0.09 80)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.4)" }}>
+                  style={{ background: "oklch(0.74 0.09 80)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.5)" }}>
                   <SlidersHorizontal className="w-4 h-4" style={{ color: "oklch(0.08 0.005 60)" }} />
                 </button>
               </div>
@@ -200,15 +220,15 @@ export function Home() {
             ].map(({ icon: Icon, label, to, gold }) => (
               <Link key={to} to={to} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl transition-all active:scale-95"
                 style={{
-                  background: gold ? "oklch(0.74 0.09 80 / 0.15)" : "oklch(0.10 0.006 62 / 0.80)",
-                  border: gold ? "1px solid oklch(0.74 0.09 80 / 0.55)" : "1px solid oklch(0.28 0.008 65 / 0.45)",
+                  background: gold ? "oklch(0.10 0.006 62 / 0.88)" : "oklch(0.08 0.006 62 / 0.90)",
+                  border: gold ? "1px solid oklch(0.74 0.09 80 / 0.7)" : "1px solid oklch(0.40 0.02 65 / 0.6)",
                   backdropFilter: "blur(14px)",
-                  boxShadow: gold ? "0 2px 16px oklch(0.74 0.09 80 / 0.2)" : "0 4px 20px rgba(0,0,0,0.25)",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
                 }}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "oklch(0.74 0.09 80 / 0.18)", border: "1px solid oklch(0.74 0.09 80 / 0.30)" }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "oklch(0.74 0.09 80 / 0.22)", border: "1px solid oklch(0.74 0.09 80 / 0.45)" }}>
                   <Icon className="w-4 h-4 text-primary" />
                 </div>
-                <span className="text-[10px]" style={{ color: gold ? "oklch(0.84 0.09 80)" : "oklch(0.62 0.01 60)" }}>{label}</span>
+                <span className="text-[10px] font-medium" style={{ color: gold ? "oklch(0.90 0.09 80)" : "#ffffff" }}>{label}</span>
               </Link>
             ))}
           </div>
