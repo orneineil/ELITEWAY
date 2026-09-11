@@ -116,7 +116,7 @@ export function AllCategories() {
         ))}
       </div>
 
-        <div className="mx-5 mt-16 mb-6 py-8 text-center">
+      <div className="mx-5 mt-16 mb-6 py-8 text-center">
         <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem" }} className="mb-4">
           Vous êtes un professionnel ?
         </p>
