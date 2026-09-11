@@ -230,11 +230,13 @@
     line-height: 1.5;
   }
 
-  input {
+   input {
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
+}
+
 @keyframes revealLetters {
   from { clip-path: inset(0 100% 0 0); }
   to { clip-path: inset(0 0% 0 0); }
