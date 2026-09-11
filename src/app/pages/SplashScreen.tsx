@@ -69,19 +69,22 @@ export function SplashScreen() {
         </div>
 
         {/* ELITEWAY */}
-        <p style={{
+                <p style={{
           fontFamily: "var(--font-heading)",
-          fontSize: "clamp(2.1rem, 9vw, 2.6rem)",
+          fontSize: "clamp(2.8rem, 12vw, 3.6rem)",
           fontWeight: 400,
           letterSpacing: "0.22em",
-          color: "oklch(0.86 0.07 80)",
-          textShadow: "0 2px 30px rgba(201,169,110,0.35)",
-          opacity: step >= 2 ? 1 : 0,
-          transform: step >= 2 ? "translateY(0)" : "translateY(16px)",
-          transition: "opacity 0.6s ease, transform 0.6s ease",
           lineHeight: 1,
           marginBottom: "10px",
           textAlign: "center",
+          backgroundImage: "linear-gradient(100deg, oklch(0.86 0.07 80) 40%, #fff 50%, oklch(0.86 0.07 80) 60%)",
+          backgroundSize: "300% 100%",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+          filter: "drop-shadow(0 2px 30px rgba(201,169,110,0.35))",
+          clipPath: step >= 2 ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
+          animation: step >= 2 ? "revealLetters 0.9s ease forwards, shimmerSweep 2.5s ease-in-out 1s infinite" : "none",
         }}>
           ELITEWAY
         </p>
