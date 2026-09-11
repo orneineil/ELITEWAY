@@ -50,17 +50,6 @@ const NEARBY_CITIES = [
   },
 ];
 
-const EXCLUSIVE_OFFERS = [
-  { id: "eo-1", title: "Dîner gastronomique", subtitle: "Table d'exception", price: "Dès 180 €/pers.", tag: "Gastronomique",
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", link: "/category/gastronomie" },
-  { id: "eo-2", title: "Week-end hôtel & spa", subtitle: "Côte d'Azur", price: "Dès 180 €/soin", tag: "Populaire",
-    image: "https://images.unsplash.com/photo-1718942899965-4fc10607d805?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", link: "/category/bien-etre" },
-  { id: "eo-3", title: "Journée Yacht", subtitle: "Îles d'Or incluses", price: "Dès 800 €/demi-journée", tag: "Best-seller",
-    image: "https://images.unsplash.com/photo-1597609049381-decc1957efe5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", link: "/category/navigation" },
-  { id: "eo-4", title: "Accès VIP Événements", subtitle: "Soirées & galas privés", price: "Membres Prestige", tag: "Exclusif",
-    image: "https://images.unsplash.com/photo-1564736676781-d0f57b29f67a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", link: "/category/offres-exclusives", locked: true },
-];
-
 const UPCOMING_EVENTS = [
   { id: "ev-1", title: "Dîner Secret — Chef", location: "Nice, Côte d'Azur", date: "28 Juin 2026", time: "20h00", price: "€€", spots: 8,
     image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gastronomie" },
@@ -200,7 +189,7 @@ export function Home() {
 
       </div>
 
-      <section className="px-5 mb-8">
+      <section className="px-5 mb-10 mt-2">
         <div className="relative overflow-hidden rounded-2xl" style={{ height: "170px" }}>
           <img
             src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900"
@@ -209,10 +198,7 @@ export function Home() {
             style={{ filter: "brightness(0.55)" }}
           />
           <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.25) 70%, transparent 100%)" }} />
-          <div className="relative z-10 h-full flex flex-col justify-center px-6" style={{ maxWidth: "70%" }}>
-            <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.3rem", lineHeight: 1.25, color: "#ffffff", marginBottom: "14px", textShadow: "0 2px 12px rgba(0,0,0,0.6)" }}>
-              Des expériences d'exception à portée de main
-            </p>
+          <div className="relative z-10 h-full flex flex-col justify-center px-6">
             <button
               onClick={() => navigate("/categories")}
               className="self-start px-5 py-2 rounded-full transition-transform active:scale-95"
@@ -224,36 +210,7 @@ export function Home() {
         </div>
       </section>
 
-      <section className="px-5 mb-8">
-        <Link to="/membership">
-          <div className="relative overflow-hidden rounded-2xl" style={{ background: "linear-gradient(135deg, oklch(0.12 0.015 75) 0%, oklch(0.10 0.010 65) 100%)" }}>
-            <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ boxShadow: "inset 0 0 0 1px oklch(0.74 0.09 80 / 0.4), 0 0 28px oklch(0.74 0.09 80 / 0.08)" }} />
-            <div className="absolute inset-0 pointer-events-none opacity-20" style={{ background: "linear-gradient(115deg, transparent 40%, oklch(0.74 0.09 80 / 0.3) 50%, transparent 60%)" }} />
-            <div className="relative px-5 py-4 flex items-center gap-4">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "oklch(0.74 0.09 80 / 0.15)", border: "1px solid oklch(0.74 0.09 80 / 0.35)" }}>
-                <Crown className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-primary font-medium">Accès exclusif</p>
-                  <div className="flex gap-1">
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">Prestige</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">Élite</span>
-                  </div>
-                </div>
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem", lineHeight: 1.2 }}>Réservé aux membres</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Offres exclusives, conciergerie & événements privés</p>
-              </div>
-              <div className="shrink-0 flex items-center gap-1 text-primary">
-                <Lock className="w-3.5 h-3.5" />
-                <ChevronRight className="w-4 h-4" />
-              </div>
-            </div>
-          </div>
-        </Link>
-      </section>
-
-      <section className="mb-8">
+      <section className="mb-10">
         <SectionHeader label="Disponible" title="Expériences du moment" />
         <ScrollRow gap={16}>
           {[
@@ -366,34 +323,6 @@ export function Home() {
                 })}
               </div>
             </div>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-8">
-        <SectionHeader label="Sélection" title="Offres à saisir" linkTo="/category/offres-exclusives" />
-        <ScrollRow gap={16}>
-          {EXCLUSIVE_OFFERS.map((offer) => (
-            <Link key={offer.id} to={offer.link} className="group shrink-0 relative overflow-hidden rounded-2xl bg-card border border-border/60" style={{ width: "200px" }}>
-              <div className="relative overflow-hidden" style={{ height: "120px" }}>
-                <img src={offer.image} alt={offer.title} className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500" />
-                {offer.locked && (
-                  <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
-                    <div className="w-9 h-9 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-                      <Lock className="w-4 h-4 text-primary" />
-                    </div>
-                  </div>
-                )}
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-background/80 backdrop-blur-sm">
-                  <span className="text-[10px] text-primary tracking-wide">{offer.tag}</span>
-                </div>
-              </div>
-              <div className="p-3">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="mb-0.5">{offer.title}</p>
-                <p className="text-xs text-muted-foreground mb-2">{offer.subtitle}</p>
-                <p className="text-xs text-primary">{offer.price}</p>
-              </div>
-            </Link>
           ))}
         </ScrollRow>
       </section>
