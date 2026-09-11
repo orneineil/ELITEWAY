@@ -1,10 +1,9 @@
 import { useParams, Link } from "react-router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { establishments } from "../data/establishments";
 import { EstablishmentCard } from "../components/EstablishmentCard";
-import { ArrowLeft, Gift, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { ArrowLeft, Gift } from "lucide-react";
 
-// Per-category hero config
 const CATEGORY_CONFIG: Record<string, {
   name: string;
   subtitle: string;
@@ -59,23 +58,29 @@ const CATEGORY_CONFIG: Record<string, {
   },
 };
 
-const SORT_OPTIONS = [
-  { id: "default",  label: "Recommandés" },
-  { id: "rating",   label: "Mieux notés" },
-  { id: "price-asc",label: "Prix croissant" },
-];
-
 export function CategoryPage() {
   const { categoryId } = useParams();
-  const [sort, setSort] = useState("default");
-  const [showSort, setShowSort] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("Tous");
 
   const config = categoryId ? CATEGORY_CONFIG[categoryId] : null;
+  const baseList = establishments.filter((e) => e.category === categoryId);
 
-  let list = establishments.filter((e) => e.category === categoryId);
+  // ── Construit des pilules de filtre à partir des tags/features réels ──
+  const filterPills = useMemo(() => {
+    const counts: Record<string, number> = {};
+    baseList.forEach((e) => {
+      (e.tags || []).forEach((t) => { counts[t] = (counts[t] || 0) + 1; });
+    });
+    const top = Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([t]) => t);
+    return ["Tous", ...top];
+  }, [baseList]);
 
-  if (sort === "rating") list = [...list].sort((a, b) => b.rating - a.rating);
-  if (sort === "price-asc") list = [...list].sort((a, b) => a.price.length - b.price.length);
+  const list = activeFilter === "Tous"
+    ? baseList
+    : baseList.filter((e) => (e.tags || []).includes(activeFilter));
 
   if (!categoryId || !config) {
     return (
@@ -89,7 +94,6 @@ export function CategoryPage() {
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      {/* ── Hero image ─────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden" style={{ height: "260px" }}>
         <img
           src={config.image}
@@ -99,12 +103,10 @@ export function CategoryPage() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.3) 0%, var(--background) 100%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, oklch(0.74 0.09 80 / 0.08) 0%, transparent 70%)" }} />
 
-        {/* Back button */}
         <Link to="/categories" className="absolute top-4 left-5 w-9 h-9 bg-background/80 backdrop-blur-sm rounded-xl flex items-center justify-center border border-border/40">
           <ArrowLeft className="w-4 h-4" />
         </Link>
 
-        {/* VIP badge */}
         {config.vip && (
           <div className="absolute top-4 right-5 flex items-center gap-1.5 bg-primary/20 border border-primary/40 backdrop-blur-sm rounded-full px-3 py-1">
             <Gift className="w-3 h-3 text-primary" />
@@ -112,7 +114,6 @@ export function CategoryPage() {
           </div>
         )}
 
-        {/* Title overlay */}
         <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
           <p className="text-xs uppercase tracking-[0.18em] text-primary mb-1">{config.subtitle}</p>
           <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.9rem", lineHeight: 1.05 }}>
@@ -121,7 +122,6 @@ export function CategoryPage() {
         </div>
       </div>
 
-      {/* ── Description ────────────────────────────────────────────────── */}
       <div className="px-5 pt-4 pb-5 border-b border-border/40">
         <p className="text-sm text-muted-foreground leading-relaxed">{config.description}</p>
         {config.partnerNote && (
@@ -140,42 +140,38 @@ export function CategoryPage() {
         )}
       </div>
 
-      {/* ── Sort & count ───────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-5 py-3">
+      {/* ── Filtres en pilules ────────────────────────────────────────── */}
+      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 py-4">
+        {filterPills.map((pill) => (
+          <button
+            key={pill}
+            onClick={() => setActiveFilter(pill)}
+            className="shrink-0 px-4 py-2 rounded-full text-xs transition-colors whitespace-nowrap"
+            style={{
+              background: activeFilter === pill ? "oklch(0.74 0.09 80)" : "oklch(0.14 0.006 60)",
+              color: activeFilter === pill ? "oklch(0.08 0.005 60)" : "oklch(0.70 0.01 60)",
+              border: activeFilter === pill ? "none" : "1px solid oklch(0.22 0.007 65)",
+              fontWeight: activeFilter === pill ? 600 : 400,
+            }}
+          >
+            {pill}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex items-center justify-between px-5 pb-3">
         <p className="text-xs text-muted-foreground">
           <span className="text-foreground">{list.length}</span> expérience{list.length > 1 ? "s" : ""}
         </p>
-        <div className="relative">
-          <button
-            onClick={() => setShowSort(!showSort)}
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            {SORT_OPTIONS.find(s => s.id === sort)?.label}
-            <ChevronDown className="w-3 h-3" />
-          </button>
-          {showSort && (
-            <div className="absolute right-0 top-7 bg-card border border-border/60 rounded-xl shadow-lg overflow-hidden z-10 w-40">
-              {SORT_OPTIONS.map((opt) => (
-                <button
-                  key={opt.id}
-                  onClick={() => { setSort(opt.id); setShowSort(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs transition-colors ${sort === opt.id ? "bg-primary/10 text-primary" : "hover:bg-accent text-muted-foreground"}`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
 
-      {/* ── Establishments grid ────────────────────────────────────────── */}
       <div className="px-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
         {list.length === 0 ? (
           <div className="col-span-2 text-center py-16">
-            <p className="text-muted-foreground mb-4">Aucune expérience dans cette catégorie pour le moment.</p>
-            <Link to="/categories" className="text-primary text-sm hover:underline">Explorer d'autres catégories</Link>
+            <p className="text-muted-foreground mb-4">Aucune expérience avec ce filtre.</p>
+            <button onClick={() => setActiveFilter("Tous")} className="text-primary text-sm hover:underline">
+              Voir toutes les expériences
+            </button>
           </div>
         ) : (
           list.map((e) => <EstablishmentCard key={e.id} establishment={e} />)
