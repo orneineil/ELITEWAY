@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { establishments } from "../data/establishments";
 import { EstablishmentCard } from "../components/EstablishmentCard";
+import { ScrollRow } from "../components/ScrollRow";
 
 const SUGGESTIONS = ["Yacht Nice", "Spa Cannes", "Gastronomie", "Hélico Monaco", "Rosé Provence", "Événements", "Cap-Ferrat"];
 
@@ -16,6 +17,7 @@ const CATEGORY_FILTERS = [
   { id: "oenologie",         label: "Œnologie" },
   { id: "evenements",        label: "Événements" },
   { id: "offres-exclusives", label: "Exclusif" },
+  { id: "sport-loisirs",     label: "Sport & Loisirs" },
 ];
 
 const BUDGET_OPTIONS = [
@@ -167,8 +169,9 @@ export function SearchPage() {
         </div>
       </div>
 
-      {/* ── CATÉGORIES (scroll horizontal) ──────────────────────────────── */}
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 pt-3 pb-2">
+      {/* ── CATÉGORIES (scroll horizontal avec flèches) ─────────────────── */}
+      <div className="pt-3 pb-2">
+      <ScrollRow gap={8}>
         {CATEGORY_FILTERS.map((cat) => (
           <button key={cat.id}
             onClick={() => setActiveCategory(cat.id === activeCategory ? "" : cat.id)}
@@ -178,6 +181,7 @@ export function SearchPage() {
             {cat.label}
           </button>
         ))}
+      </ScrollRow>
       </div>
 
       {/* ── BARRE FILTRES + TRI ──────────────────────────────────────────── */}

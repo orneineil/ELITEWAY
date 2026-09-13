@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { establishments } from "../data/establishments";
 import { EstablishmentCard } from "../components/EstablishmentCard";
+import { ScrollRow } from "../components/ScrollRow";
 
 const TABS = [
   { id: "all",               label: "Tout" },
@@ -40,7 +41,8 @@ export function Favorites() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 pb-4">
+      <div className="pb-4">
+      <ScrollRow gap={8}>
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -54,6 +56,7 @@ export function Favorites() {
             {tab.label}
           </button>
         ))}
+      </ScrollRow>
       </div>
 
       <div className="px-5">

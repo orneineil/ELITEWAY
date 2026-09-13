@@ -1,6 +1,7 @@
 import { Link } from "react-router";
-import { ArrowRight, Check, Wind, Plane, Sailboat, Utensils, Sparkles, Shield, Star, ChevronRight } from "lucide-react";
+import { ArrowRight, Check, Wind, Plane, Sailboat, Utensils, Sparkles, Shield, Star, ChevronRight, BedDouble, Wine, CalendarDays, Gem, Trophy } from "lucide-react";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+import { ScrollRow } from "../components/ScrollRow";
 import elitewayLogo from "@/imports/eliteway-logo-1000x1000.png";
 
 const PROBLEMS = [
@@ -25,10 +26,10 @@ const EXPERIENCES = [
   {
     icon: Wind,
     title: "Hélicoptère",
-    subtitle: "Nice → Monaco en 7 min",
-    price: "dès 220 €/siège",
-    image: "https://images.unsplash.com/photo-1607525884336-66ccfac7ab56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    link: "/establishment/heli-prestige",
+    subtitle: "Monaco ↔ Nice en 7 min",
+    price: "dès 160 €",
+    image: "/etab-monacair-1.jpg",
+    link: "/establishment/monacair-monaco",
   },
   {
     icon: Plane,
@@ -36,7 +37,7 @@ const EXPERIENCES = [
     subtitle: "Nice – Paris en 1h15",
     price: "dès 4 500 €",
     image: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    link: "/establishment/jet-prive-azur",
+    link: "/establishment/aeroaffaires-nice",
   },
   {
     icon: Sailboat,
@@ -61,6 +62,46 @@ const EXPERIENCES = [
     price: "dès 180 €/soin",
     image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
     link: "/category/bien-etre",
+  },
+  {
+    icon: BedDouble,
+    title: "Hôtels",
+    subtitle: "Palaces & adresses de prestige",
+    price: "dès 390 €/nuit",
+    image: "/etab-martinez-1.jpg",
+    link: "/category/hotels",
+  },
+  {
+    icon: Wine,
+    title: "Œnologie",
+    subtitle: "Caves, vignobles & dégustations",
+    price: "dès 4 €",
+    image: "/etab-azurvio-1.jpg",
+    link: "/category/oenologie",
+  },
+  {
+    icon: CalendarDays,
+    title: "Événements",
+    subtitle: "Galas & soirées partenaires",
+    price: "dès 120 €",
+    image: "/etab-goldnback-1.jpg",
+    link: "/category/evenements",
+  },
+  {
+    icon: Trophy,
+    title: "Sport & Loisirs",
+    subtitle: "Golf, tennis & équitation",
+    price: "dès 120 €",
+    image: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+    link: "/category/sport-loisirs",
+  },
+  {
+    icon: Gem,
+    title: "Offres Exclusives",
+    subtitle: "Réservé aux membres Prestige & Élite",
+    price: "Membres",
+    image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+    link: "/category/offres-exclusives",
   },
 ];
 
@@ -230,12 +271,11 @@ export function AboutPage() {
         <div className="px-5 mb-4">
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary mb-1">Nos expériences</p>
           <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.6rem", lineHeight: 1.2 }}>
-            5 univers, 1 seule app
+            {EXPERIENCES.length} univers, 1 seule app
           </h2>
         </div>
 
-        <div className="overflow-x-auto no-scrollbar">
-          <div className="flex gap-4 px-5 pb-2" style={{ width: "max-content" }}>
+        <ScrollRow gap={16}>
             {EXPERIENCES.map((exp) => {
               const Icon = exp.icon;
               return (
@@ -272,8 +312,7 @@ export function AboutPage() {
                 </Link>
               );
             })}
-          </div>
-        </div>
+        </ScrollRow>
       </section>
 
       {/* ── CE QUE VOUS GAGNEZ ─────────────────────────────────────────────── */}

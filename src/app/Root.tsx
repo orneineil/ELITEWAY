@@ -1,4 +1,4 @@
-import { Link, Outlet, ScrollRestoration } from "react-router";
+import { Link, Outlet, ScrollRestoration, useLocation } from "react-router";
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
 import { LogoFull } from "./components/LogoMark";
@@ -9,6 +9,9 @@ import { NotificationsProvider } from "./contexts/NotificationsContext";
 import { AIAssistant } from "./components/AIAssistant";
 
 export function Root() {
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
+
   return (
     <ClientAuthProvider>
       <PartnerAuthProvider>
@@ -16,7 +19,7 @@ export function Root() {
         <FavoritesProvider>
           <div className="min-h-screen bg-background">
             <Header />
-            <main className="pt-14">
+            <main className={isHome ? "pt-0" : "pt-14"}>
               <Outlet />
             </main>
 

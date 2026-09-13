@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { MapPin, Star, ChevronRight, Utensils, Sailboat, Sparkles, Plane, Wine, Gift } from "lucide-react";
+import { MapPin, Star, ChevronRight, Utensils, Sailboat, Sparkles, Plane, Wine, Gift, Trophy } from "lucide-react";
 import { establishments } from "../data/establishments";
+import { ScrollRow } from "../components/ScrollRow";
 
 const CATEGORY_FILTERS = [
   { id: "all",               label: "Tout",     icon: null },
@@ -11,6 +12,7 @@ const CATEGORY_FILTERS = [
   { id: "aviation",          label: "Aviation", icon: Plane },
   { id: "oenologie",         label: "Vins",     icon: Wine },
   { id: "offres-exclusives", label: "Exclusif", icon: Gift },
+  { id: "sport-loisirs",     label: "Sport",    icon: Trophy },
 ];
 
 // Côte d'Azur bounding box for OpenStreetMap embed
@@ -40,7 +42,8 @@ export function MapPage() {
       </div>
 
       {/* Category filters */}
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 pb-3">
+      <div className="pb-3">
+      <ScrollRow gap={8}>
         {CATEGORY_FILTERS.map((cat) => {
           const Icon = cat.icon;
           return (
@@ -58,6 +61,7 @@ export function MapPage() {
             </button>
           );
         })}
+      </ScrollRow>
       </div>
 
       {/* OpenStreetMap iframe embed — no react-leaflet */}
@@ -77,7 +81,8 @@ export function MapPage() {
       </div>
 
       {/* City quick-jump */}
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 mb-4">
+      <div className="mb-4">
+      <ScrollRow gap={8}>
         {["Nice", "Cannes", "Monaco", "Antibes", "Saint-Tropez"].map((city) => {
           const count = filtered.filter((e) => e.city === city).length;
           return (
@@ -88,6 +93,7 @@ export function MapPage() {
             </div>
           );
         })}
+      </ScrollRow>
       </div>
 
       {/* Selected card */}

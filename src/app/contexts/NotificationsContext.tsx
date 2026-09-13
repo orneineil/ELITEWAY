@@ -24,22 +24,22 @@ const NotificationsContext = createContext<NotificationsContextType | null>(null
 const INITIAL_NOTIFICATIONS: Notification[] = [
   {
     id: "n1",
-    title: "Table libérée — Le Belvédère",
+    title: "Table libérée — Le Chantecler",
     message: "Une table pour 2 vient de se libérer ce soir à 20h30. Réservez maintenant !",
     type: "table",
     time: "Il y a 5 min",
     read: false,
-    link: "/establishment/restaurant-le-grand",
+    link: "/establishment/chantecler",
     group: "today",
   },
   {
     id: "n2",
-    title: "Offre yacht — Azur Sailing",
+    title: "Offre yacht — Nomad Yachting",
     message: "Profitez de -20% sur votre sortie yacht ce week-end. Offre valable jusqu'à ce soir.",
     type: "offer",
     time: "Il y a 1h",
     read: false,
-    link: "/establishment/yacht-azur",
+    link: "/establishment/nomad-yachting-cannes",
     group: "today",
   },
   {
@@ -55,7 +55,7 @@ const INITIAL_NOTIFICATIONS: Notification[] = [
   {
     id: "n4",
     title: "Points EliteWay crédités",
-    message: "Vous avez reçu +55 points suite à votre visite chez Azur Sailing. Solde : 240 pts.",
+    message: "Vous avez reçu +55 points suite à votre visite chez Nomad Yachting. Solde : 240 pts.",
     type: "loyalty",
     time: "Il y a 2 jours",
     read: true,
@@ -64,12 +64,12 @@ const INITIAL_NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n5",
-    title: "Offre exclusive — Spa Azuréen",
+    title: "Offre exclusive — Villa Thalgo",
     message: "Soin signature + accès spa : 65 € au lieu de 90 €. Réservez avant dimanche.",
     type: "offer",
     time: "Il y a 3 jours",
     read: true,
-    link: "/establishment/spa-serenite",
+    link: "/establishment/villa-thalgo-cannes",
     group: "week",
   },
 ];

@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router";
 import { useState, useMemo } from "react";
 import { establishments } from "../data/establishments";
 import { EstablishmentCard } from "../components/EstablishmentCard";
+import { ScrollRow } from "../components/ScrollRow";
 import { ArrowLeft, Gift } from "lucide-react";
 
 const CATEGORY_CONFIG: Record<string, {
@@ -11,50 +12,69 @@ const CATEGORY_CONFIG: Record<string, {
   image: string;
   partnerNote?: string;
   vip?: boolean;
+  highlights?: string[];
 }> = {
   gastronomie: {
     name: "Gastronomie",
     subtitle: "Tables d'exception",
     description: "Des bistrots avec vue mer aux adresses gastronomiques confidentielles — toutes soigneusement sélectionnées sur la Côte d'Azur.",
-    image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    image: "/category-gastronomie.jpg",
+  },
+  hotels: {
+    name: "Hôtels",
+    subtitle: "Palaces & adresses de prestige",
+    description: "Palaces mythiques, châteaux perchés et villas Art déco — les plus belles adresses où séjourner sur la Côte d'Azur.",
+    image: "/category-hotels.jpg",
   },
   navigation: {
     name: "Yachts & Bateaux",
-    subtitle: "Mer & croisières",
-    description: "Voiliers, catamarans et yachts privatisés pour explorer les calanques et les îles de la Méditerranée.",
-    image: "https://images.unsplash.com/photo-1535024966840-e7424dc2635b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    subtitle: "Yachting & croisières",
+    description: "Charter de superyachts et sorties en mer avec les plus grandes maisons de yachting de la Côte d'Azur.",
+    image: "/category-navigation.jpg",
   },
   "bien-etre": {
-    name: "Bien-être & Hôtels",
+    name: "Bien-être",
     subtitle: "Spas, soins & détente",
     description: "Hammams, thalassos, yoga en plein air ou massages vue mer — prenez soin de vous sur la Riviera.",
-    image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    image: "/category-bien-etre.jpg",
   },
   aviation: {
     name: "Aviation",
-    subtitle: "Hélicoptères & vols panoramiques",
-    description: "Survolez la Côte d'Azur en hélicoptère, tentez l'initiation au pilotage ou rejoignez Monaco en 7 minutes.",
-    image: "https://images.unsplash.com/photo-1607525884336-66ccfac7ab56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    subtitle: "Hélicoptères & jets privés",
+    description: "Rejoignez Monaco en 7 minutes en hélicoptère, survolez la Riviera ou voyagez en jet privé vers toute l'Europe.",
+    image: "/category-aviation.jpg",
   },
   oenologie: {
     name: "Œnologie",
     subtitle: "Vins, rosés & dégustations",
     description: "Caves historiques, vignobles de l'AOC Bellet, ateliers rosé et bars à vins — l'art du vin provençal accessible à tous.",
-    image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    image: "/category-oenologie.jpg",
+    highlights: [
+      "/category-oenologie-highlight-1.jpg",
+      "/category-oenologie-highlight-2.jpg",
+      "/category-oenologie-highlight-3.jpg",
+      "/category-oenologie-highlight-4.jpg",
+    ],
   },
   evenements: {
     name: "Événements",
     subtitle: "Galas & soirées partenaires",
     description: "EliteWay ne crée pas d'événements. Nous mettons en lumière les meilleures propositions d'entreprises partenaires qui souhaitent les faire connaître à notre communauté.",
-    image: "https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    image: "/category-evenements.jpg",
     partnerNote: "Ces événements sont organisés par des entreprises partenaires indépendantes.",
   },
   "offres-exclusives": {
     name: "Offres Exclusives",
     subtitle: "Réservé aux membres Prestige & Élite",
     description: "Tarifs négociés par EliteWay, accès privatifs et expériences sur mesure introuvables ailleurs — uniquement pour nos membres.",
-    image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    image: "/category-offres-exclusives.jpg",
     vip: true,
+  },
+  "sport-loisirs": {
+    name: "Sport & Loisirs",
+    subtitle: "Golf, tennis & équitation",
+    description: "Golfs panoramiques, clubs de tennis historiques et grand domaine équestre — le sport dans son écrin le plus premium sur la Côte d'Azur.",
+    image: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
 };
 
@@ -160,7 +180,25 @@ export function CategoryPage() {
         )}
       </div>
 
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 py-4">
+      {config.highlights && config.highlights.length > 0 && (
+        <div className="pt-4 pb-1">
+          <p className="px-5 mb-3 text-xs uppercase tracking-[0.15em] text-primary">En images</p>
+          <ScrollRow>
+            {config.highlights.map((src, i) => (
+              <div
+                key={i}
+                className="shrink-0 overflow-hidden rounded-2xl border border-border/40"
+                style={{ width: "150px", height: "150px" }}
+              >
+                <img src={src} alt={`${config.name} ${i + 1}`} className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </ScrollRow>
+        </div>
+      )}
+
+      <div className="py-4">
+      <ScrollRow gap={8}>
         {filterPills.map((pill) => (
           <button
             key={pill}
@@ -176,6 +214,7 @@ export function CategoryPage() {
             {pill}
           </button>
         ))}
+      </ScrollRow>
       </div>
 
       <div className="flex items-center justify-between px-5 pb-3">

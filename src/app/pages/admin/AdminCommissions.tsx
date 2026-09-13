@@ -4,13 +4,13 @@ import { ArrowLeft, Euro, TrendingUp, CheckCircle, Clock } from "lucide-react";
 const COMMISSION_RATE = 0.12; // 12%
 
 const TRANSACTIONS = [
-  { partner: "Azur Sailing",         booking: "Sophie Martin",   amount: 55,  commission: 6.6,   status: "paid",    date: "14 juin 2026" },
-  { partner: "Le Belvédère",         booking: "Henri Beaumont",  amount: 44,  commission: 5.28,  status: "paid",    date: "13 juin 2026" },
-  { partner: "Spa Azuréen",          booking: "Clara Tissot",    amount: 90,  commission: 10.8,  status: "pending", date: "12 juin 2026" },
-  { partner: "Monaco Sunset Cruise", booking: "Marc Leblanc",    amount: 135, commission: 16.2,  status: "paid",    date: "11 juin 2026" },
-  { partner: "Azur Hélicoptères",    booking: "Sophie Renard",   amount: 79,  commission: 9.48,  status: "pending", date: "10 juin 2026" },
-  { partner: "Ateliers du Rosé",     booking: "Paul Girard",     amount: 44,  commission: 5.28,  status: "paid",    date: "9 juin 2026" },
-  { partner: "Hammam des Anges",     booking: "Émilie Rousseau", amount: 70,  commission: 8.4,   status: "paid",    date: "8 juin 2026" },
+  { partner: "Nomad Yachting",       booking: "Sophie Martin",   amount: 55,  commission: 6.6,   status: "paid",    date: "14 juin 2026" },
+  { partner: "Le Chantecler",        booking: "Henri Beaumont",  amount: 44,  commission: 5.28,  status: "paid",    date: "13 juin 2026" },
+  { partner: "Villa Thalgo",         booking: "Clara Tissot",    amount: 90,  commission: 10.8,  status: "pending", date: "12 juin 2026" },
+  { partner: "Fraser Yachts",        booking: "Marc Leblanc",    amount: 135, commission: 16.2,  status: "paid",    date: "11 juin 2026" },
+  { partner: "Monacair",             booking: "Sophie Renard",   amount: 79,  commission: 9.48,  status: "pending", date: "10 juin 2026" },
+  { partner: "Prodégustation",       booking: "Paul Girard",     amount: 44,  commission: 5.28,  status: "paid",    date: "9 juin 2026" },
+  { partner: "Spa Valmont Monte-Carlo", booking: "Émilie Rousseau", amount: 70,  commission: 8.4,   status: "paid",    date: "8 juin 2026" },
 ];
 
 const totalCommissions = TRANSACTIONS.reduce((s, t) => s + t.commission, 0);

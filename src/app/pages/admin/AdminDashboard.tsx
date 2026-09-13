@@ -32,8 +32,8 @@ const RECENT_ACTIVITY = [
   { msg: "Nouvel abonnement Élite — Isabelle Fontaine",  time: "Il y a 5 min",  type: "success" },
   { msg: "Partenaire en attente de validation — Château des Oliviers", time: "Il y a 2h", type: "warning" },
   { msg: "Remboursement traité — Sophie Martin — 85€",   time: "Il y a 3h",    type: "info" },
-  { msg: "Commission versée — Azur Sailing — 42€",       time: "Hier",         type: "success" },
-  { msg: "Signalement avis — Le Belvédère",              time: "Hier",         type: "error" },
+  { msg: "Commission versée — Nomad Yachting — 42€",     time: "Hier",         type: "success" },
+  { msg: "Signalement avis — Le Chantecler",              time: "Hier",         type: "error" },
 ];
 
 export function AdminDashboard() {

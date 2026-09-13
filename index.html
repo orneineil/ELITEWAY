@@ -12,9 +12,30 @@
     <link rel="apple-touch-icon" href="/eliteway-logo.png" />
     <link rel="icon" type="image/png" href="/eliteway-logo.png" />
     <link rel="manifest" href="/manifest.json" />
+    <style>
+      /* Écran de lancement statique — s'affiche instantanément au clic sur l'icône,
+         avant même le chargement du JS, pour éviter le flash blanc et donner
+         une sensation de lancement natif (façon iPhone) qui se fond ensuite
+         dans l'animation de src/app/pages/SplashScreen.tsx. */
+      html, body { background: #0d0b09; margin: 0; }
+      #boot-splash {
+        position: fixed; inset: 0; z-index: 99999;
+        display: flex; align-items: center; justify-content: center;
+        background: #0d0b09;
+      }
+      #boot-splash img {
+        width: 92px; height: 92px; object-fit: contain;
+        animation: boot-pulse 1.6s ease-in-out infinite;
+        filter: drop-shadow(0 4px 20px rgba(201,169,110,0.35));
+      }
+      @keyframes boot-pulse {
+        0%, 100% { opacity: 0.75; transform: scale(0.97); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div id="boot-splash"><img src="/eliteway-logo.png" alt="" /></div></div>
     <script type="module" src="/src/app/main.tsx"></script>
   </body>
 </html>

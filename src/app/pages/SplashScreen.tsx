@@ -29,77 +29,45 @@ export function SplashScreen() {
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#0d0b09" }}>
 
+      {/* Photo de fond — Côte d'Azur de nuit (à déposer dans /public/splash-background.jpg) */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/splash-background.jpg')" }}
+      />
+      <div className="absolute inset-0" style={{
+        background: "linear-gradient(180deg, #0d0b09 0%, rgba(13,11,9,0.55) 30%, rgba(13,11,9,0.35) 55%, rgba(13,11,9,0.75) 80%, #0d0b09 100%)",
+      }} />
+
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 60% 40% at 50% 40%, oklch(0.74 0.09 80 / 0.14) 0%, transparent 70%)",
       }} />
 
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8" style={{ paddingBottom: "10%" }}>
-        {/* Zone du logo qui tourne, puis se sépare */}
-        <div className="relative flex items-center justify-center" style={{ height: "70px", marginBottom: "14px", perspective: "800px" }}>
-
-          {/* Pièce centrale qui tourne (step 1), disparaît au step 2 */}
-          <div style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}>
-            <img
-              src="/eliteway-ew-logo.png"
-              alt=""
-              className="object-contain"
-              style={{
-                width: "56px", height: "56px",
-                opacity: step === 1 ? 1 : 0,
-                animation: step === 1 ? "coinFlip 1.0s cubic-bezier(0.25, 0.8, 0.4, 1) forwards" : "none",
-                transition: step >= 2 ? "opacity 0.25s ease" : "none",
-              }}
-            />
-          </div>
-
-          {/* Moitié gauche — se sépare vers la gauche du mot */}
-          <div style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: step >= 2 ? "translate(calc(-50% - 165px), -50%)" : "translate(-50%, -50%)",
-            transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1)",
-          }}>
-            <img
-              src="/eliteway-ew-logo.png"
-              alt=""
-              className="object-contain"
-              style={{
-                width: "34px", height: "34px",
-                opacity: step >= 2 ? 1 : 0,
-                transition: "opacity 0.5s ease",
-                clipPath: "inset(0 50% 0 0)",
-                filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
-              }}
-            />
-          </div>
-
-          {/* Moitié droite — se sépare vers la droite du mot */}
-          <div style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: step >= 2 ? "translate(calc(-50% + 165px), -50%)" : "translate(-50%, -50%)",
-            transition: "transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1)",
-          }}>
-            <img
-              src="/eliteway-ew-logo.png"
-              alt=""
-              className="object-contain"
-              style={{
-                width: "34px", height: "34px",
-                opacity: step >= 2 ? 1 : 0,
-                transition: "opacity 0.5s ease",
-                clipPath: "inset(0 0 0 50%)",
-                filter: "drop-shadow(0 0 12px rgba(201,169,110,0.4))",
-              }}
-            />
-          </div>
+      <div className="relative z-10 flex-1 flex flex-col items-center px-8" style={{ justifyContent: "flex-start", paddingTop: "9%" }}>
+        {/* Logo — grand monogramme "E", mis en valeur */}
+        <div className="relative flex items-center justify-center" style={{ height: "150px", marginBottom: "0px" }}>
+          <span
+            style={{
+              fontFamily: "'Playfair Display', var(--font-heading), Georgia, serif",
+              fontWeight: 900,
+              fontSize: step >= 2 ? "150px" : "70px",
+              lineHeight: 1,
+              opacity: step >= 1 ? 1 : 0,
+              backgroundImage: "linear-gradient(155deg, oklch(0.52 0.08 75) 0%, oklch(0.76 0.09 80) 35%, oklch(0.48 0.09 72) 60%, oklch(0.70 0.09 78) 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              filter: "drop-shadow(0 6px 22px rgba(120,90,40,0.5))",
+              transition: "font-size 0.7s cubic-bezier(0.2,0.8,0.3,1), opacity 0.4s ease",
+            }}
+          >
+            E
+          </span>
         </div>
 
         {/* ELITEWAY */}
         <p style={{
           fontFamily: "var(--font-heading)",
-          fontSize: "clamp(2.8rem, 12vw, 3.6rem)",
+          fontSize: "clamp(2.4rem, 10vw, 3rem)",
           fontWeight: 400,
           letterSpacing: "0.22em",
           lineHeight: 1,
@@ -120,10 +88,12 @@ export function SplashScreen() {
         {/* Slogan */}
         <p style={{
           fontFamily: "var(--font-body)",
-          fontSize: "0.62rem",
+          fontSize: "0.75rem",
+          fontWeight: 500,
           letterSpacing: "0.32em",
           textTransform: "uppercase",
-          color: "oklch(0.60 0.02 70)",
+          color: "oklch(0.86 0.07 80)",
+          textShadow: "0 2px 14px rgba(0,0,0,0.6)",
           opacity: step >= 3 ? 1 : 0,
           transition: "opacity 0.8s ease",
           textAlign: "center",
@@ -139,6 +109,20 @@ export function SplashScreen() {
           marginTop: "20px",
           boxShadow: "0 0 10px oklch(0.74 0.09 80 / 0.6)",
         }} />
+
+        {/* Sous-titre */}
+        <p style={{
+          fontFamily: "var(--font-heading)",
+          fontSize: "1.15rem",
+          lineHeight: 1.4,
+          color: "oklch(0.93 0.012 80 / 0.92)",
+          opacity: step >= 3 ? 1 : 0,
+          transition: "opacity 0.8s ease 0.15s",
+          textAlign: "center",
+          marginTop: "20px",
+        }}>
+          Un monde d'exception<br />à portée de main.
+        </p>
       </div>
 
       <div className="relative z-10 px-6" style={{

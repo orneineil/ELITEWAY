@@ -24,9 +24,9 @@ const REWARDS = [
 ];
 
 const HISTORY = [
-  { id: "h1", label: "Réservation Spa Azuréen",    pts: +45,  date: "12 juin 2026",  sign: "+" },
+  { id: "h1", label: "Réservation Villa Thalgo",   pts: +45,  date: "12 juin 2026",  sign: "+" },
   { id: "h2", label: "Avis publié",                pts: +20,  date: "10 juin 2026",  sign: "+" },
-  { id: "h3", label: "Réservation Azur Sailing",   pts: +55,  date: "2 juin 2026",   sign: "+" },
+  { id: "h3", label: "Réservation Nomad Yachting", pts: +55,  date: "2 juin 2026",   sign: "+" },
   { id: "h4", label: "Récompense utilisée",        pts: -200, date: "25 mai 2026",   sign: "-" },
   { id: "h5", label: "Parrainage accepté",         pts: +500, date: "15 mai 2026",   sign: "+" },
 ];

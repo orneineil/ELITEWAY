@@ -1,73 +1,35 @@
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import {
-  Search, ArrowRight, MapPin, Star, Lock, ChevronRight,
-  Clock, Calendar, SlidersHorizontal, Crown,
+  Search, SlidersHorizontal, ArrowRight, ChevronRight,
+  UtensilsCrossed, BedDouble, Sailboat, Flower2, Plane, Wine, CalendarDays, Gem, Trophy,
 } from "lucide-react";
 import { establishments } from "../data/establishments";
-import { useClientAuth } from "../contexts/ClientAuthContext";
 import { ScrollRow } from "../components/ScrollRow";
 
 const CATEGORIES = [
-  { id: "gastronomie",       name: "Gastronomie",     image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-  { id: "navigation",        name: "Yachts",          image: "https://images.unsplash.com/photo-1535024966840-e7424dc2635b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-  { id: "bien-etre",         name: "Bien-être",       image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-  { id: "aviation",          name: "Aviation",        image: "https://images.unsplash.com/photo-1607525884336-66ccfac7ab56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-  { id: "oenologie",         name: "Œnologie",        image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-  { id: "evenements",        name: "Événements",      image: "https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-  { id: "offres-exclusives", name: "Exclusif",        image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", badge: true },
+  { id: "gastronomie",       name: "Gastronomie",       icon: UtensilsCrossed },
+  { id: "hotels",            name: "Hôtels",            icon: BedDouble },
+  { id: "navigation",        name: "Navigation",        icon: Sailboat },
+  { id: "bien-etre",         name: "Bien-être",         icon: Flower2 },
+  { id: "aviation",          name: "Aviation",          icon: Plane },
+  { id: "oenologie",         name: "Œnologie",          icon: Wine },
+  { id: "evenements",        name: "Événements",        icon: CalendarDays },
+  { id: "offres-exclusives", name: "Offres Exclusives", icon: Gem },
+  { id: "sport-loisirs",     name: "Sport & Loisirs",   icon: Trophy },
 ];
-
-const ALL_EVENTS = [
-  { id: "ev-gp",  title: "Grand Prix de Monaco",   location: "Monaco",              date: "25-28 Mai 2027",  price: "€€€€", spots: 6,  status: "disponible",
-    badgeColor: "bg-red-500/20 text-red-400 border-red-500/30",
-    image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Sport & Prestige", exclusive: true },
-  { id: "ev-cannes", title: "Festival de Cannes",  location: "Cannes",              date: "13-24 Mai 2027",  price: "€€€", spots: 0,  status: "complet",
-    badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-    image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Culture & Glamour", exclusive: true },
-  { id: "ev-jazz", title: "Nice Jazz Festival",    location: "Nice",                date: "9-15 Juil. 2026", price: "€€",  spots: 35, status: "disponible",
-    badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-    image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Musique & Art" },
-  { id: "ev-citron", title: "Fête du Citron",      location: "Menton",              date: "Fév. 2027",       price: "€",   spots: 50, status: "disponible",
-    badgeColor: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-    image: "https://images.unsplash.com/photo-1711014778280-4d3a7f58a032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Tradition" },
-  { id: "ev-1", title: "Dîner Secret — Chef",      location: "Nice, Côte d'Azur",   date: "28 Juin 2026", time: "20h00", price: "€€", spots: 8, status: "disponible",
-    image: "https://images.unsplash.com/photo-1776993298456-98c71c0e177e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gastronomie" },
-  { id: "ev-2", title: "Soirée Rooftop Éclat",     location: "Nice, Côte d'Azur",   date: "5 Juil. 2026", time: "21h30", price: "€€", spots: 0, status: "complet",
-    image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Membres", exclusive: true },
-  { id: "ev-3", title: "Croisière Champagne",      location: "Cannes, Côte d'Azur", date: "12 Juil. 2026", time: "17h00", price: "€€", spots: 12, status: "disponible",
-    image: "https://images.unsplash.com/photo-1574504212584-29a03eb6e41e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Navigation" },
-  { id: "ev-4", title: "Nuits de l'Èze",           location: "Èze, Côte d'Azur",    date: "19 Juil. 2026", time: "21h00", price: "€", spots: 80, status: "disponible",
-    image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Événements" },
-  { id: "ev-rg", title: "Roland Garros — Loge VIP", location: "Paris — vol depuis Nice", date: "26 Mai 2026", time: "11h00", price: "€€€€", spots: 4, status: "disponible",
-    image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Exclusif", exclusive: true },
-  { id: "ev-5", title: "Monaco Yacht Show",        location: "Port Hercule, Monaco", date: "24 Sep. 2026", time: "10h00", price: "€€€", spots: 20, status: "disponible",
-    image: "https://images.unsplash.com/photo-1563642421748-5047b6585a4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Exclusif", exclusive: true },
-  { id: "ev-6", title: "Gala de la Riviera",       location: "Palais des Festivals, Cannes", date: "15 Nov. 2026", time: "19h30", price: "€€€", spots: 0, status: "complet",
-    image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600", category: "Gala Prestige", exclusive: true },
-];
-
-function SectionHeader({ label, title, linkTo }: { label: string; title: string; linkTo?: string }) {
-  return (
-    <div className="flex items-end justify-between px-5 mb-4">
-      <div>
-        <p className="text-xs uppercase tracking-[0.18em] text-primary mb-0.5">{label}</p>
-        <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.5rem", lineHeight: 1.2 }}>{title}</h2>
-      </div>
-      {linkTo && (
-        <Link to={linkTo} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
-          Tout voir <ChevronRight className="w-3 h-3" />
-        </Link>
-      )}
-    </div>
-  );
-}
 
 export function Home() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  const { client } = useClientAuth();
-  const featured = establishments.filter((e) => e.category !== "offres-exclusives").slice(0, 5);
+  // Une sélection diversifiée : le mieux noté de chaque univers, pas seulement la gastronomie.
+  const featured = CATEGORIES
+    .filter((c) => c.id !== "offres-exclusives")
+    .map((c) => {
+      const list = establishments.filter((e) => e.category === c.id);
+      return list.sort((a, b) => b.rating - a.rating)[0];
+    })
+    .filter((e): e is NonNullable<typeof e> => Boolean(e));
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,188 +39,147 @@ export function Home() {
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      <div className="relative overflow-hidden mb-1" style={{ height: "100svh", minHeight: "640px", maxHeight: "900px" }}>
+      {/* ── Hero (header floats transparently on top) ──────────────────── */}
+      <div className="relative overflow-hidden" style={{ height: "66svh", minHeight: "480px", maxHeight: "680px" }}>
 
-        <div className="absolute inset-0" style={{ zIndex: 0, overflow: "hidden" }}>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1580422666359-7160890d8c0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200')",
+            filter: "brightness(1.05) saturate(1.08)",
+          }}
+        />
+        <div className="absolute inset-0" style={{
+          background: "linear-gradient(180deg, rgba(10,8,6,0.62) 0%, rgba(10,8,6,0.05) 26%, rgba(10,8,6,0.1) 52%, rgba(10,8,6,0.78) 86%, var(--background) 100%)",
+        }} />
+
+        {/* Headline */}
+        <div className="absolute inset-x-0 px-6 text-right" style={{ top: "36%" }}>
+          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
+            EXCLUSIVE
+          </p>
+          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
+            PLACES
+          </p>
+          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
+            EXTRAORDINARY
+          </p>
+          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
+            MOMENTS
+          </p>
+        </div>
+
+        {/* Search bar */}
+        <form onSubmit={handleSearch} className="absolute inset-x-0 px-6" style={{ bottom: "30px" }}>
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="relative flex items-center rounded-full overflow-hidden"
             style={{
-              backgroundImage: "url('/ChatGPT%20Image%2011%20sept.%202026%2C%2003_27_42.png')",
-              animation: "heroZoom1 22s ease-in-out infinite alternate",
-              filter: "brightness(1.35) contrast(1.05) saturate(1.1)",
+              border: "1px solid oklch(0.74 0.09 80 / 0.55)",
+              background: "oklch(0.08 0.005 60 / 0.82)",
+              backdropFilter: "blur(8px)",
             }}
-          />
-        </div>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-end px-5" style={{ paddingBottom: "60px", zIndex: 2 }}>
-
-          <div className="absolute inset-x-0" style={{
-            bottom: "60px",
-            height: "180px",
-            background: "linear-gradient(180deg, transparent 0%, rgba(10,8,6,0.5) 30%, rgba(10,8,6,0.82) 70%, rgba(10,8,6,0.92) 100%)",
-          }} />
-
-          <form onSubmit={handleSearch} style={{ width: "90%", maxWidth: "440px" }}>
-            <div className="relative">
-              <div className="absolute -inset-[2px] rounded-[18px] pointer-events-none" style={{
-                background: "linear-gradient(135deg, oklch(0.74 0.09 80 / 0.9), oklch(0.74 0.09 80 / 0.25))",
-                boxShadow: "0 0 30px oklch(0.74 0.09 80 / 0.35)", borderRadius: "18px",
-              }} />
-              <div className="relative flex items-center rounded-2xl overflow-hidden" style={{
-                background: "oklch(0.07 0.005 60 / 0.98)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.55)",
-              }}>
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "oklch(0.74 0.09 80 / 0.25)" }}>
-                  <Search className="w-4 h-4 text-primary" />
-                </div>
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Expérience, ville, catégorie…"
-                  style={{ minHeight: "58px", fontFamily: "var(--font-body)", fontSize: "0.9rem" }}
-                  className="w-full pl-14 pr-14 py-3 bg-transparent focus:outline-none placeholder:text-muted-foreground/60 text-foreground"
-                />
-                <button type="submit" className="absolute right-2.5 w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity"
-                  style={{ background: "oklch(0.74 0.09 80)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.5)" }}>
-                  <SlidersHorizontal className="w-4 h-4" style={{ color: "oklch(0.08 0.005 60)" }} />
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-
+          >
+            <Search className="w-4 h-4 text-primary ml-4 shrink-0" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Rechercher un lieu, une expérience…"
+              style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem" }}
+              className="flex-1 min-w-0 bg-transparent pl-3 pr-2 py-3.5 focus:outline-none placeholder:text-muted-foreground/60 text-foreground"
+            />
+            <button
+              type="submit"
+              className="w-9 h-9 rounded-full mr-1.5 flex items-center justify-center shrink-0"
+              style={{ background: "oklch(0.74 0.09 80)" }}
+            >
+              <SlidersHorizontal className="w-4 h-4" style={{ color: "oklch(0.08 0.005 60)" }} />
+            </button>
+          </div>
+        </form>
       </div>
 
-      <section className="mb-12 mt-6">
-        <SectionHeader label="Disponible" title="Expériences du moment" />
-        <ScrollRow gap={16}>
-          {[
-            { id: "exp-1", title: "Dîner Gastronomique", subtitle: "Ce soir · Nice", price: "dès 180 €/pers.", link: "/establishment/restaurant-le-grand",
-              image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "exp-2", title: "Spa Vue Mer", subtitle: "Disponible aujourd'hui · Nice", price: "dès 180 €/soin", link: "/establishment/spa-serenite",
-              image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-            { id: "exp-3", title: "Sortie Yacht Cannes", subtitle: "Demain · Cannes", price: "dès 800 €/demi-journée", link: "/establishment/yacht-azur",
-              image: "https://images.unsplash.com/photo-1593351415075-3bac9f45c877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" },
-          ].map((exp) => (
-            <Link key={exp.id} to={exp.link} className="group shrink-0 rounded-2xl bg-card border border-border/60 relative" style={{ width: 290 }}>
-              <div className="relative overflow-hidden rounded-t-2xl" style={{ height: 160 }}>
-                <img src={exp.image} alt={exp.title} className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-transparent to-transparent" />
-                <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-2.5 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400 whitespace-nowrap">Disponible</span>
-                </div>
-              </div>
-              <div className="p-4">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-snug mb-1.5">{exp.title}</p>
-                <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{exp.subtitle}</p>
-                <p className="text-xs text-primary whitespace-nowrap">{exp.price}</p>
-              </div>
-            </Link>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-12">
-        <SectionHeader label="Explorer" title="Nos catégories" linkTo="/categories" />
-        <ScrollRow gap={20}>
-          {CATEGORIES.map((cat) => (
-            <Link key={cat.id} to={`/category/${cat.id}`} className="group shrink-0 flex flex-col items-center gap-2.5" style={{ width: "88px" }}>
-              <div className="relative rounded-full overflow-hidden" style={{ width: "76px", height: "76px", border: "2px solid oklch(0.74 0.09 80 / 0.45)", boxShadow: "0 2px 16px oklch(0.74 0.09 80 / 0.15)" }}>
-                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
-                {cat.badge && (
-                  <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                    <Lock className="w-2.5 h-2.5 text-primary-foreground" />
-                  </div>
-                )}
-              </div>
-              <p className="text-center leading-snug" style={{ fontFamily: "var(--font-heading)", fontSize: "0.78rem" }}>{cat.name}</p>
-            </Link>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="mb-12">
-        <SectionHeader label="Agenda" title="Événements" />
-        <ScrollRow gap={16}>
-          {ALL_EVENTS.map((event) => (
-            <div key={event.id} className="shrink-0 bg-card border border-border/60 rounded-2xl" style={{ width: "250px" }}>
-              <div className="relative overflow-hidden rounded-t-2xl" style={{ height: 130 }}>
-                <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-70" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/85 to-transparent" />
-                <span className={`absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap ${event.exclusive ? "bg-primary text-primary-foreground" : (event.badgeColor || "bg-background/70 text-foreground")}`}>
-                  {event.category}
+      {/* ── Nos catégories (grille 4x2) ──────────────────────────────── */}
+      <section className="px-5 pt-6 mb-10">
+        <div className="grid grid-cols-4 gap-2.5">
+          {CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <Link
+                key={cat.id}
+                to={`/category/${cat.id}`}
+                className="flex flex-col items-center justify-center gap-2.5 py-5 px-1.5 rounded-2xl text-center transition-colors hover:bg-accent/40"
+                style={{
+                  background: "oklch(0.12 0.006 60)",
+                  border: "1px solid oklch(0.74 0.09 80 / 0.35)",
+                }}
+              >
+                <Icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                <span className="text-[9.5px] uppercase tracking-[0.06em] leading-tight text-foreground">
+                  {cat.name}
                 </span>
-                <div className="absolute bottom-3 left-3 right-3">
-                  <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-snug">{event.title}</p>
-                </div>
-              </div>
-              <div className="px-4 py-3 space-y-2">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground leading-relaxed">
-                  <MapPin className="w-3 h-3 shrink-0" /><span>{event.location}</span>
-                </div>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
-                  <span className="flex items-center gap-1 whitespace-nowrap"><Calendar className="w-3 h-3" />{event.date}</span>
-                  {event.time && <span className="flex items-center gap-1 whitespace-nowrap"><Clock className="w-3 h-3" />{event.time}</span>}
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${event.status === "complet" ? "bg-red-500" : "bg-emerald-400 animate-pulse"}`} />
-                  <span className={`text-[10px] ${event.status === "complet" ? "text-red-400" : "text-emerald-400"}`}>
-                    {event.status === "complet" ? "Complet" : "Disponible"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between pt-2 border-t border-border/50">
-                  <span className="text-xs text-primary whitespace-nowrap">{event.price}</span>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {event.status === "complet" ? "0 place" : `${event.spots} places`}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </ScrollRow>
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
-      <section className="mb-16">
-        <SectionHeader label="Recommandés" title="Nos coups de cœur" linkTo="/categories" />
-        <ScrollRow gap={16}>
-          {featured.map((e) => (
-            <Link key={e.id} to={`/establishment/${e.id}`} className="group shrink-0 bg-card border border-border/60 rounded-2xl" style={{ width: "230px" }}>
-              <div className="relative overflow-hidden rounded-t-2xl" style={{ height: 140 }}>
-                <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute top-2 right-2 flex items-center gap-1 bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                  <Star className="w-3 h-3 fill-primary text-primary" />
-                  <span className="text-xs whitespace-nowrap">{e.rating}</span>
-                </div>
-              </div>
-              <div className="p-3">
-                <p className="text-xs text-primary mb-1 tracking-wider whitespace-nowrap">{e.price}</p>
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="mb-1.5 leading-snug">{e.name}</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground leading-relaxed">
-                  <MapPin className="w-3 h-3 shrink-0" /><span>{e.location}</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </ScrollRow>
-      </section>
-
-      <section className="px-5 mt-4 mb-2">
-        <Link to="/membership" className="block relative overflow-hidden rounded-2xl bg-card border border-primary/20 p-6">
-          <div className="absolute inset-0 opacity-10">
-            <img src="https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800" alt="" className="w-full h-full object-cover" />
-          </div>
-          <div className="relative z-10">
-            <p className="text-xs uppercase tracking-[0.18em] text-primary mb-2 pl-0.5">Accès exclusif</p>
-            <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem" }} className="mb-2">Rejoindre le Club EliteWay</h3>
-            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">Offres membres, conciergerie dédiée et événements privés sur la Côte d'Azur.</p>
-            <div className="inline-flex items-center gap-2 text-sm text-primary">
-              Découvrir les abonnements <ArrowRight className="w-4 h-4" />
-            </div>
+      {/* ── Bannière expériences ─────────────────────────────────────── */}
+      <section className="px-5 mb-10">
+        <Link
+          to="/categories"
+          className="relative block overflow-hidden rounded-2xl"
+          style={{ border: "1px solid oklch(0.74 0.09 80 / 0.35)", aspectRatio: "16 / 7.4" }}
+        >
+          <img
+            src="/banner-experiences.jpg"
+            alt="Des expériences uniques sur la Côte d'Azur"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(90deg, oklch(0.08 0.005 60 / 0.94) 0%, oklch(0.08 0.005 60 / 0.62) 42%, transparent 72%)" }}
+          />
+          <div className="absolute inset-y-0 left-0 flex flex-col justify-center px-5" style={{ maxWidth: "64%" }}>
+            <p
+              style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem", lineHeight: 1.3, letterSpacing: "0.05em" }}
+              className="uppercase text-foreground mb-3"
+            >
+              Des expériences<br />uniques<br />sur la Côte d'Azur
+            </p>
+            <ArrowRight className="w-4 h-4 text-primary" />
           </div>
         </Link>
+      </section>
+
+      {/* ── Sélection du moment ──────────────────────────────────────── */}
+      <section className="mb-6">
+        <div className="flex items-end justify-between px-5 mb-4">
+          <p
+            style={{ fontFamily: "var(--font-heading)", fontSize: "1rem", letterSpacing: "0.14em" }}
+            className="uppercase text-foreground"
+          >
+            Sélection du moment
+          </p>
+          <Link to="/categories" className="flex items-center gap-1 text-xs text-primary hover:underline">
+            Voir tout <ChevronRight className="w-3 h-3" />
+          </Link>
+        </div>
+        <ScrollRow>
+          {featured.map((e) => (
+            <Link
+              key={e.id}
+              to={`/establishment/${e.id}`}
+              className="shrink-0 rounded-2xl overflow-hidden relative"
+              style={{ width: 150, height: 150 }}
+            >
+              <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover" />
+              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+                <p className="text-[10px] text-white leading-tight truncate">{e.name}</p>
+              </div>
+            </Link>
+          ))}
+        </ScrollRow>
       </section>
 
     </div>

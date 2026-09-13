@@ -35,24 +35,24 @@ export function PartnerAuthProvider({ children }: { children: ReactNode }) {
     const mockPartners = [
       {
         id: "partner-1",
-        name: "Le Grand",
-        email: "contact@legrand.fr",
+        name: "Le Chantecler",
+        email: "contact@chantecler.fr",
         password: "demo123",
-        establishmentId: "restaurant-le-grand"
+        establishmentId: "chantecler"
       },
       {
         id: "partner-2",
-        name: "Azur Dreams",
-        email: "contact@azurdreams.fr",
+        name: "Nomad Yachting",
+        email: "contact@nomadyachting.fr",
         password: "demo123",
-        establishmentId: "yacht-azur"
+        establishmentId: "nomad-yachting-cannes"
       },
       {
         id: "partner-3",
-        name: "Spa Sérénité",
-        email: "contact@spaserenite.fr",
+        name: "Thermes Marins de Monte-Carlo",
+        email: "contact@thermesmarins.mc",
         password: "demo123",
-        establishmentId: "spa-serenite"
+        establishmentId: "thermes-marins-monaco"
       }
     ];
 

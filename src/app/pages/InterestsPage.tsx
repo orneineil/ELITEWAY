@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Check, Utensils, Sailboat, Sparkles, Plane, Wine, CalendarDays, Gift, Hotel } from "lucide-react";
+import { Check, Utensils, Sailboat, Sparkles, Plane, Wine, CalendarDays, Gift, Hotel, Trophy } from "lucide-react";
 import { LogoMark } from "../components/LogoMark";
 
 const INTERESTS = [
@@ -12,6 +12,7 @@ const INTERESTS = [
   { id: "evenements",        label: "Événements",    icon: CalendarDays,image: "https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300" },
   { id: "hotels",            label: "Hôtels & Spa",  icon: Hotel,       image: "https://images.unsplash.com/photo-1718942899965-4fc10607d805?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300" },
   { id: "offres-exclusives", label: "Exclusif",      icon: Gift,        image: "https://images.unsplash.com/photo-1768295984941-60ff9037e294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300" },
+  { id: "sport-loisirs",     label: "Sport & Loisirs", icon: Trophy,    image: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300" },
 ];
 
 export function InterestsPage() {

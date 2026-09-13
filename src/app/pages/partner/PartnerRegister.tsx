@@ -11,6 +11,7 @@ const CATEGORIES = [
   { id: "oenologie",         label: "Vignoble / Cave / Bar à vins" },
   { id: "evenements",        label: "Événements / Lieu privatisable" },
   { id: "offres-exclusives", label: "Autre / Offre exclusive" },
+  { id: "sport-loisirs",     label: "Golf / Tennis / Équitation" },
 ];
 
 const STEPS = ["Votre établissement", "Contact & accès", "Votre offre", "Confirmation"];
@@ -105,7 +106,7 @@ export function PartnerRegister() {
               <div className="relative">
                 <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input value={form.name} onChange={e => set("name", e.target.value)}
-                  placeholder="Le Belvédère, Spa Azuréen…"
+                  placeholder="Le Chantecler, Villa Thalgo…"
                   className="w-full pl-11 pr-4 py-3 bg-input-background border border-border/60 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
               </div>
             </div>

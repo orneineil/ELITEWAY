@@ -2,6 +2,7 @@ import { useParams, Link, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { establishments } from "../data/establishments";
 import { useFavorites } from "../contexts/FavoritesContext";
+import { ScrollRow } from "../components/ScrollRow";
 import {
   ArrowLeft, Heart, MapPin, Star,
   ChevronLeft, ChevronRight,
@@ -84,12 +85,14 @@ export function EstablishmentDetail() {
 
   const categoryLabels: Record<string, string> = {
     gastronomie: "Gastronomie",
+    hotels: "Hôtels",
     navigation: "Navigation",
     "bien-etre": "Bien-être",
     aviation: "Aviation",
     oenologie: "Œnologie",
     evenements: "Événements",
     "offres-exclusives": "Exclusif",
+    "sport-loisirs": "Sport & Loisirs",
   };
 
   const similar = establishments
@@ -276,7 +279,8 @@ export function EstablishmentDetail() {
         {similar.length > 0 && (
           <div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Vous aimerez aussi</p>
-            <div className="flex gap-3 overflow-x-auto no-scrollbar -mx-5 px-5 pb-1">
+            <div className="-mx-5">
+            <ScrollRow>
               {similar.map((est) => (
                 <Link
                   key={est.id}
@@ -301,6 +305,7 @@ export function EstablishmentDetail() {
                   </div>
                 </Link>
               ))}
+            </ScrollRow>
             </div>
           </div>
         )}

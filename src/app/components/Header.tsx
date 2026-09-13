@@ -1,13 +1,11 @@
-import { Bell } from "lucide-react";
+import { Menu, Bell } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { useClientAuth } from "../contexts/ClientAuthContext";
+import { LogoMark } from "./LogoMark";
 import { useNotifications } from "../contexts/NotificationsContext";
-import { LogoHorizontal, LogoMark } from "./LogoMark";
 
 export function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { client } = useClientAuth();
   const { unreadCount } = useNotifications();
 
   const pageTitles: Record<string, string> = {
@@ -25,48 +23,48 @@ export function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/92 border-b border-border/30"
+      className={`fixed top-0 left-0 right-0 z-50 ${isHome ? "" : "backdrop-blur-xl bg-background/92 border-b border-border/30"}`}
       style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
     >
-      <div className="max-w-lg mx-auto px-5 h-14 flex items-center justify-between">
+      <div
+        className={`max-w-lg mx-auto px-5 flex items-center justify-between ${isHome ? "h-16" : "h-14"}`}
+        style={isHome ? { filter: "drop-shadow(0 1px 6px rgba(0,0,0,0.55))" } : undefined}
+      >
         {isHome ? (
           <>
-            {/* Logo horizontal lockup */}
-            <Link to="/">
-              <LogoHorizontal markSize={26} />
+            {/* Hamburger — opens the menu (temporarily routes to Explorer) */}
+            <button
+              onClick={() => navigate("/categories")}
+              className="w-9 h-9 flex items-center justify-center text-foreground/95"
+              aria-label="Menu"
+            >
+              <Menu className="w-5 h-5" strokeWidth={1.75} />
+            </button>
+
+            {/* Centered wordmark + subtitle */}
+            <Link to="/" className="flex flex-col items-center">
+              <span
+                style={{ fontFamily: "var(--font-heading)", letterSpacing: "0.24em", fontSize: "1.05rem", lineHeight: 1 }}
+                className="text-foreground"
+              >
+                ELITEWAY
+              </span>
+              <span className="text-[9px] uppercase tracking-[0.32em] text-primary mt-1">
+                A World Beyond
+              </span>
             </Link>
 
-            <div className="flex items-center gap-2">
-              {/* Notification bell */}
-              <button
-                onClick={() => navigate("/notifications")}
-                className="relative w-9 h-9 rounded-xl flex items-center justify-center hover:bg-accent transition-colors"
-              >
-                <Bell className="w-5 h-5 text-muted-foreground stroke-[1.5]" />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 min-w-[16px] h-4 rounded-full bg-primary flex items-center justify-center px-0.5">
-                    <span className="text-[9px] text-primary-foreground font-bold leading-none">
-                      {unreadCount > 9 ? "9+" : unreadCount}
-                    </span>
-                  </span>
-                )}
-              </button>
-
-              {/* Avatar */}
-              <Link to="/profile">
-                {client ? (
-                  <div className="w-9 h-9 rounded-xl bg-primary/15 border border-primary/20 flex items-center justify-center">
-                    <span className="text-primary text-sm" style={{ fontFamily: "var(--font-heading)" }}>
-                      {client.firstName[0]}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="w-9 h-9 rounded-xl bg-muted border border-border/50 flex items-center justify-center">
-                    <span className="text-muted-foreground text-xs">?</span>
-                  </div>
-                )}
-              </Link>
-            </div>
+            {/* Notifications */}
+            <button
+              onClick={() => navigate("/notifications")}
+              className="relative w-9 h-9 flex items-center justify-center text-foreground/95"
+              aria-label="Notifications"
+            >
+              <Bell className="w-5 h-5" strokeWidth={1.75} />
+              {unreadCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary" />
+              )}
+            </button>
           </>
         ) : (
           <>

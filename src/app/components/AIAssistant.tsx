@@ -21,68 +21,68 @@ const MOCK_RESPONSES: Record<string, { content: string; links: Array<{ label: st
     content: `Voici un week-end romantique parfait sur la Côte d'Azur — budget estimé : 240€/pers.
 
 **Vendredi soir** — Arrivée & dîner
-Brasserie de la Croisette pour un dîner face à la mer (dès 19€). Ambiance Belle Époque, fruits de mer frais et rosé local.
+La Palme d'Or, à l'Hôtel Martinez, pour un dîner étoilé face à la mer. Décor Art déco, cuisine méditerranéenne raffinée et rosé local.
 
 **Samedi matin** — Spa & bien-être
-Spa Azuréen à Nice : massage en duo + accès piscine vue mer. Réservez tôt, places limitées (dès 45€/pers.).
+Villa Thalgo à Cannes : massage en duo + accès piscine d'eau de mer vue baie. Réservez tôt, places limitées (dès 45€/pers.).
 
 **Samedi après-midi** — Sortie voilier
-Azur Sailing : demi-journée en voilier avec pique-nique aux Îles de Lérins. Snorkeling & coucher de soleil inoubliable (55€/pers.).
+Nomad Yachting : demi-journée en mer avec pique-nique aux Îles de Lérins. Snorkeling & coucher de soleil inoubliable (55€/pers.).
 
 **Dimanche** — Brunch & retour
 Marché Forville le matin puis déjeuner terrasse.`,
     links: [
-      { label: "Brasserie de la Croisette", href: "/establishment/brasserie-doree" },
-      { label: "Spa Azuréen", href: "/establishment/spa-serenite" },
-      { label: "Azur Sailing", href: "/establishment/yacht-azur" },
+      { label: "La Palme d'Or", href: "/establishment/palme-dor" },
+      { label: "Villa Thalgo", href: "/establishment/villa-thalgo-cannes" },
+      { label: "Nomad Yachting", href: "/establishment/nomad-yachting-cannes" },
     ],
   },
   "Dîner anniversaire Nice": {
     content: `Pour un dîner d'anniversaire mémorable à Nice, voici ma sélection :
 
-**Le Belvédère** — Vue imprenable sur la Baie des Anges
-Chef Sophie Marchand, cuisine du marché ultra-fraîche. Terrasse panoramique idéale pour une soirée d'exception. Dès 22€ la formule, jusqu'à 65€ pour le menu complet.
+**Le Chantecler** — Table étoilée de l'Hôtel Negresco
+Salle Régence classée, cuisine gastronomique raffinée. Cadre historique idéal pour une soirée d'exception sur la Promenade des Anglais.
 
-Pensez à réserver la table côté terrasse pour la vue mer. Je recommande le menu dégustation avec le rosé de Bellet, un grand cru de Nice.
+Pensez à réserver à l'avance, les tables sont très demandées. Je recommande le menu dégustation avec le rosé de Bellet, un grand cru de Nice.
 
-Budget estimé : 45-65€/pers. avec accord mets-vins.`,
+Budget estimé : 140-260€/pers.`,
     links: [
-      { label: "Réserver Le Belvédère", href: "/establishment/restaurant-le-grand" },
-      { label: "Domaine de Bellet (vins)", href: "/establishment/champagne-royal" },
+      { label: "Réserver Le Chantecler", href: "/establishment/chantecler" },
+      { label: "Château de Bellet (vins)", href: "/establishment/chateau-de-bellet-nice" },
     ],
   },
   "Journée détente spa": {
     content: `Voici la journée détente idéale sur la Côte d'Azur :
 
-**Matin** — Yoga face à la mer (9h)
-Zen Riviera à Juan-les-Pins : session Yin yoga en plein air, 8 personnes max. Commence en douceur la journée (12€).
+**Matin** — Soins signature (9h)
+Villa Thalgo à Cannes : soins visage et corps aux extraits marins, accès piscine d'eau de mer vue baie (dès 45€).
 
-**Milieu de journée** — Spa signature (11h)
-Spa Azuréen à Nice : enveloppement aux algues marines de Méditerranée + massage californien. Accès piscine vue mer inclus (dès 45€).
+**Milieu de journée** — Spa d'exception (11h)
+Spa Valmont Monte-Carlo : rituel visage à la cosmétique cellulaire suisse Valmont, piscine intérieure signée Karl Lagerfeld.
 
 **Après-midi** — Thalasso (15h)
-Thalasso Menton pour les jets sous-marins et eau de mer chauffée. Détente ultime (38€ accès journée).
+Thermes Marins de Monte-Carlo pour la piscine d'eau de mer chauffée face au Rocher. Détente ultime (accès journée dès 190€).
 
-Budget total estimé : 95€ – une journée de pur bien-être.`,
+Une journée de pur bien-être entre Cannes et Monaco.`,
     links: [
-      { label: "Spa Azuréen", href: "/establishment/spa-serenite" },
-      { label: "Zen Riviera", href: "/establishment/spa-zen" },
-      { label: "Thalasso Menton", href: "/establishment/aqua-vitae" },
+      { label: "Villa Thalgo", href: "/establishment/villa-thalgo-cannes" },
+      { label: "Spa Valmont Monte-Carlo", href: "/establishment/spa-valmont-metropole" },
+      { label: "Thermes Marins de Monte-Carlo", href: "/establishment/thermes-marins-monaco" },
     ],
   },
   "Sortie yacht Monaco": {
     content: `Pour une sortie yacht au départ de Monaco :
 
-**Option 1 — Croisière coucher de soleil Monaco**
-Monaco Sunset Cruise : 2h en catamaran autour du Rocher, champagne rosé & amuse-bouches inclus. Départ tous les vendredis soirs. 45€/pers. — parfait pour 12 personnes.
+**Option 1 — Charter Fraser Yachts**
+Fraser Yachts organise des sorties sur mesure autour du Rocher, avec possibilité de coucher de soleil, champagne et catering à bord — sur devis selon le yacht choisi.
 
-**Option 2 — Journée complète Saint-Tropez**
-Riviera Yacht Charter : journée à bord d'un yacht 10m vers les Îles d'Or. Skipper, plongée & déjeuner provençal. 85€/pers.
+**Option 2 — Journée Saint-Tropez avec Y.CO**
+Y.CO peut organiser une journée personnalisée vers Saint-Tropez à bord d'un yacht de sa sélection, avec chef privé et activités nautiques.
 
 Je recommande l'option 1 pour une soirée magique avec la vue sur le Rocher illuminé.`,
     links: [
-      { label: "Monaco Sunset Cruise", href: "/establishment/cote-bleue-sailing" },
-      { label: "Riviera Yacht Charter", href: "/establishment/yacht-ocean-star" },
+      { label: "Fraser Yachts", href: "/establishment/fraser-yachts-monaco" },
+      { label: "Y.CO", href: "/establishment/yco-monaco" },
     ],
   },
 };
@@ -96,28 +96,28 @@ function getResponse(msg: string): { content: string; links: Array<{ label: stri
   }
   if (lower.includes("restaurant") || lower.includes("dîner") || lower.includes("manger")) {
     return {
-      content: "Pour une table d'exception sur la Côte d'Azur, je recommande Le Belvédère à Nice (vue mer, dès 22€) ou la Brasserie de la Croisette à Cannes (ambiance Belle Époque). Souhaitez-vous une suggestion personnalisée ?",
+      content: "Pour une table d'exception sur la Côte d'Azur, je recommande Le Chantecler à Nice (étoilé, Hôtel Negresco) ou La Palme d'Or à Cannes (2 étoiles Michelin, Hôtel Martinez). Souhaitez-vous une suggestion personnalisée ?",
       links: [
-        { label: "Le Belvédère", href: "/establishment/restaurant-le-grand" },
-        { label: "Brasserie Croisette", href: "/establishment/brasserie-doree" },
+        { label: "Le Chantecler", href: "/establishment/chantecler" },
+        { label: "La Palme d'Or", href: "/establishment/palme-dor" },
       ],
     };
   }
   if (lower.includes("spa") || lower.includes("bien-être") || lower.includes("massage")) {
     return {
-      content: "Notre spa partenaire le plus populaire est le Spa Azuréen à Nice — soins aux algues marines, piscine vue mer, dès 45€. Pour une expérience orientale, le Hammam des Anges à Antibes est exceptionnel (35€).",
+      content: "Notre spa partenaire le plus prestigieux est les Thermes Marins de Monte-Carlo — institut de thalassothérapie mythique face au Rocher, dès 190€. Pour une adresse plus accessible, Villa Thalgo à Cannes est excellente (dès 45€).",
       links: [
-        { label: "Spa Azuréen", href: "/establishment/spa-serenite" },
-        { label: "Hammam des Anges", href: "/establishment/spa-royal" },
+        { label: "Thermes Marins de Monte-Carlo", href: "/establishment/thermes-marins-monaco" },
+        { label: "Villa Thalgo", href: "/establishment/villa-thalgo-cannes" },
       ],
     };
   }
   if (lower.includes("yacht") || lower.includes("bateau") || lower.includes("voilier")) {
     return {
-      content: "Pour une sortie en mer, Azur Sailing propose une demi-journée aux Îles de Lérins (55€/pers.) — idéal pour les familles. Pour une expérience plus exclusive, Riviera Yacht Charter offre une journée complète vers les Îles d'Or (85€/pers.).",
+      content: "Pour une sortie en mer, Nomad Yachting propose des journées ou demi-journées aux Îles de Lérins au départ de Cannes — idéal pour les familles. Pour un charter de superyacht plus exclusif, Camper & Nicholsons ou Y.CO organisent des séjours sur mesure en Méditerranée.",
       links: [
-        { label: "Azur Sailing", href: "/establishment/yacht-azur" },
-        { label: "Riviera Yacht", href: "/establishment/yacht-ocean-star" },
+        { label: "Nomad Yachting", href: "/establishment/nomad-yachting-cannes" },
+        { label: "Camper & Nicholsons", href: "/establishment/camper-nicholsons-antibes" },
       ],
     };
   }
