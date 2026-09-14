@@ -69,7 +69,7 @@ export function ReservationsPage() {
       <div className="space-y-4 mb-8">
         {MOCK_BOOKINGS.map((b) => (
           <div key={b.id} className="bg-card border border-border/60 rounded-2xl overflow-hidden">
-            <div className="relative" style={{ height: "96px" }}>
+            <div className="relative" style={{ height: "84px" }}>
               <img src={b.image} alt={b.name} className="w-full h-full object-cover opacity-60" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
               <div className="absolute bottom-3 left-4">

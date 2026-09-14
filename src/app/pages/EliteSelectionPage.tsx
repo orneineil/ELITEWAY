@@ -55,7 +55,7 @@ export function EliteSelectionPage() {
     <div className="max-w-lg mx-auto pb-28">
 
       {/* Header with bg image */}
-      <div className="relative overflow-hidden" style={{ height: 190 }}>
+      <div className="relative overflow-hidden" style={{ height: 165 }}>
         <img
           src="https://images.unsplash.com/photo-1518860308377-800f02d5498a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
           alt="EliteWay Selection"
@@ -86,7 +86,7 @@ export function EliteSelectionPage() {
                   to={`/establishment/${est.id}`}
                   className="group block bg-card border border-border/60 rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
                 >
-                  <div className="relative overflow-hidden" style={{ height: 122 }}>
+                  <div className="relative overflow-hidden" style={{ height: 107 }}>
                     <img
                       src={est.imageUrl}
                       alt={est.name}
@@ -129,7 +129,7 @@ export function EliteSelectionPage() {
           <div className="space-y-4">
             {PRIVATE_BEACHES.map((beach) => (
               <div key={beach.id} className="bg-card border border-border/60 rounded-2xl overflow-hidden">
-                <div className="relative overflow-hidden" style={{ height: 122 }}>
+                <div className="relative overflow-hidden" style={{ height: 107 }}>
                   <img
                     src={beach.image}
                     alt={beach.name}

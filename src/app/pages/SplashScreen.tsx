@@ -44,7 +44,7 @@ export function SplashScreen() {
 
       <div className="relative z-10 flex-1 flex flex-col items-center px-8" style={{ justifyContent: "flex-start", paddingTop: "9%" }}>
         {/* Logo — grand monogramme "E", mis en valeur */}
-        <div className="relative flex items-center justify-center" style={{ height: "132px", marginBottom: "0px" }}>
+        <div className="relative flex items-center justify-center" style={{ height: "115px", marginBottom: "0px" }}>
           <span
             style={{
               fontFamily: "'Playfair Display', var(--font-heading), Georgia, serif",
