@@ -40,7 +40,7 @@ export function Home() {
     <div className="max-w-lg mx-auto pb-28">
 
       {/* ── Hero (header floats transparently on top) ──────────────────── */}
-      <div className="relative overflow-hidden" style={{ height: "66svh", minHeight: "480px", maxHeight: "680px" }}>
+      <div className="relative overflow-hidden" style={{ height: "56svh", minHeight: "400px", maxHeight: "560px" }}>
 
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -100,7 +100,7 @@ export function Home() {
       </div>
 
       {/* ── Nos catégories (grille 4x2) ──────────────────────────────── */}
-      <section className="px-5 pt-6 mb-10">
+      <section className="px-5 pt-8 mb-12">
         <div className="grid grid-cols-4 gap-2.5">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;
@@ -125,7 +125,7 @@ export function Home() {
       </section>
 
       {/* ── Bannière expériences ─────────────────────────────────────── */}
-      <section className="px-5 mb-10">
+      <section className="px-5 mb-12">
         <Link
           to="/categories"
           className="relative block overflow-hidden rounded-2xl"
@@ -153,7 +153,7 @@ export function Home() {
       </section>
 
       {/* ── Sélection du moment ──────────────────────────────────────── */}
-      <section className="mb-6">
+      <section className="mb-10">
         <div className="flex items-end justify-between px-5 mb-4">
           <p
             style={{ fontFamily: "var(--font-heading)", fontSize: "1rem", letterSpacing: "0.14em" }}
@@ -171,7 +171,7 @@ export function Home() {
               key={e.id}
               to={`/establishment/${e.id}`}
               className="shrink-0 rounded-2xl overflow-hidden relative"
-              style={{ width: 131, height: 131 }}
+              style={{ width: 112, height: 112 }}
             >
               <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover" />
               <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent">

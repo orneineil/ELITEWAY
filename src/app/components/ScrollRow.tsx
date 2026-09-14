@@ -7,7 +7,7 @@ interface ScrollRowProps {
   gap?: number;
 }
 
-export function ScrollRow({ children, className = "", gap = 12 }: ScrollRowProps) {
+export function ScrollRow({ children, className = "", gap = 16 }: ScrollRowProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft]   = useState(false);
   const [canRight, setCanRight] = useState(false);

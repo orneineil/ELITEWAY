@@ -124,7 +124,7 @@ export function EstablishmentDetail() {
     <div className="max-w-lg mx-auto pb-28">
 
       {/* GALLERY */}
-      <div className="relative bg-black overflow-hidden" style={{ height: 258 }}>
+      <div className="relative bg-black overflow-hidden" style={{ height: 225 }}>
         {isLowResPhoto && (
           <img
             src={galleryImages[galleryIndex]}
@@ -194,7 +194,7 @@ export function EstablishmentDetail() {
         )}
       </div>
 
-      <div className="px-5 pt-5 space-y-6">
+      <div className="px-5 pt-6 space-y-8">
 
         {/* INFOS PRINCIPALES */}
         <div>
@@ -262,14 +262,7 @@ export function EstablishmentDetail() {
           </Link>
         </div>
 
-        {/* CARTE INTERACTIVE */}
-        {establishment.mapCoords && (
-          <EstablishmentMap
-            coords={establishment.mapCoords}
-            name={establishment.name}
-            address={establishment.address}
-          />
-        )}
+        {/* CARTE INTERACTIVE — retirée temporairement (sera réintégrée plus tard) */}
 
         {/* AVIS — condensé */}
         {reviews.length > 0 && (
@@ -309,7 +302,7 @@ export function EstablishmentDetail() {
                   className="group shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
                   style={{ width: 160 }}
                 >
-                  <div className="relative overflow-hidden" style={{ height: 86 }}>
+                  <div className="relative overflow-hidden" style={{ height: 75 }}>
                     <img
                       src={est.imageUrl}
                       alt={est.name}

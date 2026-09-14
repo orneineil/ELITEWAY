@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { useClientAuth } from "../contexts/ClientAuthContext";
-import { Crown, Heart, Calendar, ChevronRight, LogOut, Settings, Bell, Shield, HelpCircle, Gift, Map, Star, Sparkles } from "lucide-react";
+import { Crown, Heart, Calendar, ChevronRight, LogOut, Settings, Bell, Shield, HelpCircle, Gift, Star, Sparkles } from "lucide-react";
 
 const tierInfo = {
   essentiel: { label: "Essentiel", color: "text-muted-foreground", bg: "bg-muted/50" },
@@ -56,7 +56,6 @@ export function ProfilePage() {
       title: "Découverte",
       items: [
         { icon: Sparkles, label: "EliteWay Selection", to: "/elite-selection" },
-        { icon: Map,      label: "Carte Côte d'Azur",  to: "/map" },
         { icon: Bell,     label: "Notifications",      to: "/notifications" },
       ],
     },

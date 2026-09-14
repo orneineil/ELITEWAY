@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Heart, MapPin, Star } from "lucide-react";
 import { Establishment } from "../data/establishments";
 import { useFavorites } from "../contexts/FavoritesContext";
@@ -10,6 +11,10 @@ interface EstablishmentCardProps {
 export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(establishment.id);
+  // Certaines photos sources sont en basse résolution : on évite de les étirer
+  // (ce qui les rend floues) en les affichant en taille native sur un fond flouté.
+  const [naturalWidth, setNaturalWidth] = useState<number | null>(null);
+  const isLowRes = naturalWidth !== null && naturalWidth < 500;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -20,13 +25,23 @@ export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
   return (
     <Link
       to={`/establishment/${establishment.id}`}
-      className="group block relative overflow-hidden rounded-2xl border border-border/60"
+      className="group block relative overflow-hidden rounded-2xl border border-border/60 bg-black"
       style={{ aspectRatio: "4 / 3" }}
     >
+      {isLowRes && (
+        <img
+          src={establishment.imageUrl}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: "blur(20px) brightness(0.5)", transform: "scale(1.2)" }}
+        />
+      )}
       <img
         src={establishment.imageUrl}
         alt={establishment.name}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        onLoad={(e) => setNaturalWidth(e.currentTarget.naturalWidth)}
+        className={`absolute inset-0 w-full h-full transition-transform duration-500 group-hover:scale-105 ${isLowRes ? "object-contain" : "object-cover"}`}
       />
       <div
         className="absolute inset-0"
