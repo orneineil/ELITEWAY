@@ -1,12 +1,29 @@
-import { Menu, Bell } from "lucide-react";
+import {
+  Menu, Bell, X,
+  UtensilsCrossed, BedDouble, Sailboat, Flower2, Plane, Wine, CalendarDays, Gem, Trophy,
+} from "lucide-react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { LogoMark } from "./LogoMark";
 import { useNotifications } from "../contexts/NotificationsContext";
+
+const MENU_CATEGORIES = [
+  { id: "gastronomie",       name: "Gastronomie",       icon: UtensilsCrossed },
+  { id: "hotels",            name: "Hôtels",            icon: BedDouble },
+  { id: "navigation",        name: "Navigation",        icon: Sailboat },
+  { id: "bien-etre",         name: "Bien-être",         icon: Flower2 },
+  { id: "aviation",          name: "Aviation",          icon: Plane },
+  { id: "oenologie",         name: "Œnologie",          icon: Wine },
+  { id: "evenements",        name: "Événements",        icon: CalendarDays },
+  { id: "offres-exclusives", name: "Offres Exclusives", icon: Gem },
+  { id: "sport-loisirs",     name: "Sport & Loisirs",   icon: Trophy },
+];
 
 export function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { unreadCount } = useNotifications();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const pageTitles: Record<string, string> = {
     "/categories":    "Catégories",
@@ -32,9 +49,9 @@ export function Header() {
       >
         {isHome ? (
           <>
-            {/* Hamburger — opens the menu (temporarily routes to Explorer) */}
+            {/* Hamburger — ouvre le menu latéral */}
             <button
-              onClick={() => navigate("/categories")}
+              onClick={() => setMenuOpen(true)}
               className="w-9 h-9 flex items-center justify-center text-foreground/95"
               aria-label="Menu"
             >
@@ -87,6 +104,81 @@ export function Header() {
           </>
         )}
       </div>
+
+      {/* MENU LATÉRAL */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-[100]">
+          <button
+            aria-label="Fermer le menu"
+            onClick={() => setMenuOpen(false)}
+            className="absolute inset-0 bg-black/60"
+          />
+          <div
+            className="absolute top-0 left-0 bottom-0 w-[82%] max-w-[320px] bg-background overflow-y-auto"
+            style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+          >
+            <div className="flex items-center justify-between px-5 pt-5 pb-6">
+              <div className="flex items-center gap-2">
+                <LogoMark size={26} className="text-primary" />
+                <span style={{ fontFamily: "var(--font-heading)", letterSpacing: "0.16em", fontSize: "1rem" }}>
+                  ELITEWAY
+                </span>
+              </div>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="w-8 h-8 flex items-center justify-center text-muted-foreground"
+                aria-label="Fermer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="px-5 pb-4 border-b border-border/30">
+              <Link
+                to="/"
+                onClick={() => setMenuOpen(false)}
+                className="block py-2.5 text-sm hover:text-primary transition-colors"
+              >
+                Accueil
+              </Link>
+              <Link
+                to="/about"
+                onClick={() => setMenuOpen(false)}
+                className="block py-2.5 text-sm hover:text-primary transition-colors"
+              >
+                Qui sommes-nous
+              </Link>
+              <Link
+                to="/membership"
+                onClick={() => setMenuOpen(false)}
+                className="block py-2.5 text-sm hover:text-primary transition-colors"
+              >
+                Membership
+              </Link>
+            </div>
+
+            <div className="px-5 pt-5 pb-8">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Catégories</p>
+              <div className="divide-y divide-border/30">
+                {MENU_CATEGORIES.map((cat) => {
+                  const Icon = cat.icon;
+                  return (
+                    <Link
+                      key={cat.id}
+                      to={`/category/${cat.id}`}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-3 py-3 text-sm hover:text-primary transition-colors"
+                    >
+                      <Icon className="w-4 h-4 text-primary shrink-0" strokeWidth={1.5} />
+                      {cat.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

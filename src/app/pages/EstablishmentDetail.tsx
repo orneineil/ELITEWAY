@@ -140,30 +140,27 @@ export function EstablishmentDetail() {
           onLoad={(e) => setGalleryNaturalWidth(e.currentTarget.naturalWidth)}
           className={`relative w-full h-full ${isLowResPhoto ? "object-contain" : "object-cover"}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
 
         <button
           onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 w-9 h-9 rounded-xl bg-background/70 backdrop-blur-md flex items-center justify-center border border-white/10"
+          className="absolute top-4 left-4 w-9 h-9 rounded-full bg-background/60 flex items-center justify-center"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
 
         <button
           onClick={() => toggleFavorite(establishment.id)}
-          className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-background/70 backdrop-blur-md flex items-center justify-center border border-white/10"
+          className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center"
         >
           <Heart
-            className={`w-5 h-5 transition-all ${favorited ? "fill-primary text-primary" : "text-foreground"}`}
+            className={`w-5 h-5 transition-all drop-shadow-sm ${favorited ? "fill-primary text-primary" : "text-white"}`}
           />
         </button>
 
         <div className="absolute bottom-4 left-4 flex items-center gap-2">
           <span className="px-2.5 py-1 rounded-full text-xs bg-primary text-primary-foreground">
             {categoryLabels[establishment.category]}
-          </span>
-          <span className="px-2.5 py-1 rounded-full text-xs bg-background/70 backdrop-blur-sm border border-white/10">
-            {establishment.price}
           </span>
         </div>
 
@@ -194,7 +191,7 @@ export function EstablishmentDetail() {
         )}
       </div>
 
-      <div className="px-5 pt-6 space-y-10">
+      <div className="px-5 pt-6 space-y-8">
 
         {/* INFOS PRINCIPALES */}
         <div>
@@ -215,7 +212,7 @@ export function EstablishmentDetail() {
           {establishment.tags && (
             <div className="flex flex-wrap gap-2">
               {establishment.tags.map((tag) => (
-                <span key={tag} className="px-3 py-1 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">
+                <span key={tag} className="px-3 py-1 rounded-full text-xs bg-primary/10 text-primary">
                   {tag}
                 </span>
               ))}
@@ -239,8 +236,8 @@ export function EstablishmentDetail() {
         </div>
 
         {/* PRIX & RÉSERVATION */}
-        <div className="bg-card border border-border/60 rounded-2xl p-4">
-          <div className="flex items-center justify-between mb-4">
+        <div className="pt-6 border-t border-border/30">
+          <div className="flex items-center justify-between mb-5">
             <div>
               <p className="text-xs text-muted-foreground mb-0.5">Tarifs</p>
               {establishment.priceRange ? (
@@ -266,8 +263,9 @@ export function EstablishmentDetail() {
 
         {/* AVIS — condensé */}
         {reviews.length > 0 && (
-          <div>
-            <div className="flex items-center gap-3 mb-4">
+          <div className="pt-6 border-t border-border/30">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Avis clients</p>
+            <div className="flex items-center gap-3 mb-5">
               <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }} className="text-primary leading-none">
                 {avgRating.toFixed(1)}
               </p>
@@ -276,37 +274,35 @@ export function EstablishmentDetail() {
                 <p className="text-xs text-muted-foreground mt-0.5">{reviews.length} avis</p>
               </div>
             </div>
-            <div className="bg-card border border-border/60 rounded-2xl p-4">
-              <div className="flex items-start gap-3 mb-2">
-                <img src={reviews[0].avatar} alt={reviews[0].author} className="w-9 h-9 rounded-xl object-cover shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium leading-tight">{reviews[0].author}</p>
-                  <StarRating rating={reviews[0].rating} size={11} />
-                </div>
+            <div className="flex items-start gap-3">
+              <img src={reviews[0].avatar} alt={reviews[0].author} className="w-9 h-9 rounded-xl object-cover shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium leading-tight mb-1">{reviews[0].author}</p>
+                <StarRating rating={reviews[0].rating} size={11} />
+                <p className="text-xs text-muted-foreground leading-relaxed mt-2">{reviews[0].comment}</p>
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">{reviews[0].comment}</p>
             </div>
           </div>
         )}
 
         {/* ÉTABLISSEMENTS SIMILAIRES */}
         {similar.length > 0 && (
-          <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Vous aimerez aussi</p>
+          <div className="pt-8 border-t border-border/30">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-5">Vous aimerez aussi</p>
             <div className="-mx-5">
-            <ScrollRow>
+            <ScrollRow gap={16}>
               {similar.map((est) => (
                 <Link
                   key={est.id}
                   to={`/establishment/${est.id}`}
                   className="group shrink-0 bg-card rounded-2xl overflow-hidden transition-colors"
-                  style={{ width: 160 }}
+                  style={{ width: 190 }}
                 >
-                  <div className="relative overflow-hidden" style={{ height: 75 }}>
+                  <div className="relative overflow-hidden" style={{ height: 120 }}>
                     <img
                       src={est.imageUrl}
                       alt={est.name}
-                      className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-2 right-2 flex items-center gap-0.5 bg-background/80 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
                       <Star className="w-2.5 h-2.5 fill-primary text-primary" />
@@ -314,8 +310,11 @@ export function EstablishmentDetail() {
                     </div>
                   </div>
                   <div className="p-3">
-                    <p style={{ fontFamily: "var(--font-heading)", fontSize: "0.9rem" }} className="leading-tight mb-1">{est.name}</p>
-                    <p className="text-[10px] text-primary">{est.price}</p>
+                    <p style={{ fontFamily: "var(--font-heading)", fontSize: "0.95rem" }} className="leading-tight mb-1">{est.name}</p>
+                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                      <MapPin className="w-2.5 h-2.5 shrink-0" />
+                      <span className="truncate">{est.city}</span>
+                    </div>
                   </div>
                 </Link>
               ))}

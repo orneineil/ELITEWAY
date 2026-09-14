@@ -53,22 +53,6 @@ export function Home() {
           background: "linear-gradient(180deg, rgba(10,8,6,0.62) 0%, rgba(10,8,6,0.05) 26%, rgba(10,8,6,0.1) 52%, rgba(10,8,6,0.78) 86%, var(--background) 100%)",
         }} />
 
-        {/* Headline */}
-        <div className="absolute inset-x-0 px-6 text-right" style={{ top: "36%" }}>
-          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
-            EXCLUSIVE
-          </p>
-          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
-            PLACES
-          </p>
-          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
-            EXTRAORDINARY
-          </p>
-          <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem", letterSpacing: "0.22em", lineHeight: 1.7 }} className="text-foreground">
-            MOMENTS
-          </p>
-        </div>
-
         {/* Search bar */}
         <form onSubmit={handleSearch} className="absolute inset-x-0 px-6" style={{ bottom: "30px" }}>
           <div

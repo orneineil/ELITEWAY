@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useClientAuth } from "../contexts/ClientAuthContext";
 import { Crown, Heart, Calendar, ChevronRight, LogOut, Settings, Bell, Shield, HelpCircle, Gift, Star, Sparkles } from "lucide-react";
+import { LogoMark } from "../components/LogoMark";
 
 const tierInfo = {
   essentiel: { label: "Essentiel", color: "text-muted-foreground", bg: "bg-muted/50" },
@@ -16,7 +17,7 @@ export function ProfilePage() {
     return (
       <div className="max-w-lg mx-auto px-5 pb-28 pt-6 flex flex-col items-center justify-center min-h-[70vh] text-center">
         <div className="w-20 h-20 rounded-3xl bg-card flex items-center justify-center mb-6">
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: "2rem" }} className="text-muted-foreground">E</span>
+          <LogoMark size={34} className="text-primary" />
         </div>
         <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.6rem" }} className="mb-2">Mon profil</h2>
         <p className="text-muted-foreground text-sm mb-8 max-w-xs">
