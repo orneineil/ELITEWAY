@@ -48,14 +48,6 @@ export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
         style={{ background: "linear-gradient(180deg, rgba(10,8,6,0.05) 0%, transparent 30%, rgba(10,8,6,0.55) 68%, rgba(10,8,6,0.92) 100%)" }}
       />
 
-      {/* Price range */}
-      <span
-        className="absolute top-2.5 left-2.5 text-[10px] tracking-[0.1em] px-2 py-1 rounded-full backdrop-blur-sm"
-        style={{ background: "oklch(0.08 0.005 60 / 0.65)", color: "oklch(0.74 0.09 80)" }}
-      >
-        {establishment.price}
-      </span>
-
       {/* Favorite */}
       <button
         onClick={handleFavoriteClick}

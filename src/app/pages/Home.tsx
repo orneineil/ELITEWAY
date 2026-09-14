@@ -154,11 +154,11 @@ export function Home() {
               key={e.id}
               to={`/establishment/${e.id}`}
               className="shrink-0 rounded-2xl overflow-hidden relative"
-              style={{ width: 112, height: 112 }}
+              style={{ width: 140, height: 140 }}
             >
               <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover" />
-              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
-                <p className="text-[10px] text-white leading-tight truncate">{e.name}</p>
+              <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                <p className="text-xs text-white leading-tight truncate">{e.name}</p>
               </div>
             </Link>
           ))}

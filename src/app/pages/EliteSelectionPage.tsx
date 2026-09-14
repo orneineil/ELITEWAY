@@ -106,12 +106,9 @@ export function EliteSelectionPage() {
                   <div className="p-4">
                     <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-tight mb-1">{est.name}</h3>
                     <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{est.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="w-3 h-3" />
-                        {est.city}
-                      </div>
-                      <span className="text-xs text-primary">{est.price}</span>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <MapPin className="w-3 h-3" />
+                      {est.city}
                     </div>
                   </div>
                 </Link>
@@ -144,12 +141,9 @@ export function EliteSelectionPage() {
                 <div className="p-4">
                   <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-tight mb-1">{beach.name}</h3>
                   <p className="text-xs text-muted-foreground mb-3">{beach.description}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin className="w-3 h-3" />
-                      {beach.city}
-                    </div>
-                    <span className="text-xs text-primary">{beach.price}</span>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <MapPin className="w-3 h-3" />
+                    {beach.city}
                   </div>
                 </div>
               </div>

@@ -58,7 +58,7 @@ export function PaymentPage() {
         </p>
 
         {/* Points earned */}
-        <div className="w-full flex items-center justify-between bg-primary/5 border border-primary/20 rounded-2xl px-5 py-4 mb-7">
+        <div className="w-full flex items-center justify-between bg-primary/5 rounded-2xl px-5 py-4 mb-7">
           <div>
             <p className="text-xs text-muted-foreground mb-0.5">Points gagnés</p>
             <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.5rem" }} className="text-primary">+{total} pts</p>
@@ -70,7 +70,7 @@ export function PaymentPage() {
         </div>
 
         {/* Confirmation number */}
-        <div className="w-full bg-card border border-border/60 rounded-2xl px-5 py-4 mb-8 text-center">
+        <div className="w-full bg-card rounded-2xl px-5 py-4 mb-8 text-center">
           <p className="text-xs text-muted-foreground mb-1">Numéro de confirmation</p>
           <p className="text-sm tracking-widest text-foreground font-mono">EW-{Math.random().toString(36).slice(2, 8).toUpperCase()}</p>
         </div>
@@ -91,7 +91,7 @@ export function PaymentPage() {
     <div className="max-w-sm mx-auto px-5 pb-24 pt-4">
       {/* Header */}
       <div className="flex items-center gap-3 mb-7">
-        <Link to={`/establishment/${id}/reserve`} className="w-9 h-9 rounded-xl bg-card border border-border/60 flex items-center justify-center">
+        <Link to={`/establishment/${id}/reserve`} className="w-9 h-9 rounded-xl bg-card flex items-center justify-center">
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div>
@@ -104,7 +104,7 @@ export function PaymentPage() {
       </div>
 
       {/* Order summary */}
-      <div className="bg-card border border-border/60 rounded-2xl px-5 py-4 mb-5">
+      <div className="bg-card rounded-2xl px-5 py-4 mb-5">
         <div className="flex justify-between items-center">
           <div>
             <p className="text-sm">{establishment?.name}</p>
@@ -199,7 +199,7 @@ export function PaymentPage() {
         </form>
       ) : (
         <div className="flex flex-col items-center py-12">
-          <div className="w-16 h-16 rounded-2xl bg-card border border-border/60 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center mb-4">
             <span className="text-2xl">{method === "apple" ? "🍎" : "🔵"}</span>
           </div>
           <p className="text-muted-foreground text-sm mb-6">

@@ -114,8 +114,13 @@ export function EstablishmentDetail() {
     : establishment.rating;
 
   const description = establishment.longDescription;
+  const truncateAtWord = (text: string, max: number) => {
+    const cut = text.slice(0, max);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim();
+  };
   const shortDescription = description.length > 160 && !showFullDescription
-    ? description.slice(0, 160).trim() + "…"
+    ? truncateAtWord(description, 160) + "…"
     : description;
 
   const isLowResPhoto = galleryNaturalWidth !== null && galleryNaturalWidth < 500;
@@ -222,17 +227,17 @@ export function EstablishmentDetail() {
 
         {/* DESCRIPTION (courte, extensible) */}
         <div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-[0.95rem] text-muted-foreground leading-relaxed">
             {shortDescription}
-            {description.length > 160 && (
-              <button
-                onClick={() => setShowFullDescription((v) => !v)}
-                className="text-primary ml-1 hover:underline"
-              >
-                {showFullDescription ? "Voir moins" : "Voir plus"}
-              </button>
-            )}
           </p>
+          {description.length > 160 && (
+            <button
+              onClick={() => setShowFullDescription((v) => !v)}
+              className="text-primary text-sm mt-2 hover:underline"
+            >
+              {showFullDescription ? "Voir moins" : "Voir plus"}
+            </button>
+          )}
         </div>
 
         {/* PRIX & RÉSERVATION */}
@@ -287,8 +292,8 @@ export function EstablishmentDetail() {
 
         {/* ÉTABLISSEMENTS SIMILAIRES */}
         {similar.length > 0 && (
-          <div className="pt-8 border-t border-border/30">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-5">Vous aimerez aussi</p>
+          <div className="mt-4 pt-10 border-t border-border/30">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-6">Vous aimerez aussi</p>
             <div className="-mx-5">
             <ScrollRow gap={16}>
               {similar.map((est) => (

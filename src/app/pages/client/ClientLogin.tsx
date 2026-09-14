@@ -37,7 +37,7 @@ export function ClientLogin() {
           <p className="text-muted-foreground text-sm">Accédez à votre espace membre</p>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-8">
+        <div className="bg-card rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm mb-2">Email</label>

@@ -26,7 +26,7 @@ export function ForgotPasswordPage() {
         </div>
 
         {!sent ? (
-          <div className="bg-card border border-border/60 rounded-2xl p-7">
+          <div className="bg-card rounded-2xl p-7">
             <Link to="/client/login" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary mb-6 transition-colors">
               <ArrowLeft className="w-3.5 h-3.5" /> Retour à la connexion
             </Link>
@@ -64,7 +64,7 @@ export function ForgotPasswordPage() {
             </form>
           </div>
         ) : (
-          <div className="bg-card border border-border/60 rounded-2xl p-8 text-center">
+          <div className="bg-card rounded-2xl p-8 text-center">
             <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-5">
               <CheckCircle className="w-8 h-8 text-emerald-400" />
             </div>

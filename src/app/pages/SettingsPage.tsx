@@ -112,7 +112,7 @@ export function SettingsPage() {
       {/* ── PROFIL ─────────────────────────────────────────────────────────── */}
       <div className="mb-6">
         <SectionTitle icon={User} label="Mon profil" />
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden">
+        <div className="rounded-2xl overflow-hidden">
           {/* Profile header */}
           <div className="flex items-center gap-4 px-4 py-4 border-b border-border/40">
             <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
@@ -186,7 +186,7 @@ export function SettingsPage() {
       {/* ── SÉCURITÉ ───────────────────────────────────────────────────────── */}
       <div className="mb-6">
         <SectionTitle icon={Lock} label="Sécurité" />
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden divide-y divide-border/40">
+        <div className="rounded-2xl overflow-hidden divide-y divide-border/30">
 
           {/* Changer le mot de passe */}
           <button onClick={() => setShowPwd(!showPwd)}
@@ -266,7 +266,7 @@ export function SettingsPage() {
       {/* ── NOTIFICATIONS ──────────────────────────────────────────────────── */}
       <div className="mb-6">
         <SectionTitle icon={Bell} label="Notifications" />
-        <div className="bg-card border border-border/50 rounded-2xl px-4">
+        <div>
           <Toggle label="Table libérée" desc="Alertes en temps réel" value={notifs.tables} onChange={() => setNotifs(n => ({ ...n, tables: !n.tables }))} />
           <Toggle label="Offres exclusives" desc="Nouveautés membres" value={notifs.offers} onChange={() => setNotifs(n => ({ ...n, offers: !n.offers }))} />
           <Toggle label="Événements à venir" value={notifs.events} onChange={() => setNotifs(n => ({ ...n, events: !n.events }))} />
@@ -278,7 +278,7 @@ export function SettingsPage() {
       {/* ── APPARENCE & LANGUE ─────────────────────────────────────────────── */}
       <div className="mb-6">
         <SectionTitle icon={Moon} label="Apparence & Langue" />
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden divide-y divide-border/40">
+        <div className="divide-y divide-border/30">
           {/* Mode sombre — toujours actif */}
           <div className="flex items-center justify-between px-4 py-3.5">
             <span className="text-sm">Mode sombre</span>
@@ -316,12 +316,12 @@ export function SettingsPage() {
       {/* ── CONFIDENTIALITÉ ────────────────────────────────────────────────── */}
       <div className="mb-6">
         <SectionTitle icon={Shield} label="Confidentialité" />
-        <div className="bg-card border border-border/50 rounded-2xl px-4">
+        <div>
           <Toggle label="Profil visible" desc="Autres membres peuvent voir votre statut" value={privacy.profileVisible} onChange={() => setPrivacy(p => ({ ...p, profileVisible: !p.profileVisible }))} />
           <Toggle label="Partage des données partenaires" desc="Pour des recommandations personnalisées" value={privacy.shareData} onChange={() => setPrivacy(p => ({ ...p, shareData: !p.shareData }))} />
           <Toggle label="Statistiques d'utilisation anonymes" value={privacy.analytics} onChange={() => setPrivacy(p => ({ ...p, analytics: !p.analytics }))} />
         </div>
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden divide-y divide-border/40 mt-2">
+        <div className="divide-y divide-border/30 mt-2">
           {[["Politique de confidentialité", "/confidentialite"], ["CGU", "/cgu"], ["Mentions légales", "/mentions-legales"]].map(([label, href]) => (
             <Link key={label} to={href} className="flex items-center justify-between px-4 py-3.5 hover:bg-accent/50 transition-colors">
               <span className="text-sm">{label}</span>
@@ -334,9 +334,9 @@ export function SettingsPage() {
       {/* ── AIDE & FAQ ─────────────────────────────────────────────────────── */}
       <div className="mb-6">
         <SectionTitle icon={HelpCircle} label="Aide & Support" />
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden mb-2">
+        <div className="mb-2">
           {faqs.map((faq, i) => (
-            <div key={i} className="border-b border-border/40 last:border-0">
+            <div key={i} className="border-b border-border/30 last:border-0">
               <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-accent/50 transition-colors text-left">
                 <span className="text-sm pr-3">{faq.q}</span>
@@ -350,7 +350,7 @@ export function SettingsPage() {
             </div>
           ))}
         </div>
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden divide-y divide-border/40">
+        <div className="divide-y divide-border/30">
           <a href="mailto:support@eliteway.fr" className="flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors">
             <Mail className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm">support@eliteway.fr</span>
@@ -373,7 +373,7 @@ export function SettingsPage() {
 
       {/* ── DÉCONNEXION & SUPPRESSION ──────────────────────────────────────── */}
       <div className="mb-6">
-        <div className="bg-card border border-border/50 rounded-2xl overflow-hidden divide-y divide-border/40">
+        <div className="divide-y divide-border/30">
           {client && (
             <button onClick={() => { logout(); navigate("/"); }}
               className="w-full flex items-center gap-3 px-4 py-4 text-muted-foreground hover:bg-accent/50 transition-colors">

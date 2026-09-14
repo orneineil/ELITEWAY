@@ -220,7 +220,7 @@ export function AboutPage() {
 
         <div className="space-y-5">
           {PROBLEMS.map((p) => (
-            <div key={p.number} className="flex gap-4 p-4 rounded-2xl bg-card border border-border/60">
+            <div key={p.number} className="flex gap-4 p-4 rounded-2xl bg-card">
               <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
                 style={{ background: "oklch(0.74 0.09 80 / 0.12)", border: "1px solid oklch(0.74 0.09 80 / 0.35)" }}>
                 <span className="text-[10px] text-primary font-medium">{p.number}</span>
@@ -283,11 +283,10 @@ export function AboutPage() {
                   key={exp.title}
                   to={exp.link}
                   className="shrink-0 rounded-2xl overflow-hidden relative group active:scale-95 transition-transform"
-                  style={{ width: 138, height: 184 }}
+                  style={{ width: 158, height: 205 }}
                 >
                   <img src={exp.image} alt={exp.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    style={{ opacity: 0.65 }} />
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0" style={{
                     background: "linear-gradient(180deg, transparent 30%, rgba(6,4,2,0.92) 100%)",
                   }} />
@@ -298,11 +297,11 @@ export function AboutPage() {
                   </div>
                   {/* Content */}
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-tight mb-0.5">
+                    <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.3rem" }} className="leading-tight mb-1">
                       {exp.title}
                     </p>
-                    <p className="text-xs text-muted-foreground mb-2">{exp.subtitle}</p>
-                    <p className="text-xs text-primary font-medium">{exp.price}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{exp.subtitle}</p>
+                    <p className="text-sm text-primary font-medium">{exp.price}</p>
                   </div>
                   {/* Arrow */}
                   <div className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center"
@@ -324,7 +323,7 @@ export function AboutPage() {
 
         <div className="grid grid-cols-2 gap-3">
           {PILLARS.map((p) => (
-            <div key={p.number} className="p-4 rounded-2xl bg-card border border-border/60">
+            <div key={p.number} className="p-4 rounded-2xl bg-card">
               <div className="w-7 h-7 rounded-full flex items-center justify-center mb-3"
                 style={{ background: "oklch(0.74 0.09 80 / 0.12)", border: "1px solid oklch(0.74 0.09 80 / 0.35)" }}>
                 <span className="text-[11px] text-primary font-semibold">{p.number}</span>
@@ -340,7 +339,7 @@ export function AboutPage() {
       <section className="px-5 py-8">
         <div className="grid grid-cols-2 gap-4">
           {STATS.map((s) => (
-            <div key={s.label} className="text-center p-5 rounded-2xl bg-card border border-border/60">
+            <div key={s.label} className="text-center p-5 rounded-2xl bg-card">
               <p style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", color: "oklch(0.74 0.09 80)" }}
                 className="leading-none mb-1">{s.value}</p>
               <p className="text-xs text-muted-foreground">{s.label}</p>
