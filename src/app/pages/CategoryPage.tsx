@@ -163,7 +163,7 @@ export function CategoryPage() {
       </div>
 
       <div className="px-5 pt-4 pb-5 border-b border-border/40">
-        <p className="text-sm text-muted-foreground leading-relaxed">{config.description}</p>
+        <p className="text-[0.95rem] text-muted-foreground leading-relaxed">{config.description}</p>
         {config.partnerNote && (
           <div className="mt-3 flex items-start gap-2 p-3 bg-primary/5 border border-primary/15 rounded-xl">
             <span className="text-primary mt-0.5">ℹ</span>

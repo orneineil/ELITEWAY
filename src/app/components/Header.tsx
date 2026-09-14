@@ -133,32 +133,32 @@ export function Header() {
               </button>
             </div>
 
-            <div className="px-5 pb-4 border-b border-border/30">
+            <div className="px-5 pb-5 border-b border-border/30">
               <Link
                 to="/"
                 onClick={() => setMenuOpen(false)}
-                className="block py-2.5 text-sm hover:text-primary transition-colors"
+                className="block py-3.5 text-sm hover:text-primary transition-colors"
               >
                 Accueil
               </Link>
               <Link
                 to="/about"
                 onClick={() => setMenuOpen(false)}
-                className="block py-2.5 text-sm hover:text-primary transition-colors"
+                className="block py-3.5 text-sm hover:text-primary transition-colors"
               >
                 Qui sommes-nous
               </Link>
               <Link
                 to="/membership"
                 onClick={() => setMenuOpen(false)}
-                className="block py-2.5 text-sm hover:text-primary transition-colors"
+                className="block py-3.5 text-sm hover:text-primary transition-colors"
               >
                 Membership
               </Link>
             </div>
 
-            <div className="px-5 pt-5 pb-8">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Catégories</p>
+            <div className="px-5 pt-6 pb-10">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Catégories</p>
               <div className="divide-y divide-border/30">
                 {MENU_CATEGORIES.map((cat) => {
                   const Icon = cat.icon;
@@ -167,9 +167,9 @@ export function Header() {
                       key={cat.id}
                       to={`/category/${cat.id}`}
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-3 py-3 text-sm hover:text-primary transition-colors"
+                      className="flex items-center gap-3.5 py-4 text-sm hover:text-primary transition-colors"
                     >
-                      <Icon className="w-4 h-4 text-primary shrink-0" strokeWidth={1.5} />
+                      <Icon className="w-[18px] h-[18px] text-primary shrink-0" strokeWidth={1.5} />
                       {cat.name}
                     </Link>
                   );
