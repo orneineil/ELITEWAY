@@ -54,7 +54,7 @@ export function ClientLogin() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm">Mot de passe</label>
-                <a href="#" className="text-xs text-primary hover:underline">Mot de passe oublié ?</a>
+                <Link to="/forgot-password" className="text-xs text-primary hover:underline">Mot de passe oublié ?</Link>
               </div>
               <div className="relative">
                 <input

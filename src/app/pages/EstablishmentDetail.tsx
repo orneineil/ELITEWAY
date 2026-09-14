@@ -194,7 +194,7 @@ export function EstablishmentDetail() {
         )}
       </div>
 
-      <div className="px-5 pt-6 space-y-8">
+      <div className="px-5 pt-6 space-y-10">
 
         {/* INFOS PRINCIPALES */}
         <div>

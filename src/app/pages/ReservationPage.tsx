@@ -13,11 +13,11 @@ function getNextDays(n: number) {
   });
 }
 
+// Date, heure et nombre de personnes sont regroupés sur un seul écran pour
+// raccourcir le parcours de réservation (auparavant 4 écrans distincts).
 const STEPS = [
-  { key: "date",   label: "Date",         icon: Calendar },
-  { key: "heure",  label: "Heure",        icon: Clock },
-  { key: "pers",   label: "Personnes",    icon: Users },
-  { key: "recap",  label: "Confirmation", icon: Check },
+  { key: "details", label: "Détails",      icon: Calendar },
+  { key: "recap",   label: "Confirmation", icon: Check },
 ];
 
 export function ReservationPage() {
@@ -45,16 +45,14 @@ export function ReservationPage() {
   const basePrice = establishment.priceRange?.min ?? 45;
   const total = basePrice * guests;
 
-  const goNext = () => setStep((s) => Math.min(3, s + 1));
+  const goNext = () => setStep((s) => Math.min(1, s + 1));
   const goBack = () => {
     if (step === 0) navigate(`/establishment/${id}`);
     else setStep((s) => s - 1);
   };
 
   const canProceed = [
-    !!selectedDate,
-    !!selectedTime,
-    guests > 0,
+    !!selectedDate && !!selectedTime && guests > 0,
     true,
   ][step];
 
@@ -90,74 +88,72 @@ export function ReservationPage() {
       </div>
 
       {step === 0 && (
-        <div>
-          <p className="text-sm font-medium mb-4">Sélectionnez une date</p>
-          <div className="grid grid-cols-3 gap-2.5">
-            {days.map((d, i) => {
-              const sel = selectedDate?.toDateString() === d.toDateString();
-              return (
+        <div className="space-y-7">
+          <div>
+            <p className="text-sm font-medium mb-4">Sélectionnez une date</p>
+            <div className="grid grid-cols-3 gap-2.5">
+              {days.map((d, i) => {
+                const sel = selectedDate?.toDateString() === d.toDateString();
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedDate(d)}
+                    className={`flex flex-col items-center py-3.5 rounded-xl text-xs transition-all ${sel ? "bg-primary text-primary-foreground" : "bg-card border border-border/60 text-muted-foreground hover:border-primary/40"}`}
+                  >
+                    <span className="text-[10px] uppercase">{d.toLocaleDateString("fr-FR", { weekday: "short" })}</span>
+                    <span className="text-lg leading-tight my-0.5">{d.getDate()}</span>
+                    <span className="text-[10px]">{d.toLocaleDateString("fr-FR", { month: "short" })}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium mb-4">Sélectionnez une heure</p>
+            <div className="grid grid-cols-2 gap-3">
+              {TIME_SLOTS.map((t) => (
                 <button
-                  key={i}
-                  onClick={() => setSelectedDate(d)}
-                  className={`flex flex-col items-center py-3.5 rounded-xl text-xs transition-all ${sel ? "bg-primary text-primary-foreground" : "bg-card border border-border/60 text-muted-foreground hover:border-primary/40"}`}
+                  key={t}
+                  onClick={() => setSelectedTime(t)}
+                  className={`py-3.5 rounded-xl text-sm transition-all ${selectedTime === t ? "bg-primary text-primary-foreground" : "bg-card border border-border/60 text-muted-foreground hover:border-primary/40"}`}
                 >
-                  <span className="text-[10px] uppercase">{d.toLocaleDateString("fr-FR", { weekday: "short" })}</span>
-                  <span className="text-lg leading-tight my-0.5">{d.getDate()}</span>
-                  <span className="text-[10px]">{d.toLocaleDateString("fr-FR", { month: "short" })}</span>
+                  {t}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium mb-4">Nombre de personnes</p>
+            <div className="flex items-center justify-between bg-card border border-border/60 rounded-2xl px-6 py-6 mb-6">
+              <button
+                onClick={() => setGuests((g) => Math.max(1, g - 1))}
+                className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
+              >—</button>
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }}>{guests} pers.</span>
+              <button
+                onClick={() => setGuests((g) => Math.min(8, g + 1))}
+                className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
+              >+</button>
+            </div>
+
+            <div className="flex items-center gap-2 mb-3">
+              <MessageSquare className="w-4 h-4 text-primary" />
+              <p className="text-sm font-medium">Demandes spéciales (optionnel)</p>
+            </div>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Allergie, occasion spéciale, préférence de table…"
+              rows={3}
+              className="w-full px-4 py-3 bg-input-background border border-border/60 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none placeholder:text-muted-foreground/60"
+            />
           </div>
         </div>
       )}
 
       {step === 1 && (
-        <div>
-          <p className="text-sm font-medium mb-4">Sélectionnez une heure</p>
-          <div className="grid grid-cols-2 gap-3">
-            {TIME_SLOTS.map((t) => (
-              <button
-                key={t}
-                onClick={() => setSelectedTime(t)}
-                className={`py-3.5 rounded-xl text-sm transition-all ${selectedTime === t ? "bg-primary text-primary-foreground" : "bg-card border border-border/60 text-muted-foreground hover:border-primary/40"}`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {step === 2 && (
-        <div>
-          <p className="text-sm font-medium mb-4">Nombre de personnes</p>
-          <div className="flex items-center justify-between bg-card border border-border/60 rounded-2xl px-6 py-6 mb-6">
-            <button
-              onClick={() => setGuests((g) => Math.max(1, g - 1))}
-              className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
-            >—</button>
-            <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }}>{guests} pers.</span>
-            <button
-              onClick={() => setGuests((g) => Math.min(8, g + 1))}
-              className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
-            >+</button>
-          </div>
-
-          <div className="flex items-center gap-2 mb-3">
-            <MessageSquare className="w-4 h-4 text-primary" />
-            <p className="text-sm font-medium">Demandes spéciales (optionnel)</p>
-          </div>
-          <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="Allergie, occasion spéciale, préférence de table…"
-            rows={3}
-            className="w-full px-4 py-3 bg-input-background border border-border/60 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none placeholder:text-muted-foreground/60"
-          />
-        </div>
-      )}
-
-      {step === 3 && (
         <div>
           <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-5">
             <div className="relative" style={{ height: 86 }}>
@@ -205,16 +201,16 @@ export function ReservationPage() {
       )}
 
       <button
-        onClick={step === 3
+        onClick={step === 1
           ? () => navigate(`/establishment/${id}/payment?total=${total}&guests=${guests}&date=${selectedDate?.toISOString()}&time=${selectedTime}`)
           : goNext}
         disabled={!canProceed}
         className="w-full py-4 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center gap-2 disabled:opacity-40 hover:bg-primary/85 transition-colors mt-7"
       >
-        {step === 3 ? `Procéder au paiement — ${total}€` : "Suivant"}
+        {step === 1 ? `Procéder au paiement — ${total}€` : "Suivant"}
         <ChevronRight className="w-4 h-4" />
       </button>
-      {step === 3 && (
+      {step === 1 && (
         <p className="text-center text-xs text-muted-foreground mt-3">Annulation gratuite jusqu'à 24h avant</p>
       )}
     </div>
