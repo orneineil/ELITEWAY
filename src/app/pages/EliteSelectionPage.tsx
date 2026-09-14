@@ -84,7 +84,7 @@ export function EliteSelectionPage() {
                 <Link
                   key={est.id}
                   to={`/establishment/${est.id}`}
-                  className="group block bg-card border border-border/60 rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
+                  className="group block bg-card rounded-2xl overflow-hidden transition-colors"
                 >
                   <div className="relative overflow-hidden" style={{ height: 107 }}>
                     <img
@@ -128,7 +128,7 @@ export function EliteSelectionPage() {
           </div>
           <div className="space-y-4">
             {PRIVATE_BEACHES.map((beach) => (
-              <div key={beach.id} className="bg-card border border-border/60 rounded-2xl overflow-hidden">
+              <div key={beach.id} className="bg-card rounded-2xl overflow-hidden">
                 <div className="relative overflow-hidden" style={{ height: 107 }}>
                   <img
                     src={beach.image}

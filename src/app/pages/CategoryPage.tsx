@@ -187,7 +187,7 @@ export function CategoryPage() {
             {config.highlights.map((src, i) => (
               <div
                 key={i}
-                className="shrink-0 overflow-hidden rounded-2xl border border-border/40"
+                className="shrink-0 overflow-hidden rounded-2xl"
                 style={{ width: "110px", height: "110px" }}
               >
                 <img src={src} alt={`${config.name} ${i + 1}`} className="w-full h-full object-cover" />

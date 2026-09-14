@@ -25,7 +25,7 @@ export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
   return (
     <Link
       to={`/establishment/${establishment.id}`}
-      className="group block relative overflow-hidden rounded-2xl border border-border/60 bg-black"
+      className="group block relative overflow-hidden rounded-2xl bg-black"
       style={{ aspectRatio: "4 / 3" }}
     >
       {isLowRes && (

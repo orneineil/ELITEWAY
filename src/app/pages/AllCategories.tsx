@@ -104,7 +104,7 @@ export function AllCategories() {
           <Link
             key={cat.id}
             to={`/category/${cat.id}`}
-            className="group block relative overflow-hidden rounded-2xl bg-card border border-border/60 hover:border-primary/30 transition-all min-w-0"
+            className="group block relative overflow-hidden rounded-2xl bg-card transition-all min-w-0"
           >
             <div className="relative w-full overflow-hidden" style={{ aspectRatio: "1 / 1" }}>
               <img

@@ -299,7 +299,7 @@ export function EstablishmentDetail() {
                 <Link
                   key={est.id}
                   to={`/establishment/${est.id}`}
-                  className="group shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
+                  className="group shrink-0 bg-card rounded-2xl overflow-hidden transition-colors"
                   style={{ width: 160 }}
                 >
                   <div className="relative overflow-hidden" style={{ height: 75 }}>

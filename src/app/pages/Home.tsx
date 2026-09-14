@@ -111,7 +111,6 @@ export function Home() {
                 className="flex flex-col items-center justify-center gap-2.5 py-5 px-1.5 rounded-2xl text-center transition-colors hover:bg-accent/40"
                 style={{
                   background: "oklch(0.12 0.006 60)",
-                  border: "1px solid oklch(0.74 0.09 80 / 0.35)",
                 }}
               >
                 <Icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
@@ -129,7 +128,7 @@ export function Home() {
         <Link
           to="/categories"
           className="relative block overflow-hidden rounded-2xl"
-          style={{ border: "1px solid oklch(0.74 0.09 80 / 0.35)", aspectRatio: "16 / 7.4" }}
+          style={{ aspectRatio: "16 / 7.4" }}
         >
           <img
             src="/banner-experiences.jpg"
