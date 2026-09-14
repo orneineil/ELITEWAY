@@ -155,7 +155,7 @@ export function ReservationPage() {
 
       {step === 1 && (
         <div>
-          <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-5">
+          <div className="bg-card rounded-2xl overflow-hidden mb-5">
             <div className="relative" style={{ height: 86 }}>
               <img src={establishment.imageUrl} alt="" className="w-full h-full object-cover opacity-60" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
@@ -180,7 +180,7 @@ export function ReservationPage() {
             </div>
           </div>
 
-          <div className="bg-card border border-border/60 rounded-2xl p-4 mb-5">
+          <div className="pt-5 border-t border-border/30 mb-5">
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">{basePrice}€ × {guests} pers.</span>

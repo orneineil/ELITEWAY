@@ -15,7 +15,7 @@ export function ProfilePage() {
   if (!isAuthenticated || !client) {
     return (
       <div className="max-w-lg mx-auto px-5 pb-28 pt-6 flex flex-col items-center justify-center min-h-[70vh] text-center">
-        <div className="w-20 h-20 rounded-3xl bg-card border border-border flex items-center justify-center mb-6">
+        <div className="w-20 h-20 rounded-3xl bg-card flex items-center justify-center mb-6">
           <span style={{ fontFamily: "var(--font-heading)", fontSize: "2rem" }} className="text-muted-foreground">E</span>
         </div>
         <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.6rem" }} className="mb-2">Mon profil</h2>
@@ -73,7 +73,7 @@ export function ProfilePage() {
     <div className="max-w-lg mx-auto pb-28 pt-4">
 
       {/* Profile card */}
-      <div className="mx-5 mb-6 bg-card border border-border/60 rounded-2xl p-5 flex items-center gap-4">
+      <div className="mx-5 mb-6 bg-card rounded-2xl p-5 flex items-center gap-4">
         <div className="w-14 h-14 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
           <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.5rem" }} className="text-primary">
             {client.firstName[0]}{client.lastName[0]}
@@ -99,7 +99,7 @@ export function ProfilePage() {
           { label: "Favoris",      value: "0" },
           { label: "Points",       value: "240" },
         ].map((s) => (
-          <div key={s.label} className="bg-card border border-border/50 rounded-xl p-3 text-center">
+          <div key={s.label} className="bg-card rounded-xl p-3 text-center">
             <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem" }} className="text-primary">{s.value}</p>
             <p className="text-xs text-muted-foreground">{s.label}</p>
           </div>
@@ -108,10 +108,10 @@ export function ProfilePage() {
 
       {/* Rewards mini-card */}
       <Link to="/rewards" className="block mx-5 mb-5">
-        <div className={`border rounded-2xl p-4 relative overflow-hidden ${
-          client.membershipTier === "elite" ? "border-amber-500/30 bg-amber-500/5" :
-          client.membershipTier === "prestige" ? "border-primary/30 bg-primary/5" :
-          "border-border/60 bg-card"
+        <div className={`rounded-2xl p-4 relative overflow-hidden ${
+          client.membershipTier === "elite" ? "bg-amber-500/5" :
+          client.membershipTier === "prestige" ? "bg-primary/5" :
+          "bg-card"
         }`}>
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
@@ -134,7 +134,7 @@ export function ProfilePage() {
 
       {/* Upgrade banner if essentiel */}
       {client.membershipTier === "essentiel" && (
-        <Link to="/membership" className="block mx-5 mb-6 bg-primary/8 border border-primary/20 rounded-2xl p-4">
+        <Link to="/membership" className="block mx-5 mb-6 bg-primary/8 rounded-2xl p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm mb-0.5" style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }}>Passez à Prestige</p>
@@ -151,16 +151,14 @@ export function ProfilePage() {
       {menuSections.map((section) => (
         <div key={section.title} className="mx-5 mb-5">
           <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2 px-1">{section.title}</p>
-          <div className="bg-card border border-border/50 rounded-2xl overflow-hidden divide-y divide-border/50">
+          <div className="divide-y divide-border/30">
             {section.items.map(({ icon: Icon, label, to }) => (
               <Link
                 key={label}
                 to={to}
-                className="flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors"
+                className="flex items-center gap-3 px-1 py-3.5 hover:opacity-70 transition-opacity"
               >
-                <div className="w-8 h-8 rounded-xl bg-muted/60 flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4 text-muted-foreground" />
-                </div>
+                <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
                 <span className="flex-1 text-sm">{label}</span>
                 <ChevronRight className="w-4 h-4 text-muted-foreground/50" />
               </Link>

@@ -18,7 +18,7 @@ export function NotificationsPage() {
   if (notifications.length === 0) {
     return (
       <div className="max-w-lg mx-auto px-5 pb-28 pt-4 flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center mb-4">
           <Bell className="w-7 h-7 text-muted-foreground" />
         </div>
         <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem" }} className="mb-2">Aucune notification</h2>
@@ -54,8 +54,8 @@ export function NotificationsPage() {
       {/* Grouped list */}
       {todayNotifs.length > 0 && (
         <section className="mb-6 px-5">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Aujourd'hui</p>
-          <div className="space-y-3">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Aujourd'hui</p>
+          <div className="divide-y divide-border/30">
             {todayNotifs.map((notif) => (
               <NotifCard
                 key={notif.id}
@@ -70,8 +70,8 @@ export function NotificationsPage() {
 
       {weekNotifs.length > 0 && (
         <section className="px-5">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Cette semaine</p>
-          <div className="space-y-3">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Cette semaine</p>
+          <div className="divide-y divide-border/30">
             {weekNotifs.map((notif) => (
               <NotifCard
                 key={notif.id}
@@ -102,8 +102,8 @@ function NotifCard({
 
   const Content = (
     <div
-      className={`flex items-start gap-3 p-4 rounded-2xl border transition-colors ${
-        notif.read ? "bg-card border-border/50" : "bg-card border-primary/20 bg-primary/3"
+      className={`flex items-start gap-3 py-4 transition-colors ${
+        notif.read ? "" : "bg-primary/3"
       }`}
       onClick={onRead}
     >

@@ -234,7 +234,7 @@ export function MembershipPage() {
                 img: "https://images.unsplash.com/photo-1780542900375-0cf459e38fbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400&h=300&fit=crop",
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-xl overflow-hidden border border-border bg-card">
+              <div key={item.title} className="rounded-xl overflow-hidden bg-card">
                 <div className="aspect-[4/3] overflow-hidden bg-muted">
                   <img
                     src={item.img}
@@ -260,7 +260,7 @@ export function MembershipPage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
-              <div key={t.name} className="rounded-xl border border-border bg-card p-6">
+              <div key={t.name} className="rounded-xl bg-card p-6">
                 <p className="text-sm text-muted-foreground leading-relaxed mb-6 italic">
                   « {t.text} »
                 </p>

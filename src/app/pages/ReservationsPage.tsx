@@ -68,7 +68,7 @@ export function ReservationsPage() {
       <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">À venir</p>
       <div className="space-y-4 mb-8">
         {MOCK_BOOKINGS.map((b) => (
-          <div key={b.id} className="bg-card border border-border/60 rounded-2xl overflow-hidden">
+          <div key={b.id} className="bg-card rounded-2xl overflow-hidden">
             <div className="relative" style={{ height: "84px" }}>
               <img src={b.image} alt={b.name} className="w-full h-full object-cover opacity-60" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
@@ -99,7 +99,7 @@ export function ReservationsPage() {
       </div>
 
       {/* Empty state + CTA */}
-      <div className="border border-dashed border-border/60 rounded-2xl p-6 flex flex-col items-center text-center">
+      <div className="pt-6 border-t border-border/30 flex flex-col items-center text-center">
         <Plus className="w-6 h-6 text-muted-foreground mb-3" />
         <p className="text-sm text-muted-foreground mb-4">Réservez votre prochaine expérience</p>
         <Link

@@ -53,7 +53,7 @@ export function RewardsPage() {
       </div>
 
       {/* Member card */}
-      <div className="bg-card border border-primary/20 rounded-2xl p-5 mb-6 relative overflow-hidden">
+      <div className="bg-card rounded-2xl p-5 mb-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
         <div className="relative z-10">
           <div className="flex items-start justify-between mb-4">
@@ -62,7 +62,7 @@ export function RewardsPage() {
               <p style={{ fontFamily: "var(--font-heading)", fontSize: "2.2rem" }} className="text-primary leading-none">{userPoints}</p>
               <p className="text-xs text-muted-foreground">points</p>
             </div>
-            <div className={`px-3 py-1.5 rounded-xl text-xs border ${currentTier.bg} ${currentTier.border} ${currentTier.color}`}>
+            <div className={`px-3 py-1.5 rounded-xl text-xs ${currentTier.bg} ${currentTier.color}`}>
               {currentTier.badge} Membre {currentTier.label}
             </div>
           </div>
@@ -93,7 +93,7 @@ export function RewardsPage() {
           {TIERS.map((tier) => (
             <div
               key={tier.id}
-              className={`flex items-center gap-4 p-4 rounded-2xl border ${tier.bg} ${tier.border} ${tier.id === currentTier.id ? "ring-1 ring-primary/30" : ""}`}
+              className={`flex items-center gap-4 p-4 rounded-2xl ${tier.bg} ${tier.id === currentTier.id ? "ring-1 ring-primary/30" : ""}`}
             >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${tier.id === "elite" ? "animate-pulse" : ""}`}
                 style={tier.id === "elite" ? { background: "linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05))" } : {}}>
@@ -123,7 +123,7 @@ export function RewardsPage() {
           {EARNING_RULES.map((rule) => {
             const Icon = rule.icon;
             return (
-              <div key={rule.label} className="bg-card border border-border/60 rounded-2xl p-4">
+              <div key={rule.label} className="bg-card rounded-2xl p-4">
                 <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
                   <Icon className="w-4 h-4 text-primary" />
                 </div>
@@ -144,7 +144,7 @@ export function RewardsPage() {
             return (
               <div
                 key={reward.id}
-                className={`flex items-center gap-4 p-4 rounded-2xl border ${unlocked ? "bg-card border-border/60" : "bg-muted/20 border-border/30"}`}
+                className={`flex items-center gap-4 p-4 rounded-2xl ${unlocked ? "bg-card" : "bg-muted/20"}`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${unlocked ? "bg-primary/10" : "bg-muted/30"}`}>
                   {reward.icon}
@@ -173,9 +173,9 @@ export function RewardsPage() {
       {/* History */}
       <div className="mb-6">
         <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Historique des points</p>
-        <div className="bg-card border border-border/60 rounded-2xl overflow-hidden divide-y divide-border/40">
+        <div className="divide-y divide-border/30">
           {HISTORY.map((item) => (
-            <div key={item.id} className="flex items-center gap-3 px-4 py-3.5">
+            <div key={item.id} className="flex items-center gap-3 px-1 py-3.5">
               <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold ${item.sign === "+" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
                 {item.sign}
               </div>
