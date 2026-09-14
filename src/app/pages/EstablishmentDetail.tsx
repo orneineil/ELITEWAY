@@ -62,10 +62,19 @@ export function EstablishmentDetail() {
   const { isFavorite, toggleFavorite } = useFavorites();
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  // Certaines photos sources sont en basse résolution (petites miniatures) — on
+  // détecte leur taille réelle au chargement pour éviter de les étirer en plein
+  // écran (ce qui les rend floues) : on les affiche alors en taille native sur
+  // un fond flouté, plutôt qu'en "cover" agrandi.
+  const [galleryNaturalWidth, setGalleryNaturalWidth] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  useEffect(() => {
+    setGalleryNaturalWidth(null);
+  }, [galleryIndex, id]);
 
   if (!establishment) {
     return (
@@ -109,15 +118,27 @@ export function EstablishmentDetail() {
     ? description.slice(0, 160).trim() + "…"
     : description;
 
+  const isLowResPhoto = galleryNaturalWidth !== null && galleryNaturalWidth < 500;
+
   return (
     <div className="max-w-lg mx-auto pb-28">
 
       {/* GALLERY */}
-      <div className="relative" style={{ height: 300 }}>
+      <div className="relative bg-black overflow-hidden" style={{ height: 300 }}>
+        {isLowResPhoto && (
+          <img
+            src={galleryImages[galleryIndex]}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: "blur(28px) brightness(0.5)", transform: "scale(1.2)" }}
+          />
+        )}
         <img
           src={galleryImages[galleryIndex]}
           alt={establishment.name}
-          className="w-full h-full object-cover"
+          onLoad={(e) => setGalleryNaturalWidth(e.currentTarget.naturalWidth)}
+          className={`relative w-full h-full ${isLowResPhoto ? "object-contain" : "object-cover"}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
 

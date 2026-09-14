@@ -53,7 +53,7 @@ export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
       {/* Legend: name, rating, location */}
       <div className="absolute inset-x-0 bottom-0 p-3">
         <div className="flex items-center justify-between gap-2 mb-1">
-          <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-snug truncate">
+          <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }} className="leading-snug truncate min-w-0 flex-1">
             {establishment.name}
           </h3>
           <div className="flex items-center gap-1 shrink-0">
@@ -61,9 +61,9 @@ export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
             <span className="text-xs">{establishment.rating}</span>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
+        <div className="flex items-center gap-1.5 text-muted-foreground text-xs min-w-0">
           <MapPin className="w-3 h-3 shrink-0" />
-          <span className="truncate">{establishment.city || establishment.location}</span>
+          <span className="truncate min-w-0">{establishment.city || establishment.location}</span>
         </div>
       </div>
     </Link>

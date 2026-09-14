@@ -138,9 +138,9 @@ export function CategoryPage() {
         <img
           src={config.image}
           alt={config.name}
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-90"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.3) 0%, var(--background) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.12) 0%, transparent 45%, var(--background) 100%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, oklch(0.74 0.09 80 / 0.08) 0%, transparent 70%)" }} />
 
         <Link to="/categories" className="absolute top-4 left-5 w-9 h-9 bg-background/80 backdrop-blur-sm rounded-xl flex items-center justify-center border border-border/40">

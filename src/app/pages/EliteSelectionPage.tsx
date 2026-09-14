@@ -59,9 +59,9 @@ export function EliteSelectionPage() {
         <img
           src="https://images.unsplash.com/photo-1518860308377-800f02d5498a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
           alt="EliteWay Selection"
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 px-5 pb-6">
           <p className="text-xs uppercase tracking-[0.2em] text-primary mb-1.5">Choix de l'équipe éditoriale</p>
           <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem" }} className="leading-tight">

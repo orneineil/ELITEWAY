@@ -275,9 +275,9 @@ export function PartnerDashboard() {
                   <div className="space-y-3">
                     {messages.map((msg) => (
                       <div key={msg.id} className={`py-3 border-b border-border/50 last:border-0 ${msg.unread ? "opacity-100" : "opacity-70"}`}>
-                        <div className="flex items-start justify-between mb-1">
-                          <p className={`text-sm ${msg.unread ? "font-medium" : ""}`}>{msg.from}</p>
-                          <span className="text-xs text-muted-foreground">{msg.time}</span>
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <p className={`text-sm truncate min-w-0 ${msg.unread ? "font-medium" : ""}`}>{msg.from}</p>
+                          <span className="text-xs text-muted-foreground shrink-0">{msg.time}</span>
                         </div>
                         <p className="text-xs text-muted-foreground truncate">{msg.message}</p>
                       </div>
@@ -365,7 +365,7 @@ export function PartnerDashboard() {
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="text-sm truncate">{client.name}</p>
+                          <p className="text-sm truncate min-w-0">{client.name}</p>
                           <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColors[client.status] || "bg-border text-muted-foreground"}`}>
                             {client.status}
                           </span>

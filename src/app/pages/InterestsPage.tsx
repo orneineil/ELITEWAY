@@ -65,8 +65,8 @@ export function InterestsPage() {
                 boxShadow: isSelected ? "0 0 0 2px var(--primary)" : "0 0 0 1px var(--border)",
               }}
             >
-              <img src={item.image} alt={item.label} className="w-full h-full object-cover opacity-50" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+              <img src={item.image} alt={item.label} className="w-full h-full object-cover opacity-85" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
 
               {/* Selected check */}
               {isSelected && (
