@@ -171,7 +171,7 @@ export function Home() {
               key={e.id}
               to={`/establishment/${e.id}`}
               className="shrink-0 rounded-2xl overflow-hidden relative"
-              style={{ width: 150, height: 150 }}
+              style={{ width: 131, height: 131 }}
             >
               <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover" />
               <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent">

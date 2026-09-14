@@ -160,7 +160,7 @@ export function ReservationPage() {
       {step === 3 && (
         <div>
           <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-5">
-            <div className="relative" style={{ height: 112 }}>
+            <div className="relative" style={{ height: 98 }}>
               <img src={establishment.imageUrl} alt="" className="w-full h-full object-cover opacity-60" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
               <div className="absolute bottom-3 left-4">

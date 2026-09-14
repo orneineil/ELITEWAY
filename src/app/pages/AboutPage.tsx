@@ -283,7 +283,7 @@ export function AboutPage() {
                   key={exp.title}
                   to={exp.link}
                   className="shrink-0 rounded-2xl overflow-hidden relative group active:scale-95 transition-transform"
-                  style={{ width: 180, height: 240 }}
+                  style={{ width: 158, height: 210 }}
                 >
                   <img src={exp.image} alt={exp.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

@@ -37,7 +37,7 @@ function EstablishmentMap({
   const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-border/60 relative" style={{ height: 160 }}>
+    <div className="rounded-2xl overflow-hidden border border-border/60 relative" style={{ height: 138 }}>
       <iframe
         title={`Carte ${name}`}
         src={src}
@@ -124,7 +124,7 @@ export function EstablishmentDetail() {
     <div className="max-w-lg mx-auto pb-28">
 
       {/* GALLERY */}
-      <div className="relative bg-black overflow-hidden" style={{ height: 300 }}>
+      <div className="relative bg-black overflow-hidden" style={{ height: 258 }}>
         {isLowResPhoto && (
           <img
             src={galleryImages[galleryIndex]}
@@ -309,7 +309,7 @@ export function EstablishmentDetail() {
                   className="group shrink-0 bg-card border border-border/60 rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
                   style={{ width: 160 }}
                 >
-                  <div className="relative overflow-hidden" style={{ height: 100 }}>
+                  <div className="relative overflow-hidden" style={{ height: 86 }}>
                     <img
                       src={est.imageUrl}
                       alt={est.name}

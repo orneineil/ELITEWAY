@@ -65,7 +65,7 @@ export function MapPage() {
       </div>
 
       {/* OpenStreetMap iframe embed — no react-leaflet */}
-      <div className="mx-5 mb-4 rounded-2xl overflow-hidden border border-border/60 relative" style={{ height: 280 }}>
+      <div className="mx-5 mb-4 rounded-2xl overflow-hidden border border-border/60 relative" style={{ height: 245 }}>
         <iframe
           title="Carte Côte d'Azur EliteWay"
           src={mapSrc}

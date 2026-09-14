@@ -134,7 +134,7 @@ export function CategoryPage() {
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      <div className="relative overflow-hidden" style={{ height: "260px" }}>
+      <div className="relative overflow-hidden" style={{ height: "225px" }}>
         <img
           src={config.image}
           alt={config.name}
@@ -188,7 +188,7 @@ export function CategoryPage() {
               <div
                 key={i}
                 className="shrink-0 overflow-hidden rounded-2xl border border-border/40"
-                style={{ width: "150px", height: "150px" }}
+                style={{ width: "128px", height: "128px" }}
               >
                 <img src={src} alt={`${config.name} ${i + 1}`} className="w-full h-full object-cover" />
               </div>
