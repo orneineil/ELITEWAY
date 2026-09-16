@@ -79,9 +79,11 @@ export function Favorites() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4">
+          <div className="flex flex-col gap-5">
             {filtered.map((establishment) => (
-              <EstablishmentCard key={establishment.id} establishment={establishment} />
+              <div key={establishment.id} style={{ aspectRatio: "4 / 3.2" }}>
+                <EstablishmentCard establishment={establishment} showPrice />
+              </div>
             ))}
           </div>
         )}

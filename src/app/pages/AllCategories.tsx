@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ArrowRight, Gift } from "lucide-react";
+import { ArrowRight, Gift, Search } from "lucide-react";
 
 const CATEGORIES = [
   {
@@ -97,6 +97,16 @@ export function AllCategories() {
         <p className="text-muted-foreground text-sm">
           {CATEGORIES.length} univers · Côte d'Azur
         </p>
+      </div>
+
+      <div className="px-5 mb-7">
+        <Link
+          to="/search"
+          className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-card border border-border/50 text-sm text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors"
+        >
+          <Search className="w-4 h-4 text-primary shrink-0" />
+          Que recherchez-vous ?
+        </Link>
       </div>
 
       <div className="px-5 grid grid-cols-2 gap-4 min-w-0">

@@ -8,6 +8,7 @@ import { ArrowLeft, Gift } from "lucide-react";
 const CATEGORY_CONFIG: Record<string, {
   name: string;
   subtitle: string;
+  tagline: string;
   description: string;
   image: string;
   partnerNote?: string;
@@ -17,36 +18,42 @@ const CATEGORY_CONFIG: Record<string, {
   gastronomie: {
     name: "Gastronomie",
     subtitle: "Tables d'exception",
+    tagline: "Where every table tells a story.",
     description: "Des bistrots avec vue mer aux adresses gastronomiques confidentielles — toutes soigneusement sélectionnées sur la Côte d'Azur.",
     image: "/category-gastronomie.jpg",
   },
   hotels: {
     name: "Hôtels",
     subtitle: "Palaces & adresses de prestige",
+    tagline: "Sleep where legends have stayed.",
     description: "Palaces mythiques, châteaux perchés et villas Art déco — les plus belles adresses où séjourner sur la Côte d'Azur.",
     image: "/category-hotels.jpg",
   },
   navigation: {
     name: "Yachts & Bateaux",
     subtitle: "Yachting & croisières",
+    tagline: "Explore the Mediterranean differently.",
     description: "Charter de superyachts et sorties en mer avec les plus grandes maisons de yachting de la Côte d'Azur.",
     image: "/category-navigation.jpg",
   },
   "bien-etre": {
     name: "Bien-être",
     subtitle: "Spas, soins & détente",
+    tagline: "Slow down, in style.",
     description: "Hammams, thalassos, yoga en plein air ou massages vue mer — prenez soin de vous sur la Riviera.",
     image: "/category-bien-etre.jpg",
   },
   aviation: {
     name: "Aviation",
     subtitle: "Hélicoptères & jets privés",
+    tagline: "The sky, without compromise.",
     description: "Rejoignez Monaco en 7 minutes en hélicoptère, survolez la Riviera ou voyagez en jet privé vers toute l'Europe.",
     image: "/category-aviation.jpg",
   },
   oenologie: {
     name: "Œnologie",
     subtitle: "Vins, rosés & dégustations",
+    tagline: "The art of Provençal wine.",
     description: "Caves historiques, vignobles de l'AOC Bellet, ateliers rosé et bars à vins — l'art du vin provençal accessible à tous.",
     image: "/category-oenologie.jpg",
     highlights: [
@@ -59,6 +66,7 @@ const CATEGORY_CONFIG: Record<string, {
   evenements: {
     name: "Événements",
     subtitle: "Galas & soirées partenaires",
+    tagline: "Nights worth remembering.",
     description: "EliteWay ne crée pas d'événements. Nous mettons en lumière les meilleures propositions d'entreprises partenaires qui souhaitent les faire connaître à notre communauté.",
     image: "/category-evenements.jpg",
     partnerNote: "Ces événements sont organisés par des entreprises partenaires indépendantes.",
@@ -66,6 +74,7 @@ const CATEGORY_CONFIG: Record<string, {
   "offres-exclusives": {
     name: "Offres Exclusives",
     subtitle: "Réservé aux membres Prestige & Élite",
+    tagline: "Access, reserved.",
     description: "Tarifs négociés par EliteWay, accès privatifs et expériences sur mesure introuvables ailleurs — uniquement pour nos membres.",
     image: "/category-offres-exclusives.jpg",
     vip: true,
@@ -73,6 +82,7 @@ const CATEGORY_CONFIG: Record<string, {
   "sport-loisirs": {
     name: "Sport & Loisirs",
     subtitle: "Golf, tennis & équitation",
+    tagline: "Play, elevated.",
     description: "Golfs panoramiques, clubs de tennis historiques et grand domaine équestre — le sport dans son écrin le plus premium sur la Côte d'Azur.",
     image: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
@@ -134,31 +144,41 @@ export function CategoryPage() {
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      <div className="relative overflow-hidden" style={{ height: "195px" }}>
+      <div className="relative overflow-hidden" style={{ height: "48svh", minHeight: "300px", maxHeight: "420px" }}>
         <img
           src={config.image}
           alt={config.name}
-          className="w-full h-full object-cover opacity-90"
+          className="w-full h-full object-cover opacity-95"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.12) 0%, transparent 45%, var(--background) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.35) 0%, transparent 40%, var(--background) 98%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, oklch(0.74 0.09 80 / 0.08) 0%, transparent 70%)" }} />
 
-        <Link to="/categories" className="absolute top-4 left-5 w-9 h-9 bg-background/80 backdrop-blur-sm rounded-xl flex items-center justify-center border border-border/40">
+        <Link
+          to="/categories"
+          className="absolute w-9 h-9 bg-background/80 backdrop-blur-sm rounded-xl flex items-center justify-center border border-border/40"
+          style={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: "20px" }}
+        >
           <ArrowLeft className="w-4 h-4" />
         </Link>
 
         {config.vip && (
-          <div className="absolute top-4 right-5 flex items-center gap-1.5 bg-primary/20 border border-primary/40 backdrop-blur-sm rounded-full px-3 py-1">
+          <div
+            className="absolute flex items-center gap-1.5 bg-primary/20 border border-primary/40 backdrop-blur-sm rounded-full px-3 py-1"
+            style={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", right: "20px" }}
+          >
             <Gift className="w-3 h-3 text-primary" />
             <span className="text-xs text-primary">Membres</span>
           </div>
         )}
 
-        <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
-          <p className="text-xs uppercase tracking-[0.18em] text-primary mb-1">{config.subtitle}</p>
-          <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.9rem", lineHeight: 1.05 }}>
+        <div className="absolute bottom-0 left-0 right-0 px-5 pb-6">
+          <p className="text-xs uppercase tracking-[0.18em] text-primary mb-2">{config.subtitle}</p>
+          <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2.1rem", lineHeight: 1.05 }} className="mb-2">
             {config.name}
           </h1>
+          <p className="text-sm text-foreground/70 italic" style={{ fontFamily: "var(--font-heading)" }}>
+            {config.tagline}
+          </p>
         </div>
       </div>
 
@@ -223,16 +243,20 @@ export function CategoryPage() {
         </p>
       </div>
 
-      <div className="px-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="px-5 flex flex-col gap-5">
         {list.length === 0 ? (
-          <div className="col-span-2 text-center py-16">
+          <div className="text-center py-16">
             <p className="text-muted-foreground mb-4">Aucune expérience avec ce filtre.</p>
             <button onClick={() => setActiveFilter("Tous")} className="text-primary text-sm hover:underline">
               Voir toutes les expériences
             </button>
           </div>
         ) : (
-          list.map((e) => <EstablishmentCard key={e.id} establishment={e} />)
+          list.map((e) => (
+            <div key={e.id} style={{ aspectRatio: "4 / 3.2" }}>
+              <EstablishmentCard establishment={e} showPrice />
+            </div>
+          ))
         )}
       </div>
 

@@ -360,8 +360,12 @@ export function SearchPage() {
             </div>
 
             {results.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {results.map((e) => <EstablishmentCard key={e.id} establishment={e} />)}
+              <div className="flex flex-col gap-5">
+                {results.map((e) => (
+                  <div key={e.id} style={{ aspectRatio: "4 / 3.2" }}>
+                    <EstablishmentCard establishment={e} showPrice />
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="flex flex-col items-center py-16 text-center">
@@ -388,8 +392,12 @@ export function SearchPage() {
               ))}
             </div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground/60 mb-4">Sélection du moment</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {establishments.slice(0, 4).map((e) => <EstablishmentCard key={e.id} establishment={e} />)}
+            <div className="flex flex-col gap-5">
+              {establishments.slice(0, 4).map((e) => (
+                <div key={e.id} style={{ aspectRatio: "4 / 3.2" }}>
+                  <EstablishmentCard establishment={e} showPrice />
+                </div>
+              ))}
             </div>
           </div>
         )}
