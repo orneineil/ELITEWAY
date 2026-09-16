@@ -1,11 +1,14 @@
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search, SlidersHorizontal, ArrowRight, ChevronRight,
-  UtensilsCrossed, BedDouble, Sailboat, Flower2, Plane, Wine, CalendarDays, Gem, Trophy,
+  UtensilsCrossed, BedDouble, Sailboat, Flower2, Plane, Wine, CalendarDays, Gem, Trophy, Check, Sparkles,
 } from "lucide-react";
 import { establishments } from "../data/establishments";
 import { ScrollRow } from "../components/ScrollRow";
+import { useFavorites } from "../contexts/FavoritesContext";
+
+const JOINED_EVENTS_KEY = "eliteway-events-joined";
 
 const CATEGORIES = [
   { id: "gastronomie",       name: "Gastronomie",       icon: UtensilsCrossed },
@@ -22,6 +25,8 @@ const CATEGORIES = [
 export function Home() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const { favorites } = useFavorites();
+
   // Une sélection diversifiée : le mieux noté de chaque univers, pas seulement la gastronomie.
   const featured = CATEGORIES
     .filter((c) => c.id !== "offres-exclusives")
@@ -30,6 +35,42 @@ export function Home() {
       return list.sort((a, b) => b.rating - a.rating)[0];
     })
     .filter((e): e is NonNullable<typeof e> => Boolean(e));
+
+  // Recommandé pour vous : à partir des catégories déjà mises en favori,
+  // on propose d'autres adresses bien notées de ces mêmes univers.
+  const favoriteEstablishments = establishments.filter((e) => favorites.includes(e.id));
+  const favoriteCategories = Array.from(new Set(favoriteEstablishments.map((e) => e.category)));
+  const recommended = favoriteCategories.length > 0
+    ? establishments
+        .filter((e) => favoriteCategories.includes(e.category) && !favorites.includes(e.id))
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 8)
+    : [];
+
+  // Événements exclusifs à venir, réservés à la communauté EliteWay.
+  const exclusiveEvents = establishments.filter((e) => e.category === "evenements");
+  const [joinedEvents, setJoinedEvents] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(JOINED_EVENTS_KEY);
+      if (saved) setJoinedEvents(JSON.parse(saved));
+    } catch {
+      // stockage indisponible — l'inscription reste fonctionnelle pour la session en cours
+    }
+  }, []);
+
+  const toggleJoin = (id: string) => {
+    setJoinedEvents((prev) => {
+      const next = prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
+      try {
+        localStorage.setItem(JOINED_EVENTS_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,6 +148,36 @@ export function Home() {
         </div>
       </section>
 
+      {/* ── Recommandé pour vous (basé sur vos favoris) ─────────────────── */}
+      {recommended.length > 0 && (
+        <section className="mb-10">
+          <div className="flex items-center gap-2 px-5 mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <p
+              style={{ fontFamily: "var(--font-heading)", fontSize: "1rem", letterSpacing: "0.14em" }}
+              className="uppercase text-foreground"
+            >
+              Recommandé pour vous
+            </p>
+          </div>
+          <ScrollRow>
+            {recommended.map((e) => (
+              <Link
+                key={e.id}
+                to={`/establishment/${e.id}`}
+                className="shrink-0 rounded-2xl overflow-hidden relative"
+                style={{ width: 140, height: 140 }}
+              >
+                <img src={e.imageUrl} alt={e.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                  <p className="text-xs text-white leading-tight truncate">{e.name}</p>
+                </div>
+              </Link>
+            ))}
+          </ScrollRow>
+        </section>
+      )}
+
       {/* ── Bannière expériences ─────────────────────────────────────── */}
       <section className="px-5 mb-12">
         <Link
@@ -164,6 +235,62 @@ export function Home() {
           ))}
         </ScrollRow>
       </section>
+
+      {/* ── Événements exclusifs ─────────────────────────────────────── */}
+      {exclusiveEvents.length > 0 && (
+        <section className="mb-4">
+          <div className="flex items-end justify-between px-5 mb-4">
+            <p
+              style={{ fontFamily: "var(--font-heading)", fontSize: "1rem", letterSpacing: "0.14em" }}
+              className="uppercase text-foreground"
+            >
+              Événements exclusifs
+            </p>
+            <Link to="/category/evenements" className="flex items-center gap-1 text-xs text-primary hover:underline">
+              Voir tout <ChevronRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <ScrollRow>
+            {exclusiveEvents.map((event) => {
+              const joined = joinedEvents.includes(event.id);
+              return (
+                <div
+                  key={event.id}
+                  className="shrink-0 bg-card rounded-2xl overflow-hidden flex flex-col"
+                  style={{ width: 220 }}
+                >
+                  <Link to={`/establishment/${event.id}`} className="relative block" style={{ height: 110 }}>
+                    <img src={event.imageUrl} alt={event.name} className="w-full h-full object-cover" />
+                    <div className="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-[10px]">
+                      Membres
+                    </div>
+                  </Link>
+                  <div className="p-3.5 flex flex-col flex-1">
+                    <p className="text-sm leading-tight mb-1 line-clamp-1">{event.name}</p>
+                    <p className="text-xs text-muted-foreground mb-3">{event.city}</p>
+                    <button
+                      onClick={() => toggleJoin(event.id)}
+                      className={`mt-auto w-full py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors ${
+                        joined
+                          ? "bg-emerald-500/10 text-emerald-400"
+                          : "bg-primary text-primary-foreground hover:bg-primary/85"
+                      }`}
+                    >
+                      {joined ? (
+                        <>
+                          <Check className="w-3.5 h-3.5" /> Vous participez
+                        </>
+                      ) : (
+                        "Je participe"
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </ScrollRow>
+        </section>
+      )}
 
     </div>
   );

@@ -6,6 +6,7 @@ import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { PartnerAuthProvider } from "./contexts/PartnerAuthContext";
 import { ClientAuthProvider } from "./contexts/ClientAuthContext";
 import { NotificationsProvider } from "./contexts/NotificationsContext";
+import { ConciergeProvider } from "./contexts/ConciergeContext";
 import { AIAssistant } from "./components/AIAssistant";
 
 export function Root() {
@@ -16,6 +17,7 @@ export function Root() {
     <ClientAuthProvider>
       <PartnerAuthProvider>
         <NotificationsProvider>
+        <ConciergeProvider>
         <FavoritesProvider>
           <div className="min-h-screen bg-background">
             <Header />
@@ -62,6 +64,7 @@ export function Root() {
             <ScrollRestoration />
           </div>
         </FavoritesProvider>
+        </ConciergeProvider>
         </NotificationsProvider>
       </PartnerAuthProvider>
     </ClientAuthProvider>

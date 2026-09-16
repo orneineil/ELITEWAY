@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { useClientAuth } from "../contexts/ClientAuthContext";
-import { Crown, Heart, Calendar, ChevronRight, LogOut, Settings, Bell, Shield, HelpCircle, Gift, Star, Sparkles } from "lucide-react";
+import { Crown, Heart, Calendar, ChevronRight, LogOut, Settings, Bell, Shield, HelpCircle, Gift, Star, Sparkles, MessageCircle } from "lucide-react";
 import { LogoMark } from "../components/LogoMark";
 
 const tierInfo = {
@@ -49,6 +49,7 @@ export function ProfilePage() {
         { icon: Crown,    label: "Mon abonnement",    to: "/client/dashboard" },
         { icon: Heart,    label: "Mes favoris",       to: "/favorites" },
         { icon: Calendar, label: "Mes réservations",  to: "/reservations" },
+        { icon: MessageCircle, label: "Messagerie concierge", to: "/messages" },
         { icon: Star,     label: "EliteWay Rewards",  to: "/rewards" },
         { icon: Gift,     label: "Offres exclusives", to: "/category/offres-exclusives" },
       ],
