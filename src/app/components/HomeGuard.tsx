@@ -1,24 +1,13 @@
 import { Navigate } from "react-router";
-import { useClientAuth } from "../contexts/ClientAuthContext";
 import { Home } from "../pages/Home";
 
+// L'accueil reste l'accueil pour tout le monde, connecté ou non — comme
+// dans la plupart des applications, l'espace personnel se trouve dans
+// l'onglet Profil plutôt que de remplacer la page d'accueil à la connexion.
 export function HomeGuard() {
-  const { isAuthenticated, isLoading } = useClientAuth();
-
   const splashShown = sessionStorage.getItem("eliteway-splash-shown");
   if (!splashShown) {
     return <Navigate to="/splash" replace />;
-  }
-
-  // Le temps que Supabase confirme si une session est déjà ouverte, on
-  // affiche l'accueil tel quel plutôt qu'un aller-retour visible vers le
-  // tableau de bord.
-  if (isLoading) {
-    return <Home />;
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/client/dashboard" replace />;
   }
 
   return <Home />;

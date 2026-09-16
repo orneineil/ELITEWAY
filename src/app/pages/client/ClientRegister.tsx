@@ -51,7 +51,7 @@ export function ClientRegister() {
       setError("");
       setConfirmationPending(true);
     } else if (result.success) {
-      navigate("/client/dashboard");
+      navigate("/");
     } else {
       setError(result.error || "Une erreur est survenue.");
     }

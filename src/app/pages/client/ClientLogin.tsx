@@ -20,7 +20,7 @@ export function ClientLogin() {
     const result = await login(email, password);
     setLoading(false);
     if (result.success) {
-      navigate("/client/dashboard");
+      navigate("/");
     } else {
       setError(result.error || "Une erreur est survenue.");
     }

@@ -65,7 +65,7 @@ export function ProfilePage() {
       items: [
         { icon: Shield,     label: "Confidentialité",  to: "/confidentialite" },
         { icon: Settings,   label: "Paramètres",       to: "/settings" },
-        { icon: HelpCircle, label: "Aide & support",   to: "#" },
+        { icon: HelpCircle, label: "Aide & support",   to: "/contact" },
       ],
     },
   ];

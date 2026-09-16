@@ -34,6 +34,7 @@ import { RewardsPage } from "./pages/RewardsPage";
 import { EliteSelectionPage } from "./pages/EliteSelectionPage";
 import { MapPage } from "./pages/MapPage";
 import { NotificationsPage } from "./pages/NotificationsPage";
+import { ContactPage } from "./pages/ContactPage";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { AdminUsers } from "./pages/admin/AdminUsers";
 import { AdminPartners } from "./pages/admin/AdminPartners";
@@ -90,6 +91,7 @@ export const router = createBrowserRouter([
       // Content
       { path: "about",                        Component: AboutPage },
       { path: "notifications",                Component: NotificationsPage },
+      { path: "contact",                      Component: ContactPage },
       // Legal
       { path: "mentions-legales",             Component: MentionsLegales },
       { path: "confidentialite",              Component: PolitiqueConfidentialite },
