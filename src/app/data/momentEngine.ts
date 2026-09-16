@@ -57,7 +57,7 @@ export const TIME_OPTIONS: { key: TimeKey; label: string; beatCount: number }[] 
   { key: "weekend", label: "Week-end", beatCount: 4 },
 ];
 
-type Category = Establishment["category"];
+export type Category = Establishment["category"];
 
 interface MoodBeatTemplate {
   label: string;
@@ -161,6 +161,18 @@ export interface MomentInput {
   city?: string | null;
 }
 
+// Recalcule le total à partir d'une liste de temps forts — réutilisé quand
+// l'utilisateur retire un élément du Moment (voir la doctrine "l'utilisateur
+// doit pouvoir modifier le Moment" : la conversation continue après la
+// première proposition, ce n'est jamais un résultat figé).
+export function totalsFor(beats: MomentBeat[]): { pricePerPerson: number; hasSurDevis: boolean } {
+  const pricePerPerson = beats
+    .filter((b) => !b.surDevis)
+    .reduce((sum, b) => sum + estimatePricePerPerson(b.establishment), 0);
+  const hasSurDevis = beats.some((b) => b.surDevis);
+  return { pricePerPerson, hasSurDevis };
+}
+
 function findCandidate(
   categories: Category[],
   usedIds: Set<string>,
@@ -208,10 +220,7 @@ export function composeMoment(input: MomentInput): ComposedMoment | null {
 
   if (beats.length === 0) return null;
 
-  const pricePerPerson = beats
-    .filter((b) => !b.surDevis)
-    .reduce((sum, b) => sum + estimatePricePerPerson(b.establishment), 0);
-  const hasSurDevis = beats.some((b) => b.surDevis);
+  const { pricePerPerson, hasSurDevis } = totalsFor(beats);
 
   return {
     mood: input.mood,

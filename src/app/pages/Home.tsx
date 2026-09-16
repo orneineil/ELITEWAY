@@ -1,13 +1,77 @@
 import { Link, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import {
-  Search, ChevronRight, MapPin, Locate, Loader, Crown, Check, Sparkles,
+  Search, ChevronRight, MapPin, Locate, Loader, Crown, Check, Sparkles, ArrowRight,
   UtensilsCrossed, BedDouble, Sailboat, Flower2, Plane, Wine, CalendarDays, Gem, Trophy,
 } from "lucide-react";
 import { establishments, cityCoordinates, Establishment } from "../data/establishments";
 import { ScrollRow } from "../components/ScrollRow";
 import { EstablishmentCard } from "../components/EstablishmentCard";
 import { useFavorites } from "../contexts/FavoritesContext";
+import { MOODS } from "../data/momentEngine";
+
+// Ask EliteWay — la porte d'entrée conversationnelle, en clair sur l'accueil
+// (jamais un bouton caché). Une phrase libre OU une humeur en un tap : les
+// deux mènent au même moteur de composition (/moment).
+function AskEliteWay() {
+  const [text, setText] = useState("");
+  const navigate = useNavigate();
+
+  const handleAsk = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate(text.trim() ? `/moment?q=${encodeURIComponent(text.trim())}` : "/moment");
+  };
+
+  return (
+    <div
+      className="rounded-2xl border p-5"
+      style={{ borderColor: "oklch(0.74 0.09 80 / 0.35)", background: "oklch(0.13 0.008 60)" }}
+    >
+      <div className="flex items-center gap-2 mb-3.5">
+        <Sparkles className="w-3.5 h-3.5 text-primary" />
+        <p className="text-[10px] uppercase tracking-[0.2em] text-primary">Ask EliteWay</p>
+      </div>
+      <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="leading-snug mb-4">
+        Dites-nous ce que vous voulez vivre.
+      </p>
+      <form onSubmit={handleAsk} className="mb-4">
+        <div className="flex items-center rounded-full overflow-hidden border border-border/60 bg-background/50">
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Une soirée romantique à Cannes, samedi…"
+            style={{ fontSize: "0.8rem" }}
+            className="flex-1 min-w-0 bg-transparent pl-4 pr-2 py-3 focus:outline-none placeholder:text-muted-foreground/60"
+          />
+          <button
+            type="submit"
+            className="w-9 h-9 mr-1 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0"
+            aria-label="Envoyer"
+          >
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </form>
+      <div className="flex flex-wrap gap-2">
+        {MOODS.map((m) => (
+          <Link
+            key={m.key}
+            to={`/moment?mood=${m.key}`}
+            className="px-3 py-1.5 rounded-full text-xs border border-border/60 text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors"
+          >
+            {m.label}
+          </Link>
+        ))}
+        <Link
+          to="/moment?mood=surprise"
+          className="px-3 py-1.5 rounded-full text-xs border border-primary/40 text-primary hover:bg-primary/10 transition-colors"
+        >
+          Surprenez-moi
+        </Link>
+      </div>
+    </div>
+  );
+}
 
 const JOINED_EVENTS_KEY = "eliteway-events-joined";
 
@@ -206,27 +270,13 @@ export function Home() {
         </div>
       </div>
 
-      {/* ── Créer un Moment — l'intention avant le catalogue ────────────
+      {/* ── Ask EliteWay — l'intention avant le catalogue ───────────────
           Doctrine produit : on ne demande pas "que voulez-vous réserver ?"
           mais "que voulez-vous vivre ?". Ce module précède volontairement
-          les catégories classiques ci-dessous. */}
+          les catégories classiques ci-dessous, et l'IA y est une porte
+          d'entrée directe — pas un bouton caché dans un menu. */}
       <section className="px-5 pt-8">
-        <Link
-          to="/moment"
-          className="flex items-center gap-4 p-5 rounded-2xl border transition-colors hover:border-primary/50"
-          style={{ borderColor: "oklch(0.74 0.09 80 / 0.35)", background: "oklch(0.13 0.008 60)" }}
-        >
-          <div className="w-11 h-11 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
-            <Sparkles className="w-5 h-5 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-primary mb-1">EliteWay AI</p>
-            <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-tight">
-              Qu'avez-vous envie de vivre ?
-            </p>
-          </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-        </Link>
+        <AskEliteWay />
       </section>
 
       {/* ── Accès rapide aux univers ──────────────────────────────────── */}

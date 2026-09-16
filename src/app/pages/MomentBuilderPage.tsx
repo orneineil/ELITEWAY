@@ -1,45 +1,166 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import {
-  ArrowLeft, Heart, Sparkles, Users, Wallet, Clock, ArrowRight, MapPin, Star,
+  ArrowLeft, Heart, Sparkles, Users, Wallet, Clock, ArrowRight, MapPin, Star, Send,
 } from "lucide-react";
 import {
   MOODS, WHO_OPTIONS, BUDGET_OPTIONS, TIME_OPTIONS,
-  composeMoment, MoodKey, WhoKey, BudgetKey, TimeKey, ComposedMoment,
+  composeMoment, totalsFor, MoodKey, WhoKey, BudgetKey, TimeKey, ComposedMoment, Category,
 } from "../data/momentEngine";
+import { parseIntent } from "../data/intentParser";
 
-// La doctrine ONE REQUEST, version guidée : plutôt que de partir d'une
-// catégorie, on part de l'intention. 4 questions courtes, puis un Moment
-// composé — jamais une simple liste de résultats de recherche.
-const STEPS = ["mood", "who", "budget", "time", "result"] as const;
-type StepKey = typeof STEPS[number];
+// La doctrine ONE REQUEST / ASK ELITEWAY : l'utilisateur arrive soit avec une
+// phrase libre (?q=, tapée sur Home), soit avec une humeur choisie en un tap
+// (?mood=). Dans les deux cas, on ne redemande jamais ce qui est déjà connu —
+// seules les questions dont la réponse manque encore sont posées.
+const ORDER: readonly ("mood" | "who" | "budget" | "time")[] = ["mood", "who", "budget", "time"];
+type QuestionKey = typeof ORDER[number];
+type StepKey = QuestionKey | "result";
+
+interface ResolvedState {
+  mood: MoodKey | null;
+  who: WhoKey | null;
+  budget: BudgetKey | null;
+  time: TimeKey | null;
+}
+
+function firstUnresolved(state: ResolvedState): QuestionKey | null {
+  for (const key of ORDER) {
+    if (state[key] === null) return key;
+  }
+  return null;
+}
+
+const REMOVE_TRIGGERS = ["enlève", "enlever", "retire", "retirer", "supprime", "supprimer"];
+const CATEGORY_WORDS: Record<string, Category> = {
+  "dîner": "gastronomie", "déjeuner": "gastronomie", "restaurant": "gastronomie", "repas": "gastronomie",
+  "spa": "bien-etre", "bien-être": "bien-etre", "massage": "bien-etre",
+  "yacht": "navigation", "bateau": "navigation", "voile": "navigation",
+  "vol": "aviation", "hélicoptère": "aviation", "jet": "aviation",
+};
 
 export function MomentBuilderPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState<StepKey>("mood");
   const [mood, setMood] = useState<MoodKey | null>(null);
   const [who, setWho] = useState<WhoKey | null>(null);
   const [budget, setBudget] = useState<BudgetKey | null>(null);
   const [time, setTime] = useState<TimeKey | null>(null);
+  const [city, setCity] = useState<string | null>(null);
   const [moment, setMoment] = useState<ComposedMoment | null | "empty">(null);
+  const [refineError, setRefineError] = useState<string | null>(null);
 
-  const stepIndex = STEPS.indexOf(step);
+  // Comprendre ce qui a été fourni dès l'arrivée sur la page — depuis "Ask
+  // EliteWay" (texte libre) ou depuis une puce d'humeur sur Home.
+  useEffect(() => {
+    const q = searchParams.get("q");
+    const moodParam = searchParams.get("mood");
 
-  const goBack = () => {
-    if (stepIndex === 0) navigate(-1);
-    else setStep(STEPS[stepIndex - 1]);
-  };
+    let initial: ResolvedState = { mood: null, who: null, budget: null, time: null };
+    let initialCity: string | null = null;
 
-  const advance = (next: StepKey) => setStep(next);
+    if (q) {
+      const parsed = parseIntent(q);
+      initial = { mood: parsed.mood, who: parsed.who, budget: parsed.budget, time: parsed.time };
+      initialCity = parsed.city;
+    } else if (moodParam === "surprise") {
+      initial.mood = MOODS[Math.floor(Math.random() * MOODS.length)].key;
+    } else if (moodParam && MOODS.some((m) => m.key === moodParam)) {
+      initial.mood = moodParam as MoodKey;
+    }
 
-  const buildMoment = (finalTime: TimeKey) => {
-    if (!mood || !who || !budget) return;
-    const result = composeMoment({ mood, who, budget, time: finalTime });
+    setMood(initial.mood);
+    setWho(initial.who);
+    setBudget(initial.budget);
+    setTime(initial.time);
+    setCity(initialCity);
+
+    const next = firstUnresolved(initial);
+    if (next) {
+      setStep(next);
+    } else if (initial.mood && initial.who && initial.budget && initial.time) {
+      finalize(initial.mood, initial.who, initial.budget, initial.time, initialCity);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const finalize = (m: MoodKey, w: WhoKey, b: BudgetKey, t: TimeKey, c: string | null) => {
+    const result = composeMoment({ mood: m, who: w, budget: b, time: t, city: c });
     setMoment(result ?? "empty");
     setStep("result");
   };
 
+  const answer = (key: QuestionKey, value: string) => {
+    const updated: ResolvedState = {
+      mood: key === "mood" ? (value as MoodKey) : mood,
+      who: key === "who" ? (value as WhoKey) : who,
+      budget: key === "budget" ? (value as BudgetKey) : budget,
+      time: key === "time" ? (value as TimeKey) : time,
+    };
+    setMood(updated.mood);
+    setWho(updated.who);
+    setBudget(updated.budget);
+    setTime(updated.time);
+
+    const next = firstUnresolved(updated);
+    if (next) setStep(next);
+    else if (updated.mood && updated.who && updated.budget && updated.time) {
+      finalize(updated.mood, updated.who, updated.budget, updated.time, city);
+    }
+  };
+
+  const goBack = () => {
+    const idx = step === "result" ? ORDER.length - 1 : ORDER.indexOf(step as QuestionKey);
+    if (idx <= 0) navigate(-1);
+    else setStep(ORDER[idx - 1]);
+  };
+
+  // La conversation continue après la proposition — l'utilisateur peut
+  // affiner ("plus calme", "enlève le dîner", "budget finalement 300€")
+  // plutôt que de tout recommencer.
+  const handleRefine = (text: string) => {
+    if (moment === "empty" || moment === null) return;
+    const lower = text.toLowerCase();
+    setRefineError(null);
+
+    if (REMOVE_TRIGGERS.some((t) => lower.includes(t))) {
+      const catWord = Object.keys(CATEGORY_WORDS).find((w) => lower.includes(w));
+      if (catWord) {
+        const cat = CATEGORY_WORDS[catWord];
+        const filtered = moment.beats.filter((b) => b.establishment.category !== cat);
+        if (filtered.length === moment.beats.length) {
+          setRefineError("Cet élément ne fait pas partie de votre Moment actuel.");
+          return;
+        }
+        if (filtered.length === 0) {
+          setMoment("empty");
+          return;
+        }
+        const { pricePerPerson, hasSurDevis } = totalsFor(filtered);
+        setMoment({ ...moment, beats: filtered, pricePerPerson, hasSurDevis });
+        return;
+      }
+    }
+
+    const parsed = parseIntent(text);
+    if (!parsed.mood && !parsed.who && !parsed.budget && !parsed.time && !parsed.city) {
+      setRefineError("Je n'ai pas encore compris cette demande — essayez par exemple « plus calme » ou « budget 300€ ».");
+      return;
+    }
+
+    const nextMood = parsed.mood ?? mood!;
+    const nextWho = parsed.who ?? who!;
+    const nextBudget = parsed.budget ?? budget!;
+    const nextTime = parsed.time ?? time!;
+    const nextCity = parsed.city ?? city;
+    setMood(nextMood); setWho(nextWho); setBudget(nextBudget); setTime(nextTime); setCity(nextCity);
+    const result = composeMoment({ mood: nextMood, who: nextWho, budget: nextBudget, time: nextTime, city: nextCity });
+    setMoment(result ?? "empty");
+  };
+
   const isCouple = who === "couple";
+  const stepIndex = step === "result" ? ORDER.length : ORDER.indexOf(step as QuestionKey);
 
   return (
     <div className="max-w-sm mx-auto px-5 pb-24 pt-4">
@@ -55,7 +176,7 @@ export function MomentBuilderPage() {
 
       {step !== "result" && (
         <div className="flex items-center gap-1.5 mb-10">
-          {STEPS.slice(0, 4).map((s, i) => (
+          {ORDER.map((s, i) => (
             <div
               key={s}
               className="h-1 flex-1 rounded-full transition-colors"
@@ -71,7 +192,7 @@ export function MomentBuilderPage() {
           question="Qu'avez-vous envie de vivre ?"
           options={MOODS.map((m) => ({ key: m.key, label: m.label }))}
           selected={mood}
-          onSelect={(k) => { setMood(k as MoodKey); advance("who"); }}
+          onSelect={(k) => answer("mood", k)}
         />
       )}
 
@@ -82,7 +203,7 @@ export function MomentBuilderPage() {
           icon={Users}
           options={WHO_OPTIONS.map((w) => ({ key: w.key, label: w.label }))}
           selected={who}
-          onSelect={(k) => { setWho(k as WhoKey); advance("budget"); }}
+          onSelect={(k) => answer("who", k)}
         />
       )}
 
@@ -94,7 +215,7 @@ export function MomentBuilderPage() {
           icon={Wallet}
           options={BUDGET_OPTIONS.map((b) => ({ key: b.key, label: b.label }))}
           selected={budget}
-          onSelect={(k) => { setBudget(k as BudgetKey); advance("time"); }}
+          onSelect={(k) => answer("budget", k)}
         />
       )}
 
@@ -105,7 +226,7 @@ export function MomentBuilderPage() {
           icon={Clock}
           options={TIME_OPTIONS.map((t) => ({ key: t.key, label: t.label }))}
           selected={time}
-          onSelect={(k) => { setTime(k as TimeKey); buildMoment(k as TimeKey); }}
+          onSelect={(k) => answer("time", k)}
         />
       )}
 
@@ -113,7 +234,12 @@ export function MomentBuilderPage() {
         <MomentResult
           moment={moment}
           isCouple={isCouple}
-          onRestart={() => { setMood(null); setWho(null); setBudget(null); setTime(null); setMoment(null); setStep("mood"); }}
+          refineError={refineError}
+          onRefine={handleRefine}
+          onRestart={() => {
+            setMood(null); setWho(null); setBudget(null); setTime(null); setCity(null);
+            setMoment(null); setRefineError(null); setStep("mood");
+          }}
         />
       )}
     </div>
@@ -161,12 +287,16 @@ function QuestionStep({
 }
 
 function MomentResult({
-  moment, isCouple, onRestart,
+  moment, isCouple, refineError, onRefine, onRestart,
 }: {
   moment: ComposedMoment | null | "empty";
   isCouple: boolean;
+  refineError: string | null;
+  onRefine: (text: string) => void;
   onRestart: () => void;
 }) {
+  const [refineText, setRefineText] = useState("");
+
   if (moment === "empty" || moment === null) {
     return (
       <div className="text-center pt-10">
@@ -196,7 +326,7 @@ function MomentResult({
       </h1>
 
       <div className="flex flex-col gap-4 mb-6">
-        {moment.beats.map((beat, i) => (
+        {moment.beats.map((beat) => (
           <Link
             key={beat.establishment.id}
             to={`/establishment/${beat.establishment.id}`}
@@ -225,12 +355,11 @@ function MomentResult({
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" />
-            {i < moment.beats.length - 1 && null}
           </Link>
         ))}
       </div>
 
-      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 mb-6">
+      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 mb-3">
         <div className="flex items-center justify-between mb-1">
           <span className="text-xs text-muted-foreground">Budget estimé</span>
           <span className="text-sm text-primary">
@@ -244,6 +373,31 @@ function MomentResult({
               : "Estimation à titre indicatif — le tarif exact dépend de vos choix lors de la réservation."}
           </p>
         )}
+      </div>
+
+      <p className="text-[10px] text-muted-foreground mb-6">
+        Recommandation EliteWay — disponibilité à confirmer à la réservation.
+      </p>
+
+      {/* La conversation continue : affiner plutôt que recommencer. */}
+      <div className="mb-6">
+        <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-2">Ajuster ce Moment</p>
+        <form
+          onSubmit={(e) => { e.preventDefault(); if (refineText.trim()) { onRefine(refineText.trim()); setRefineText(""); } }}
+          className="flex items-center rounded-full overflow-hidden border border-border/60 bg-card"
+        >
+          <input
+            value={refineText}
+            onChange={(e) => setRefineText(e.target.value)}
+            placeholder="Plus calme, enlève le dîner, budget 300€…"
+            style={{ fontSize: "0.8rem" }}
+            className="flex-1 min-w-0 bg-transparent pl-4 pr-2 py-3 focus:outline-none placeholder:text-muted-foreground/60"
+          />
+          <button type="submit" className="w-9 h-9 mr-1 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0" aria-label="Envoyer">
+            <Send className="w-3.5 h-3.5" />
+          </button>
+        </form>
+        {refineError && <p className="text-[11px] text-muted-foreground mt-2">{refineError}</p>}
       </div>
 
       <div className="flex flex-col gap-3">

@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { parseIntent } from "../data/intentParser";
+import { composeMoment } from "../data/momentEngine";
 
 export interface ConciergeMessage {
   id: string;
@@ -86,13 +88,64 @@ Je recommande l'option 1 pour une soirée magique avec la vue sur le Rocher illu
   },
 };
 
+// EliteWay Moments appliqué à une demande libre : comprend une intention
+// écrite avec ses propres mots, la fait passer par le même moteur de
+// composition que le parcours guidé (/moment), jamais une réponse inventée.
+// Renvoie null si la demande est trop ambiguë pour composer quoi que ce soit
+// (aucune humeur identifiable) — le fil de fallback prend alors le relais.
+function formatMomentResponse(msg: string): { content: string; links: Array<{ label: string; href: string }> } | null {
+  const parsed = parseIntent(msg);
+  if (!parsed.mood) return null;
+
+  const moment = composeMoment({
+    mood: parsed.mood,
+    who: parsed.who ?? "solo",
+    budget: parsed.budget ?? "flexible",
+    time: parsed.time ?? "full",
+    city: parsed.city,
+  });
+
+  if (!moment) {
+    return {
+      content: "Je comprends l'envie, mais je n'ai pas encore d'adresse qui corresponde exactement à ces critères sur la Côte d'Azur. Essayez un autre budget, ou dites-m'en un peu plus.",
+      links: [],
+    };
+  }
+
+  const isCouple = parsed.who === "couple";
+  const total = isCouple ? moment.pricePerPerson * 2 : moment.pricePerPerson;
+
+  const lines = [
+    `**${moment.title}**`,
+    ...moment.beats.map((b) => `${b.label} — ${b.establishment.name}${b.surDevis ? " (sur devis)" : ""}`),
+    "",
+    moment.pricePerPerson > 0
+      ? `Budget estimé : ${moment.isEstimate ? "≈ " : ""}${total} € ${isCouple ? "pour deux" : "par personne"}.`
+      : "Tarif sur devis pour les éléments de cette proposition.",
+    "Recommandation EliteWay — disponibilité à confirmer à la réservation.",
+  ];
+
+  return {
+    content: lines.join("\n"),
+    links: moment.beats.map((b) => ({ label: b.establishment.name, href: `/establishment/${b.establishment.id}` })),
+  };
+}
+
 function getResponse(msg: string): { content: string; links: Array<{ label: string; href: string }> } {
   const lower = msg.toLowerCase();
+
+  // 1) Suggestions éditoriales — contenu écrit à la main, correspondance exacte
+  //    (les puces de suggestion envoient le texte tel quel).
   for (const [key, val] of Object.entries(MOCK_RESPONSES)) {
-    if (lower.includes(key.toLowerCase().split(" ")[0]) || lower === key.toLowerCase()) {
-      return val;
-    }
+    if (lower === key.toLowerCase()) return val;
   }
+
+  // 2) Moteur EliteWay Moments — comprend une demande libre (humeur, contexte,
+  //    budget, durée, ville) et compose une proposition réelle.
+  const composed = formatMomentResponse(msg);
+  if (composed) return composed;
+
+  // 3) Repli thématique — une seule catégorie évoquée, sans humeur claire.
   if (lower.includes("restaurant") || lower.includes("dîner") || lower.includes("manger")) {
     return {
       content: "Pour une table d'exception sur la Côte d'Azur, je recommande Le Chantecler à Nice (étoilé, Hôtel Negresco) ou La Palme d'Or à Cannes (2 étoiles Michelin, Hôtel Martinez). Souhaitez-vous une suggestion personnalisée ?",
@@ -104,7 +157,7 @@ function getResponse(msg: string): { content: string; links: Array<{ label: stri
   }
   if (lower.includes("spa") || lower.includes("bien-être") || lower.includes("massage")) {
     return {
-      content: "Notre spa partenaire le plus prestigieux est les Thermes Marins de Monte-Carlo — institut de thalassothérapie mythique face au Rocher, dès 190€. Pour une adresse plus accessible, Villa Thalgo à Cannes est excellente (dès 45€).",
+      content: "Notre spa partenaire le plus prestigieux est les Thermes Marins de Monte-Carlo — institut de thalassothérapie mythique face au Rocher, dès 190€. Pour une adresse plus accessible, Villa Thalgo à Cannes est excellente (dès 160€).",
       links: [
         { label: "Thermes Marins de Monte-Carlo", href: "/establishment/thermes-marins-monaco" },
         { label: "Villa Thalgo", href: "/establishment/villa-thalgo-cannes" },
@@ -120,8 +173,10 @@ function getResponse(msg: string): { content: string; links: Array<{ label: stri
       ],
     };
   }
+
+  // 4) Repli générique — rien d'identifiable dans la demande.
   return {
-    content: "Je suis EliteWay AI, spécialiste de la Côte d'Azur. Dites-moi ce que vous cherchez : gastronomie, navigation, bien-être, aviation, œnologie… ou choisissez une suggestion ci-dessus pour commencer.",
+    content: "Je suis EliteWay AI. Décrivez-moi ce que vous voulez vivre — une envie, un contexte, un budget — et je vous compose un Moment. Vous pouvez aussi choisir une suggestion ci-dessus pour commencer.",
     links: [],
   };
 }
