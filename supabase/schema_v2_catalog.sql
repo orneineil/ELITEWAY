@@ -6,6 +6,16 @@
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
+-- 0. COMPLÉMENT À `bookings` (schema.sql) — date et heure du créneau réservé.
+-- `bookings` référence déjà `slot_id` (public.availability_slots) mais tant que
+-- les disponibilités réelles ne sont pas branchées, on stocke la date/heure
+-- choisie directement ici. Ajout additif de colonnes nullables : aucune ligne
+-- existante n'est affectée (l'audit confirme que la table est vide à ce jour).
+-- ----------------------------------------------------------------------------
+alter table public.bookings add column if not exists reservation_date date;
+alter table public.bookings add column if not exists reservation_time text;
+
+-- ----------------------------------------------------------------------------
 -- 1. ÉTABLISSEMENTS (sort le catalogue de establishments.ts vers une vraie table)
 -- ----------------------------------------------------------------------------
 create table if not exists public.establishments (

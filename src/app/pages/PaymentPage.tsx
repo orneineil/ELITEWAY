@@ -3,11 +3,18 @@ import { useParams, useSearchParams, useNavigate, Link } from "react-router";
 import { ArrowLeft, CreditCard, Lock, CheckCircle, Shield } from "lucide-react";
 import { establishments } from "../data/establishments";
 import { LogoMark } from "../components/LogoMark";
+import { supabase } from "../lib/supabase";
+import { useClientAuth } from "../contexts/ClientAuthContext";
+
+function generateConfirmationCode() {
+  return "EW-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+}
 
 export function PaymentPage() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { client, isAuthenticated } = useClientAuth();
   const establishment = establishments.find((e) => e.id === id);
 
   const total = searchParams.get("total") ?? "0";
@@ -20,6 +27,8 @@ export function PaymentPage() {
   const [method, setMethod] = useState<"card" | "apple" | "google">("card");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [saveError, setSaveError] = useState(false);
 
   const formatCard = (v: string) => v.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
   const formatExpiry = (v: string) => {
@@ -27,11 +36,35 @@ export function PaymentPage() {
     return d.length >= 3 ? d.slice(0, 2) + "/" + d.slice(2) : d;
   };
 
+  // Paiement simulé (mode test, comme prévu dans SETUP_BACKEND.md tant que
+  // Stripe n'est pas branché) — mais la réservation, elle, est bien réelle :
+  // on l'écrit dans la table `bookings` pour qu'elle apparaisse ensuite dans
+  // "Mes réservations" et déclenche la notification de confirmation.
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1800));
+    const code = generateConfirmationCode();
+
+    if (isAuthenticated && client && establishment) {
+      const { error } = await supabase.from("bookings").insert({
+        client_id: client.id,
+        establishment_id: establishment.id,
+        guests: Number(guests) || 1,
+        total_amount: Number(total) || null,
+        status: "confirmed",
+        payment_status: "paid",
+        confirmation_code: code,
+        reservation_date: dateStr ? dateStr.slice(0, 10) : null,
+        reservation_time: time || null,
+      });
+      setSaveError(!!error);
+    } else {
+      setSaveError(true);
+    }
+
+    await new Promise((r) => setTimeout(r, 1200));
     setLoading(false);
+    setConfirmationCode(code);
     setDone(true);
   };
 
@@ -72,7 +105,12 @@ export function PaymentPage() {
         {/* Confirmation number */}
         <div className="w-full bg-card rounded-2xl px-5 py-4 mb-8 text-center">
           <p className="text-xs text-muted-foreground mb-1">Numéro de confirmation</p>
-          <p className="text-sm tracking-widest text-foreground font-mono">EW-{Math.random().toString(36).slice(2, 8).toUpperCase()}</p>
+          <p className="text-sm tracking-widest text-foreground font-mono">{confirmationCode}</p>
+          {saveError && (
+            <p className="text-[11px] text-muted-foreground/70 mt-2">
+              Un membre de l'équipe EliteWay confirmera personnellement les derniers détails avec vous.
+            </p>
+          )}
         </div>
 
         <div className="w-full space-y-3">

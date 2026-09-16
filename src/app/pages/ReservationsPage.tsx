@@ -1,34 +1,44 @@
 import { Link } from "react-router";
-import { Calendar, Clock, MapPin, ChevronRight, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Calendar, Clock, MapPin, ChevronRight, Plus, Loader } from "lucide-react";
 import { useClientAuth } from "../contexts/ClientAuthContext";
+import { supabase } from "../lib/supabase";
+import { establishments } from "../data/establishments";
 
-const MOCK_BOOKINGS = [
-  {
-    id: "b1",
-    name: "Azur Dreams",
-    type: "Croisière privée · 4h",
-    location: "Cannes, France",
-    date: "12 Juillet 2026",
-    time: "10h00",
-    status: "confirmed",
-    price: "€€€€",
-    image: "https://images.unsplash.com/photo-1593351415075-3bac9f45c877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-  },
-  {
-    id: "b2",
-    name: "Spa Sérénité",
-    type: "Soin signature · 2h",
-    location: "Courchevel, France",
-    date: "28 Juin 2026",
-    time: "14h30",
-    status: "pending",
-    price: "€€€",
-    image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-  },
-];
+interface Booking {
+  id: string;
+  establishment_id: string;
+  guests: number;
+  total_amount: number | null;
+  status: "pending" | "confirmed" | "cancelled";
+  created_at: string;
+  reservation_date: string | null;
+  reservation_time: string | null;
+}
+
+function isPast(b: Booking) {
+  if (!b.reservation_date) return false;
+  const d = new Date(b.reservation_date);
+  return d.getTime() < new Date().setHours(0, 0, 0, 0);
+}
 
 export function ReservationsPage() {
   const { client, isAuthenticated } = useClientAuth();
+  const [bookings, setBookings] = useState<Booking[] | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated || !client) return;
+    let cancelled = false;
+    supabase
+      .from("bookings")
+      .select("id, establishment_id, guests, total_amount, status, created_at, reservation_date, reservation_time")
+      .eq("client_id", client.id)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (!cancelled) setBookings((data as Booking[] | null) ?? []);
+      });
+    return () => { cancelled = true; };
+  }, [isAuthenticated, client]);
 
   if (!isAuthenticated) {
     return (
@@ -55,6 +65,48 @@ export function ReservationsPage() {
     );
   }
 
+  const upcoming = (bookings ?? []).filter((b) => b.status !== "cancelled" && !isPast(b));
+  const completed = (bookings ?? []).filter((b) => b.status !== "cancelled" && isPast(b));
+  const cancelled = (bookings ?? []).filter((b) => b.status === "cancelled");
+
+  function BookingCard({ b }: { b: Booking }) {
+    const est = establishments.find((e) => e.id === b.establishment_id);
+    return (
+      <Link to={est ? `/establishment/${est.id}` : "#"} className="block bg-card rounded-2xl overflow-hidden">
+        <div className="relative" style={{ height: "84px" }}>
+          <img src={est?.imageUrl} alt={est?.name ?? ""} className="w-full h-full object-cover opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
+          <div className="absolute bottom-3 left-4">
+            <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="mb-0.5">{est?.name ?? "Établissement"}</p>
+            <p className="text-xs text-muted-foreground">{est?.city}</p>
+          </div>
+          <div className="absolute top-3 right-3">
+            <span className={`text-xs px-2.5 py-1 rounded-full ${b.status === "confirmed" ? "bg-emerald-500/15 text-emerald-400" : b.status === "cancelled" ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"}`}>
+              {b.status === "confirmed" ? "Confirmée" : b.status === "cancelled" ? "Annulée" : "En attente"}
+            </span>
+          </div>
+        </div>
+        <div className="px-4 py-3 flex items-center justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              {b.reservation_date && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {new Date(b.reservation_date).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
+                </span>
+              )}
+              {b.reservation_time && <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{b.reservation_time}</span>}
+            </div>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <MapPin className="w-3 h-3" />{b.guests} pers.
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <div className="max-w-lg mx-auto px-5 pb-28 pt-4">
       <div className="mb-6">
@@ -64,51 +116,53 @@ export function ReservationsPage() {
         </h1>
       </div>
 
-      {/* Upcoming */}
-      <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">À venir</p>
-      <div className="space-y-4 mb-8">
-        {MOCK_BOOKINGS.map((b) => (
-          <div key={b.id} className="bg-card rounded-2xl overflow-hidden">
-            <div className="relative" style={{ height: "84px" }}>
-              <img src={b.image} alt={b.name} className="w-full h-full object-cover opacity-60" />
-              <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
-              <div className="absolute bottom-3 left-4">
-                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="mb-0.5">{b.name}</p>
-                <p className="text-xs text-muted-foreground">{b.type}</p>
-              </div>
-              <div className="absolute top-3 right-3">
-                <span className={`text-xs px-2.5 py-1 rounded-full ${b.status === "confirmed" ? "bg-emerald-500/15 text-emerald-400" : "bg-amber-500/15 text-amber-400"}`}>
-                  {b.status === "confirmed" ? "Confirmée" : "En attente"}
-                </span>
+      {bookings === null ? (
+        <div className="flex justify-center py-16">
+          <Loader className="w-5 h-5 text-primary animate-spin" />
+        </div>
+      ) : (
+        <>
+          {upcoming.length > 0 && (
+            <div className="mb-8">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">À venir</p>
+              <div className="space-y-4">
+                {upcoming.map((b) => <BookingCard key={b.id} b={b} />)}
               </div>
             </div>
-            <div className="px-4 py-3 flex items-center justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{b.date}</span>
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{b.time}</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin className="w-3 h-3" />{b.location}
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            </div>
-          </div>
-        ))}
-      </div>
+          )}
 
-      {/* Empty state + CTA */}
-      <div className="pt-6 border-t border-border/30 flex flex-col items-center text-center">
-        <Plus className="w-6 h-6 text-muted-foreground mb-3" />
-        <p className="text-sm text-muted-foreground mb-4">Réservez votre prochaine expérience</p>
-        <Link
-          to="/categories"
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-xl text-sm"
-        >
-          Explorer les expériences
-        </Link>
-      </div>
+          {completed.length > 0 && (
+            <div className="mb-8">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Passées</p>
+              <div className="space-y-4">
+                {completed.map((b) => <BookingCard key={b.id} b={b} />)}
+              </div>
+            </div>
+          )}
+
+          {cancelled.length > 0 && (
+            <div className="mb-8">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Annulées</p>
+              <div className="space-y-4">
+                {cancelled.map((b) => <BookingCard key={b.id} b={b} />)}
+              </div>
+            </div>
+          )}
+
+          {upcoming.length === 0 && completed.length === 0 && cancelled.length === 0 && (
+            <div className="pt-6 border-t border-border/30 flex flex-col items-center text-center">
+              <Plus className="w-6 h-6 text-muted-foreground mb-3" />
+              <p className="text-sm text-muted-foreground mb-4">Réservez votre prochaine expérience</p>
+              <Link
+                to="/categories"
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-xl text-sm"
+              >
+                Explorer les expériences
+              </Link>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

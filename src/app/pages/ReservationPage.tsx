@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
-import { ArrowLeft, Calendar, Users, Clock, ChevronRight, MessageSquare, Check } from "lucide-react";
+import { ArrowLeft, Calendar, Users, Clock, ChevronRight, MessageSquare, ListChecks, ClipboardCheck } from "lucide-react";
 import { establishments } from "../data/establishments";
 
 const TIME_SLOTS = ["12h00", "12h30", "13h00", "13h30", "19h00", "19h30", "20h00", "20h30", "21h00", "21h30"];
@@ -13,11 +13,14 @@ function getNextDays(n: number) {
   });
 }
 
-// Date, heure et nombre de personnes sont regroupés sur un seul écran pour
-// raccourcir le parcours de réservation (auparavant 4 écrans distincts).
+// 4 étapes nommées et visibles (la 5e, Confirmation, arrive après le paiement
+// simulé sur PaymentPage) — remplace les 2 étapes muettes d'avant, pour que
+// la réservation ressente comme un vrai rituel plutôt qu'un formulaire éclair.
 const STEPS = [
-  { key: "details", label: "Détails",      icon: Calendar },
-  { key: "recap",   label: "Confirmation", icon: Check },
+  { key: "date",   label: "Date",          icon: Calendar },
+  { key: "guests", label: "Participants",  icon: Users },
+  { key: "options",label: "Options",       icon: ListChecks },
+  { key: "recap",  label: "Récapitulatif", icon: ClipboardCheck },
 ];
 
 export function ReservationPage() {
@@ -44,15 +47,18 @@ export function ReservationPage() {
 
   const basePrice = establishment.priceRange?.min ?? 45;
   const total = basePrice * guests;
+  const lastStep = STEPS.length - 1;
 
-  const goNext = () => setStep((s) => Math.min(1, s + 1));
+  const goNext = () => setStep((s) => Math.min(lastStep, s + 1));
   const goBack = () => {
     if (step === 0) navigate(`/establishment/${id}`);
     else setStep((s) => s - 1);
   };
 
   const canProceed = [
-    !!selectedDate && !!selectedTime && guests > 0,
+    !!selectedDate && !!selectedTime,
+    guests > 0,
+    true,
     true,
   ][step];
 
@@ -87,6 +93,7 @@ export function ReservationPage() {
         })}
       </div>
 
+      {/* ÉTAPE 1 — DATE */}
       {step === 0 && (
         <div className="space-y-7">
           <div>
@@ -123,37 +130,47 @@ export function ReservationPage() {
               ))}
             </div>
           </div>
-
-          <div>
-            <p className="text-sm font-medium mb-4">Nombre de personnes</p>
-            <div className="flex items-center justify-between bg-card border border-border/60 rounded-2xl px-6 py-6 mb-6">
-              <button
-                onClick={() => setGuests((g) => Math.max(1, g - 1))}
-                className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
-              >—</button>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }}>{guests} pers.</span>
-              <button
-                onClick={() => setGuests((g) => Math.min(8, g + 1))}
-                className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
-              >+</button>
-            </div>
-
-            <div className="flex items-center gap-2 mb-3">
-              <MessageSquare className="w-4 h-4 text-primary" />
-              <p className="text-sm font-medium">Demandes spéciales (optionnel)</p>
-            </div>
-            <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Allergie, occasion spéciale, préférence de table…"
-              rows={3}
-              className="w-full px-4 py-3 bg-input-background border border-border/60 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none placeholder:text-muted-foreground/60"
-            />
-          </div>
         </div>
       )}
 
+      {/* ÉTAPE 2 — PARTICIPANTS */}
       {step === 1 && (
+        <div>
+          <p className="text-sm font-medium mb-4">Nombre de personnes</p>
+          <div className="flex items-center justify-between bg-card border border-border/60 rounded-2xl px-6 py-6">
+            <button
+              onClick={() => setGuests((g) => Math.max(1, g - 1))}
+              className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
+            >—</button>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }}>{guests} pers.</span>
+            <button
+              onClick={() => setGuests((g) => Math.min(8, g + 1))}
+              className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl leading-none hover:bg-accent transition-colors"
+            >+</button>
+          </div>
+          <p className="text-xs text-muted-foreground mt-4 text-center">Jusqu'à 8 personnes par réservation en ligne — au-delà, contactez EliteWay AI.</p>
+        </div>
+      )}
+
+      {/* ÉTAPE 3 — OPTIONS */}
+      {step === 2 && (
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <MessageSquare className="w-4 h-4 text-primary" />
+            <p className="text-sm font-medium">Demandes spéciales (optionnel)</p>
+          </div>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Allergie, occasion spéciale, préférence de table…"
+            rows={5}
+            className="w-full px-4 py-3 bg-input-background border border-border/60 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none placeholder:text-muted-foreground/60"
+          />
+        </div>
+      )}
+
+      {/* ÉTAPE 4 — RÉCAPITULATIF */}
+      {step === 3 && (
         <div>
           <div className="bg-card rounded-2xl overflow-hidden mb-5">
             <div className="relative" style={{ height: 86 }}>
@@ -201,16 +218,16 @@ export function ReservationPage() {
       )}
 
       <button
-        onClick={step === 1
+        onClick={step === lastStep
           ? () => navigate(`/establishment/${id}/payment?total=${total}&guests=${guests}&date=${selectedDate?.toISOString()}&time=${selectedTime}`)
           : goNext}
         disabled={!canProceed}
         className="w-full py-4 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center gap-2 disabled:opacity-40 hover:bg-primary/85 transition-colors mt-7"
       >
-        {step === 1 ? `Procéder au paiement — ${total}€` : "Suivant"}
+        {step === lastStep ? `Procéder au paiement — ${total}€` : "Suivant"}
         <ChevronRight className="w-4 h-4" />
       </button>
-      {step === 1 && (
+      {step === lastStep && (
         <p className="text-center text-xs text-muted-foreground mt-3">Annulation gratuite jusqu'à 24h avant</p>
       )}
     </div>

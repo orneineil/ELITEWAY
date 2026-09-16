@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { Root } from "./Root";
 import { Home } from "./pages/Home";
 import { HomeGuard } from "./components/HomeGuard";
@@ -22,7 +22,6 @@ import { PartnerRegister } from "./pages/partner/PartnerRegister";
 import { PartnerOffers } from "./pages/partner/PartnerOffers";
 import { ClientLogin } from "./pages/client/ClientLogin";
 import { ClientRegister } from "./pages/client/ClientRegister";
-import { ClientDashboard } from "./pages/client/ClientDashboard";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { SplashScreen } from "./pages/SplashScreen";
@@ -84,7 +83,8 @@ export const router = createBrowserRouter([
       { path: "messages",                     Component: MessagesPage },
       { path: "profile",                      Component: ProfilePage },
       { path: "settings",                     Component: SettingsPage },
-      { path: "client/dashboard",             Component: ClientDashboard },
+      // Fusionné dans My EliteWay (ProfilePage) — redirection pour ne jamais casser un lien existant
+      { path: "client/dashboard",             element: <Navigate to="/profile" replace /> },
       // Membership & rewards
       { path: "membership",                   Component: MembershipPage },
       { path: "rewards",                      Component: RewardsPage },
