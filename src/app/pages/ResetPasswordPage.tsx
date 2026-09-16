@@ -96,7 +96,7 @@ export function ResetPasswordPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full px-4 py-3 pr-12 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                    className="w-full px-4 py-3 pr-12 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40"
                     required
                   />
                   <button
@@ -129,7 +129,7 @@ export function ResetPasswordPage() {
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full px-4 py-3 bg-input-background border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm ${
+                  className={`w-full px-4 py-3 bg-input-background border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40 ${
                     confirm && !rules.match ? "border-red-500/50" : "border-border"
                   }`}
                   required

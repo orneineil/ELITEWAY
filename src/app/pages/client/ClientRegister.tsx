@@ -96,90 +96,98 @@ export function ClientRegister() {
               </Link>
             </div>
           ) : (
-          <form onSubmit={handleSubmit} className="space-y-7">
-            <div className="grid grid-cols-2 gap-5">
-              <div>
-                <label className="block text-sm mb-2.5">Prénom</label>
-                <input
-                  type="text"
-                  value={form.firstName}
-                  onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-                  placeholder="Jean"
-                  className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
-                  required
-                />
+          <form onSubmit={handleSubmit} className="space-y-9">
+            <div className="space-y-5">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground/60">Vos informations</p>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm mb-2.5">Prénom</label>
+                  <input
+                    type="text"
+                    value={form.firstName}
+                    onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                    placeholder="Jean"
+                    className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-2.5">Nom</label>
+                  <input
+                    type="text"
+                    value={form.lastName}
+                    onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                    placeholder="Dupont"
+                    className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40"
+                    required
+                  />
+                </div>
               </div>
+
               <div>
-                <label className="block text-sm mb-2.5">Nom</label>
+                <label className="block text-sm mb-2.5">Adresse email</label>
                 <input
-                  type="text"
-                  value={form.lastName}
-                  onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-                  placeholder="Dupont"
-                  className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="vous@exemple.fr"
+                  className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm mb-2.5">Adresse email</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="vous@exemple.fr"
-                className="w-full px-4 py-3.5 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
-                required
-              />
-            </div>
+            <div className="space-y-5 pt-8 border-t border-border/25">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground/60">Sécurité</p>
 
-            <div>
-              <label className="block text-sm mb-2.5">Mot de passe</label>
-              <div className="relative">
+              <div>
+                <label className="block text-sm mb-2.5">Mot de passe</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    placeholder="••••••••"
+                    className="w-full px-4 py-3.5 pr-12 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                {form.password && (
+                  <ul className="mt-3 space-y-1.5 pl-1">
+                    <PasswordRule ok={rules.length} label="8 caractères minimum" />
+                    <PasswordRule ok={rules.upper} label="Une majuscule" />
+                    <PasswordRule ok={rules.digit} label="Un chiffre" />
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm mb-2.5">Confirmer le mot de passe</label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  type="password"
+                  value={form.confirm}
+                  onChange={(e) => setForm({ ...form, confirm: e.target.value })}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3.5 pr-12 bg-input-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm"
+                  className={`w-full px-4 py-3.5 bg-input-background border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm placeholder:text-muted-foreground/40 ${
+                    form.confirm && !rules.match ? "border-red-500/50" : "border-border"
+                  }`}
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                {form.confirm && !rules.match && (
+                  <p className="text-xs text-red-400 mt-2">Les mots de passe ne correspondent pas.</p>
+                )}
               </div>
-              {form.password && (
-                <ul className="mt-3 space-y-1.5 pl-1">
-                  <PasswordRule ok={rules.length} label="8 caractères minimum" />
-                  <PasswordRule ok={rules.upper} label="Une majuscule" />
-                  <PasswordRule ok={rules.digit} label="Un chiffre" />
-                </ul>
-              )}
             </div>
 
-            <div>
-              <label className="block text-sm mb-2.5">Confirmer le mot de passe</label>
-              <input
-                type="password"
-                value={form.confirm}
-                onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-                placeholder="••••••••"
-                className={`w-full px-4 py-3.5 bg-input-background border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm ${
-                  form.confirm && !rules.match ? "border-red-500/50" : "border-border"
-                }`}
-                required
-              />
-              {form.confirm && !rules.match && (
-                <p className="text-xs text-red-400 mt-2">Les mots de passe ne correspondent pas.</p>
-              )}
-            </div>
-
-            <label className="flex items-start gap-3 cursor-pointer pt-1">
+            <label className="flex items-start gap-3 cursor-pointer">
               <div
                 onClick={() => setAgreed(!agreed)}
                 className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
