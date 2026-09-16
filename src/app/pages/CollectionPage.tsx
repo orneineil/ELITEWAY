@@ -48,7 +48,7 @@ export function CollectionPage() {
         {collection.coverImage && (
           <img src={collection.coverImage} alt={collection.title} className="w-full h-full object-cover" />
         )}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.35) 0%, transparent 40%, var(--background) 98%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.03 256 / 0.35) 0%, transparent 40%, var(--background) 98%)" }} />
 
         <Link
           to="/categories"

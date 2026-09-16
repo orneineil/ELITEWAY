@@ -1,46 +1,64 @@
 @custom-variant dark (&:is(.dark *));
 
+/* ── Midnight Riviera — direction artistique EliteWay ────────────────────────
+   Rupture assumée avec le "noir + or" de la première version : le fond
+   devient un vrai bleu nuit (pas un near-black neutre), le champagne reste
+   proche de sa teinte d'origine (déjà juste) mais doit être utilisé avec
+   parcimonie au niveau des composants — ce fichier ne peut fixer que les
+   valeurs, pas leur fréquence d'usage à l'écran.
+   Ancres (converties depuis les hex de la direction artistique) :
+     Midnight Blue #0B111C · Deep Ocean #142536 · Soft Ivory #F4F0E8
+     Champagne #C9A96E · Warm Sand #D8CBB8                                  */
 :root {
   --font-size: 16px;
   --font-heading: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
-  --background: oklch(0.08 0.005 60);
-  --foreground: oklch(0.93 0.012 80);
-  --card: oklch(0.12 0.006 60);
-  --card-foreground: oklch(0.93 0.012 80);
-  --popover: oklch(0.12 0.006 60);
-  --popover-foreground: oklch(0.93 0.012 80);
-  --primary: oklch(0.74 0.09 80);
-  --primary-foreground: oklch(0.08 0.005 60);
-  --secondary: oklch(0.18 0.008 60);
-  --secondary-foreground: oklch(0.93 0.012 80);
-  --muted: oklch(0.16 0.006 60);
-  --muted-foreground: oklch(0.52 0.01 60);
-  --accent: oklch(0.18 0.008 60);
-  --accent-foreground: oklch(0.93 0.012 80);
+
+  /* Alias sémantiques réutilisables directement dans les composants
+     (style={{ background: "var(--champagne)" }}, etc.) */
+  --midnight: oklch(0.177 0.025 262);
+  --deep-ocean: oklch(0.258 0.039 250);
+  --soft-ivory: oklch(0.956 0.011 85);
+  --champagne: oklch(0.75 0.085 82);
+  --warm-sand: oklch(0.848 0.030 77.5);
+
+  --background: var(--midnight);
+  --foreground: var(--soft-ivory);
+  --card: var(--deep-ocean);
+  --card-foreground: var(--soft-ivory);
+  --popover: var(--deep-ocean);
+  --popover-foreground: var(--soft-ivory);
+  --primary: var(--champagne);
+  --primary-foreground: var(--midnight);
+  --secondary: oklch(0.24 0.032 256);
+  --secondary-foreground: var(--soft-ivory);
+  --muted: oklch(0.22 0.028 254);
+  --muted-foreground: oklch(0.60 0.02 78);
+  --accent: oklch(0.24 0.032 256);
+  --accent-foreground: var(--soft-ivory);
   --destructive: #b5383c;
   --destructive-foreground: #ffffff;
-  --border: oklch(0.155 0.006 62);
+  --border: oklch(0.27 0.032 255);
   --input: transparent;
-  --input-background: oklch(0.14 0.006 60);
-  --switch-background: oklch(0.28 0.01 60);
+  --input-background: oklch(0.22 0.03 252);
+  --switch-background: oklch(0.34 0.03 255);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: oklch(0.74 0.09 80);
-  --chart-1: oklch(0.74 0.09 80);
-  --chart-2: oklch(0.65 0.07 75);
-  --chart-3: oklch(0.55 0.05 65);
-  --chart-4: oklch(0.70 0.08 85);
-  --chart-5: oklch(0.60 0.06 70);
+  --ring: var(--champagne);
+  --chart-1: oklch(0.75 0.085 82);
+  --chart-2: oklch(0.65 0.06 78);
+  --chart-3: oklch(0.55 0.045 70);
+  --chart-4: oklch(0.60 0.05 250);
+  --chart-5: oklch(0.45 0.04 255);
   --radius: 0.375rem;
-  --sidebar: oklch(0.12 0.006 60);
-  --sidebar-foreground: oklch(0.93 0.012 80);
-  --sidebar-primary: oklch(0.74 0.09 80);
-  --sidebar-primary-foreground: oklch(0.08 0.005 60);
-  --sidebar-accent: oklch(0.18 0.008 60);
-  --sidebar-accent-foreground: oklch(0.93 0.012 80);
-  --sidebar-border: oklch(0.20 0.007 65);
-  --sidebar-ring: oklch(0.74 0.09 80);
+  --sidebar: var(--deep-ocean);
+  --sidebar-foreground: var(--soft-ivory);
+  --sidebar-primary: var(--champagne);
+  --sidebar-primary-foreground: var(--midnight);
+  --sidebar-accent: oklch(0.24 0.032 256);
+  --sidebar-accent-foreground: var(--soft-ivory);
+  --sidebar-border: oklch(0.29 0.033 255);
+  --sidebar-ring: var(--champagne);
 }
 
 .dark {
@@ -81,6 +99,11 @@
 }
 
 @theme inline {
+  --color-midnight: var(--midnight);
+  --color-deep-ocean: var(--deep-ocean);
+  --color-soft-ivory: var(--soft-ivory);
+  --color-champagne: var(--champagne);
+  --color-warm-sand: var(--warm-sand);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

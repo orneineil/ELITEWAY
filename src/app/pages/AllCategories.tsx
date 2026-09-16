@@ -193,7 +193,7 @@ export function AllCategories() {
           to="/partner/register"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-transform active:scale-95"
           style={{
-            border: "1px solid oklch(0.74 0.09 80 / 0.5)",
+            border: "1px solid oklch(0.74 0.0792 80 / 0.5)",
             color: "oklch(0.85 0.09 80)",
             fontSize: "0.9rem",
           }}

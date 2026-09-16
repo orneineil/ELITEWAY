@@ -25,7 +25,7 @@ function AskEliteWay() {
   return (
     <div
       className="rounded-2xl border p-5"
-      style={{ borderColor: "oklch(0.74 0.09 80 / 0.35)", background: "oklch(0.13 0.008 60)" }}
+      style={{ borderColor: "oklch(0.74 0.0792 80 / 0.35)", background: "oklch(0.13 0.03 256)" }}
     >
       <div className="flex items-center gap-2 mb-3.5">
         <Sparkles className="w-3.5 h-3.5 text-primary" />
@@ -231,8 +231,8 @@ export function Home() {
           <div
             className="relative flex items-center rounded-full overflow-hidden"
             style={{
-              border: "1px solid oklch(0.74 0.09 80 / 0.4)",
-              background: "oklch(0.08 0.005 60 / 0.55)",
+              border: "1px solid oklch(0.74 0.0792 80 / 0.4)",
+              background: "oklch(0.08 0.03 256 / 0.55)",
               backdropFilter: "blur(10px)",
             }}
           >
@@ -263,7 +263,7 @@ export function Home() {
           <Link
             to="/categories"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-xs uppercase tracking-[0.18em] transition-transform active:scale-95"
-            style={{ background: "oklch(0.74 0.09 80)", color: "oklch(0.08 0.005 60)" }}
+            style={{ background: "oklch(0.74 0.0792 80)", color: "oklch(0.08 0.03 256)" }}
           >
             Explorer
           </Link>
@@ -289,7 +289,7 @@ export function Home() {
                 key={cat.id}
                 to={`/category/${cat.id}`}
                 className="flex flex-col items-center justify-center gap-2.5 py-5 px-1.5 rounded-2xl text-center transition-colors hover:bg-accent/40"
-                style={{ background: "oklch(0.12 0.006 60)" }}
+                style={{ background: "oklch(0.12 0.03 256)" }}
               >
                 <Icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
                 <span className="text-[9.5px] uppercase tracking-[0.06em] leading-tight text-foreground">

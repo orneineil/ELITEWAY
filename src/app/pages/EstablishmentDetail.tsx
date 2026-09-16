@@ -151,7 +151,7 @@ export function EstablishmentDetail() {
           onLoad={(e) => setGalleryNaturalWidth(e.currentTarget.naturalWidth)}
           className={`relative w-full h-full ${isLowResPhoto ? "object-contain" : "object-cover"}`}
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.4) 0%, transparent 35%, var(--background) 96%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.03 256 / 0.4) 0%, transparent 35%, var(--background) 96%)" }} />
 
         <button
           onClick={() => navigate(-1)}

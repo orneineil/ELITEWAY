@@ -180,7 +180,7 @@ export function MomentBuilderPage() {
             <div
               key={s}
               className="h-1 flex-1 rounded-full transition-colors"
-              style={{ background: i <= stepIndex ? "oklch(0.74 0.09 80)" : "oklch(0.2 0.006 60)" }}
+              style={{ background: i <= stepIndex ? "oklch(0.74 0.0792 80)" : "oklch(0.2 0.03 256)" }}
             />
           ))}
         </div>
@@ -404,7 +404,7 @@ function MomentResult({
         <Link
           to={`/establishment/${moment.beats[0].establishment.id}/reserve`}
           className="w-full py-4 rounded-full text-sm text-center uppercase tracking-[0.1em] transition-transform active:scale-95"
-          style={{ background: "oklch(0.74 0.09 80)", color: "oklch(0.08 0.005 60)" }}
+          style={{ background: "oklch(0.74 0.0792 80)", color: "oklch(0.08 0.03 256)" }}
         >
           Réserver ce Moment
         </Link>

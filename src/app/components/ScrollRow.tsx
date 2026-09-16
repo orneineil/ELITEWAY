@@ -57,16 +57,16 @@ export function ScrollRow({ children, className = "", gap = 16 }: ScrollRowProps
           aria-label="Défiler à gauche"
           className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90"
           style={{
-            background:  canLeft ? "oklch(0.18 0.01 65)" : "oklch(0.14 0.006 60 / 0.5)",
-            border:      `1px solid ${canLeft ? "oklch(0.74 0.09 80 / 0.45)" : "oklch(0.22 0.007 65 / 0.3)"}`,
+            background:  canLeft ? "oklch(0.18 0.03 256)" : "oklch(0.14 0.03 256 / 0.5)",
+            border:      `1px solid ${canLeft ? "oklch(0.74 0.0792 80 / 0.45)" : "oklch(0.22 0.03 256 / 0.3)"}`,
             cursor:      canLeft ? "pointer" : "default",
-            boxShadow:   canLeft ? "0 0 12px oklch(0.74 0.09 80 / 0.15)" : "none",
+            boxShadow:   canLeft ? "0 0 12px oklch(0.74 0.0792 80 / 0.15)" : "none",
             opacity:     canLeft ? 1 : 0.3,
           }}
         >
           <ChevronLeft
             className="w-4 h-4"
-            style={{ color: canLeft ? "oklch(0.74 0.09 80)" : "oklch(0.45 0.008 60)" }}
+            style={{ color: canLeft ? "oklch(0.74 0.0792 80)" : "oklch(0.45 0.02 256)" }}
           />
         </button>
 
@@ -77,16 +77,16 @@ export function ScrollRow({ children, className = "", gap = 16 }: ScrollRowProps
           aria-label="Défiler à droite"
           className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90"
           style={{
-            background:  canRight ? "oklch(0.18 0.01 65)" : "oklch(0.14 0.006 60 / 0.5)",
-            border:      `1px solid ${canRight ? "oklch(0.74 0.09 80 / 0.45)" : "oklch(0.22 0.007 65 / 0.3)"}`,
+            background:  canRight ? "oklch(0.18 0.03 256)" : "oklch(0.14 0.03 256 / 0.5)",
+            border:      `1px solid ${canRight ? "oklch(0.74 0.0792 80 / 0.45)" : "oklch(0.22 0.03 256 / 0.3)"}`,
             cursor:      canRight ? "pointer" : "default",
-            boxShadow:   canRight ? "0 0 12px oklch(0.74 0.09 80 / 0.15)" : "none",
+            boxShadow:   canRight ? "0 0 12px oklch(0.74 0.0792 80 / 0.15)" : "none",
             opacity:     canRight ? 1 : 0.3,
           }}
         >
           <ChevronRight
             className="w-4 h-4"
-            style={{ color: canRight ? "oklch(0.74 0.09 80)" : "oklch(0.45 0.008 60)" }}
+            style={{ color: canRight ? "oklch(0.74 0.0792 80)" : "oklch(0.45 0.02 256)" }}
           />
         </button>
       </div>

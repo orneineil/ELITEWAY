@@ -71,8 +71,8 @@ export function ClientRegister() {
         <div
           className="rounded-2xl p-7"
           style={{
-            background: "oklch(0.13 0.008 62)",
-            border: "1px solid oklch(0.74 0.09 80 / 0.22)",
+            background: "oklch(0.13 0.03 256)",
+            border: "1px solid oklch(0.74 0.0792 80 / 0.22)",
             boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
           }}
         >

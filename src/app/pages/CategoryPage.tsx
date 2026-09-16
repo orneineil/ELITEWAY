@@ -150,8 +150,8 @@ export function CategoryPage() {
           alt={config.name}
           className="w-full h-full object-cover opacity-95"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.35) 0%, transparent 40%, var(--background) 98%)" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, oklch(0.74 0.09 80 / 0.08) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.03 256 / 0.35) 0%, transparent 40%, var(--background) 98%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, oklch(0.74 0.0792 80 / 0.08) 0%, transparent 70%)" }} />
 
         <Link
           to="/categories"
@@ -225,9 +225,9 @@ export function CategoryPage() {
             onClick={() => setActiveFilter(pill)}
             className="shrink-0 px-4 py-2 rounded-full text-xs transition-colors whitespace-nowrap"
             style={{
-              background: activeFilter === pill ? "oklch(0.74 0.09 80)" : "oklch(0.14 0.006 60)",
-              color: activeFilter === pill ? "oklch(0.08 0.005 60)" : "oklch(0.70 0.01 60)",
-              border: activeFilter === pill ? "none" : "1px solid oklch(0.22 0.007 65)",
+              background: activeFilter === pill ? "oklch(0.74 0.0792 80)" : "oklch(0.14 0.03 256)",
+              color: activeFilter === pill ? "oklch(0.08 0.03 256)" : "oklch(0.7 0.02 256)",
+              border: activeFilter === pill ? "none" : "1px solid oklch(0.22 0.03 256)",
               fontWeight: activeFilter === pill ? 600 : 400,
             }}
           >

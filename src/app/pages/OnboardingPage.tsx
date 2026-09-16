@@ -62,7 +62,7 @@ export function OnboardingPage() {
             <img src={s.image} alt="" className="w-full h-full object-cover opacity-30" />
           </div>
         ))}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.5) 0%, oklch(0.08 0.005 60) 60%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.03 256 / 0.5) 0%, oklch(0.08 0.03 256) 60%)" }} />
       </div>
 
       {/* Top nav */}

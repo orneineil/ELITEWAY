@@ -39,7 +39,7 @@ export function SplashScreen() {
       }} />
 
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 60% 40% at 50% 40%, oklch(0.74 0.09 80 / 0.14) 0%, transparent 70%)",
+        background: "radial-gradient(ellipse 60% 40% at 50% 40%, oklch(0.74 0.0792 80 / 0.14) 0%, transparent 70%)",
       }} />
 
       <div className="relative z-10 flex-1 flex flex-col items-center px-8" style={{ justifyContent: "flex-start", paddingTop: "9%" }}>
@@ -52,7 +52,7 @@ export function SplashScreen() {
               fontSize: step >= 2 ? "150px" : "70px",
               lineHeight: 1,
               opacity: step >= 1 ? 1 : 0,
-              backgroundImage: "linear-gradient(155deg, oklch(0.52 0.08 75) 0%, oklch(0.76 0.09 80) 35%, oklch(0.48 0.09 72) 60%, oklch(0.70 0.09 78) 100%)",
+              backgroundImage: "linear-gradient(155deg, oklch(0.52 0.0704 75) 0%, oklch(0.76 0.0792 80) 35%, oklch(0.48 0.0792 72) 60%, oklch(0.7 0.0792 78) 100%)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
@@ -104,10 +104,10 @@ export function SplashScreen() {
         <div style={{
           width: step >= 3 ? "56px" : "0px",
           height: "1px",
-          background: "oklch(0.74 0.09 80)",
+          background: "oklch(0.74 0.0792 80)",
           transition: "width 0.6s ease",
           marginTop: "20px",
-          boxShadow: "0 0 10px oklch(0.74 0.09 80 / 0.6)",
+          boxShadow: "0 0 10px oklch(0.74 0.0792 80 / 0.6)",
         }} />
 
         {/* Sous-titre */}
@@ -136,11 +136,11 @@ export function SplashScreen() {
           className="w-full flex items-center justify-center gap-2 rounded-full mb-3 transition-transform active:scale-[0.98]"
           style={{
             height: "56px",
-            background: "linear-gradient(135deg, oklch(0.80 0.09 80), oklch(0.68 0.10 78))",
-            color: "oklch(0.10 0.006 60)",
+            background: "linear-gradient(135deg, oklch(0.8 0.0792 80), oklch(0.68 0.088 78))",
+            color: "oklch(0.1 0.03 256)",
             fontFamily: "var(--font-heading)",
             fontSize: "1.05rem",
-            boxShadow: "0 6px 24px oklch(0.74 0.09 80 / 0.35)",
+            boxShadow: "0 6px 24px oklch(0.74 0.0792 80 / 0.35)",
           }}
         >
           Commencer <ArrowRight className="w-4 h-4" />
@@ -152,7 +152,7 @@ export function SplashScreen() {
           style={{
             height: "56px",
             background: "transparent",
-            border: "1px solid oklch(0.74 0.09 80 / 0.5)",
+            border: "1px solid oklch(0.74 0.0792 80 / 0.5)",
             color: "oklch(0.90 0.05 80)",
             fontFamily: "var(--font-heading)",
             fontSize: "1.05rem",
@@ -162,16 +162,16 @@ export function SplashScreen() {
         </button>
 
         <div className="flex items-center justify-center gap-3 mt-6">
-          <span style={{ width: "28px", height: "1px", background: "oklch(0.74 0.09 80 / 0.4)" }} />
+          <span style={{ width: "28px", height: "1px", background: "oklch(0.74 0.0792 80 / 0.4)" }} />
           <span style={{
             fontFamily: "var(--font-body)",
             fontSize: "0.62rem",
             letterSpacing: "0.28em",
-            color: "oklch(0.74 0.09 80 / 0.75)",
+            color: "oklch(0.74 0.0792 80 / 0.75)",
           }}>
             CÔTE D'AZUR
           </span>
-          <span style={{ width: "28px", height: "1px", background: "oklch(0.74 0.09 80 / 0.4)" }} />
+          <span style={{ width: "28px", height: "1px", background: "oklch(0.74 0.0792 80 / 0.4)" }} />
         </div>
       </div>
     </div>

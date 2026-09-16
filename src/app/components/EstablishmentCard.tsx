@@ -59,7 +59,7 @@ export function EstablishmentCard({ establishment, showPrice = false }: Establis
       <button
         onClick={handleFavoriteClick}
         className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full backdrop-blur-sm flex items-center justify-center"
-        style={{ background: "oklch(0.08 0.005 60 / 0.65)" }}
+        style={{ background: "oklch(0.08 0.03 256 / 0.65)" }}
       >
         <Heart className={`w-3.5 h-3.5 ${favorited ? "fill-primary text-primary" : "text-foreground/90"}`} />
       </button>
@@ -69,7 +69,7 @@ export function EstablishmentCard({ establishment, showPrice = false }: Establis
       {establishment.exclusive ? (
         <div
           className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
-          style={{ background: "oklch(0.08 0.005 60 / 0.65)" }}
+          style={{ background: "oklch(0.08 0.03 256 / 0.65)" }}
         >
           <Gem className="w-3 h-3 text-primary" />
           <span className="text-[9px] uppercase tracking-[0.1em] text-primary">EliteWay Selection</span>
@@ -77,7 +77,7 @@ export function EstablishmentCard({ establishment, showPrice = false }: Establis
       ) : establishment.category === "offres-exclusives" ? (
         <div
           className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
-          style={{ background: "oklch(0.08 0.005 60 / 0.65)" }}
+          style={{ background: "oklch(0.08 0.03 256 / 0.65)" }}
         >
           <Lock className="w-3 h-3 text-primary" />
           <span className="text-[9px] uppercase tracking-[0.1em] text-primary">Membres</span>

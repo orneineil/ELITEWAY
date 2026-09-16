@@ -130,8 +130,8 @@ export function SearchPage() {
           alt="Recherche"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.6) 0%, var(--background) 100%)" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 0%, oklch(0.74 0.09 80 / 0.12) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.03 256 / 0.6) 0%, var(--background) 100%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 0%, oklch(0.74 0.0792 80 / 0.12) 0%, transparent 70%)" }} />
 
         <div className="relative z-10 px-5 pt-5 pb-7">
           <p className="text-xs uppercase tracking-[0.2em] text-primary mb-2">Recherche</p>
@@ -143,7 +143,7 @@ export function SearchPage() {
           <form onSubmit={handleSearch}>
             <div className="relative" style={{ width: "90%", margin: "0 auto" }}>
               <div className="absolute -inset-[2px] rounded-[18px] pointer-events-none"
-                style={{ background: "linear-gradient(135deg, oklch(0.74 0.09 80 / 0.45), oklch(0.74 0.09 80 / 0.08))", borderRadius: "18px" }} />
+                style={{ background: "linear-gradient(135deg, oklch(0.74 0.0792 80 / 0.45), oklch(0.74 0.0792 80 / 0.08))", borderRadius: "18px" }} />
               <div className="relative flex items-center bg-card rounded-2xl overflow-hidden shadow-lg">
                 <Search className="absolute left-4 w-5 h-5 text-primary pointer-events-none" />
                 <input

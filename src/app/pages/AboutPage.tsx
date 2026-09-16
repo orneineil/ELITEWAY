@@ -154,7 +154,7 @@ export function AboutPage() {
 
         {/* Gold halo */}
         <div className="absolute inset-0 pointer-events-none z-0" style={{
-          background: "radial-gradient(ellipse 60% 40% at 50% 35%, oklch(0.74 0.09 80 / 0.10) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 60% 40% at 50% 35%, oklch(0.74 0.0792 80 / 0.10) 0%, transparent 70%)",
         }} />
 
         <div className="relative z-10 flex flex-col items-center justify-end px-6 pb-12" style={{ minHeight: "90svh" }}>
@@ -171,7 +171,7 @@ export function AboutPage() {
             fontFamily: "var(--font-body)",
             fontSize: "0.6rem",
             letterSpacing: "0.3em",
-            color: "oklch(0.74 0.09 80)",
+            color: "oklch(0.74 0.0792 80)",
           }}>
             Côte d'Azur · L'exception à portée de main
           </p>
@@ -190,20 +190,20 @@ export function AboutPage() {
 
           {/* Quote line */}
           <div className="flex items-center gap-3 mb-5">
-            <div className="h-px flex-1" style={{ background: "oklch(0.74 0.09 80 / 0.4)" }} />
+            <div className="h-px flex-1" style={{ background: "oklch(0.74 0.0792 80 / 0.4)" }} />
             <p className="text-center text-sm text-muted-foreground shrink-0 px-2" style={{ maxWidth: "260px" }}>
               EliteWay réunit les meilleures expériences de luxe de la Côte d'Azur dans une seule application.
             </p>
-            <div className="h-px flex-1" style={{ background: "oklch(0.74 0.09 80 / 0.4)" }} />
+            <div className="h-px flex-1" style={{ background: "oklch(0.74 0.0792 80 / 0.4)" }} />
           </div>
 
           <Link
             to="/categories"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium transition-all active:scale-95"
             style={{
-              background: "oklch(0.74 0.09 80)",
-              color: "oklch(0.08 0.005 60)",
-              boxShadow: "0 4px 24px oklch(0.74 0.09 80 / 0.4)",
+              background: "oklch(0.74 0.0792 80)",
+              color: "oklch(0.08 0.03 256)",
+              boxShadow: "0 4px 24px oklch(0.74 0.0792 80 / 0.4)",
             }}
           >
             Découvrir les expériences <ArrowRight className="w-4 h-4" />
@@ -222,7 +222,7 @@ export function AboutPage() {
           {PROBLEMS.map((p) => (
             <div key={p.number} className="flex gap-4 p-4 rounded-2xl bg-card">
               <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: "oklch(0.74 0.09 80 / 0.12)", border: "1px solid oklch(0.74 0.09 80 / 0.35)" }}>
+                style={{ background: "oklch(0.74 0.0792 80 / 0.12)", border: "1px solid oklch(0.74 0.0792 80 / 0.35)" }}>
                 <span className="text-[10px] text-primary font-medium">{p.number}</span>
               </div>
               <div>
@@ -237,11 +237,11 @@ export function AboutPage() {
       {/* ── LA SOLUTION — ce qu'est EliteWay ───────────────────────────────── */}
       <section className="px-5 py-8">
         <div className="relative overflow-hidden rounded-3xl p-6"
-          style={{ background: "linear-gradient(135deg, oklch(0.13 0.015 75), oklch(0.10 0.010 65))" }}>
+          style={{ background: "linear-gradient(135deg, oklch(0.13 0.03 256), oklch(0.1 0.03 256))" }}>
           <div className="absolute inset-0 pointer-events-none rounded-3xl"
-            style={{ boxShadow: "inset 0 0 0 1px oklch(0.74 0.09 80 / 0.35)" }} />
+            style={{ boxShadow: "inset 0 0 0 1px oklch(0.74 0.0792 80 / 0.35)" }} />
           <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full pointer-events-none"
-            style={{ background: "radial-gradient(circle, oklch(0.74 0.09 80 / 0.12) 0%, transparent 70%)" }} />
+            style={{ background: "radial-gradient(circle, oklch(0.74 0.0792 80 / 0.12) 0%, transparent 70%)" }} />
 
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary mb-3 relative z-10">La réponse</p>
           <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.6rem", lineHeight: 1.2 }} className="mb-4 relative z-10">
@@ -256,7 +256,7 @@ export function AboutPage() {
             ].map((txt, i) => (
               <div key={i} className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ background: "oklch(0.74 0.09 80 / 0.20)", border: "1px solid oklch(0.74 0.09 80 / 0.4)" }}>
+                  style={{ background: "oklch(0.74 0.0792 80 / 0.20)", border: "1px solid oklch(0.74 0.0792 80 / 0.4)" }}>
                   <Check className="w-3 h-3 text-primary" />
                 </div>
                 <p className="text-sm leading-relaxed text-foreground/85">{txt}</p>
@@ -292,7 +292,7 @@ export function AboutPage() {
                   }} />
                   {/* Icon badge */}
                   <div className="absolute top-3 left-3 w-8 h-8 rounded-xl flex items-center justify-center"
-                    style={{ background: "oklch(0.74 0.09 80 / 0.20)", border: "1px solid oklch(0.74 0.09 80 / 0.5)" }}>
+                    style={{ background: "oklch(0.74 0.0792 80 / 0.20)", border: "1px solid oklch(0.74 0.0792 80 / 0.5)" }}>
                     <Icon className="w-4 h-4 text-primary" />
                   </div>
                   {/* Content */}
@@ -325,7 +325,7 @@ export function AboutPage() {
           {PILLARS.map((p) => (
             <div key={p.number} className="p-4 rounded-2xl bg-card">
               <div className="w-7 h-7 rounded-full flex items-center justify-center mb-3"
-                style={{ background: "oklch(0.74 0.09 80 / 0.12)", border: "1px solid oklch(0.74 0.09 80 / 0.35)" }}>
+                style={{ background: "oklch(0.74 0.0792 80 / 0.12)", border: "1px solid oklch(0.74 0.0792 80 / 0.35)" }}>
                 <span className="text-[11px] text-primary font-semibold">{p.number}</span>
               </div>
               <p style={{ fontFamily: "var(--font-heading)", fontSize: "0.95rem" }} className="mb-1.5 leading-snug">{p.title}</p>
@@ -340,7 +340,7 @@ export function AboutPage() {
         <div className="grid grid-cols-2 gap-4">
           {STATS.map((s) => (
             <div key={s.label} className="text-center p-5 rounded-2xl bg-card">
-              <p style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", color: "oklch(0.74 0.09 80)" }}
+              <p style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", color: "oklch(0.74 0.0792 80)" }}
                 className="leading-none mb-1">{s.value}</p>
               <p className="text-xs text-muted-foreground">{s.label}</p>
             </div>
@@ -351,11 +351,11 @@ export function AboutPage() {
       {/* ── PROMESSE ÉLITEWAY ───────────────────────────────────────────────── */}
       <section className="px-5 py-6">
         <div className="relative overflow-hidden rounded-3xl p-6 text-center"
-          style={{ background: "linear-gradient(145deg, oklch(0.12 0.015 75), oklch(0.09 0.008 65))" }}>
+          style={{ background: "linear-gradient(145deg, oklch(0.12 0.03 256), oklch(0.09 0.03 256))" }}>
           <div className="absolute inset-0 rounded-3xl pointer-events-none"
-            style={{ boxShadow: "inset 0 0 0 1px oklch(0.74 0.09 80 / 0.3)" }} />
+            style={{ boxShadow: "inset 0 0 0 1px oklch(0.74 0.0792 80 / 0.3)" }} />
           <div className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, oklch(0.74 0.09 80 / 0.08), transparent)" }} />
+            style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, oklch(0.74 0.0792 80 / 0.08), transparent)" }} />
 
           <Shield className="w-8 h-8 text-primary mx-auto mb-4 relative z-10" />
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary mb-3 relative z-10">Notre engagement</p>
@@ -371,9 +371,9 @@ export function AboutPage() {
               to="/membership"
               className="inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full text-sm font-medium transition-all active:scale-95"
               style={{
-                background: "oklch(0.74 0.09 80)",
-                color: "oklch(0.08 0.005 60)",
-                boxShadow: "0 4px 24px oklch(0.74 0.09 80 / 0.35)",
+                background: "oklch(0.74 0.0792 80)",
+                color: "oklch(0.08 0.03 256)",
+                boxShadow: "0 4px 24px oklch(0.74 0.0792 80 / 0.35)",
               }}
             >
               Rejoindre EliteWay <ArrowRight className="w-4 h-4" />
@@ -381,7 +381,7 @@ export function AboutPage() {
             <Link
               to="/categories"
               className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full text-sm text-muted-foreground transition-all"
-              style={{ border: "1px solid oklch(0.28 0.008 65 / 0.6)" }}
+              style={{ border: "1px solid oklch(0.28 0.03 256 / 0.6)" }}
             >
               Explorer sans s'inscrire
             </Link>
@@ -398,7 +398,7 @@ export function AboutPage() {
 
         <div className="relative pl-6">
           <div className="absolute left-2.5 top-2 bottom-2 w-px"
-            style={{ background: "linear-gradient(180deg, oklch(0.74 0.09 80), oklch(0.74 0.09 80 / 0.15))" }} />
+            style={{ background: "linear-gradient(180deg, oklch(0.74 0.0792 80), oklch(0.74 0.0792 80 / 0.15))" }} />
           <div className="space-y-6">
             {[
               { year: "2022", title: "L'idée", text: "Naissance d'EliteWay : connecter la Riviera à ceux qui exigent le meilleur." },
@@ -409,8 +409,8 @@ export function AboutPage() {
               <div key={m.year} className="relative flex gap-4">
                 <div className="absolute -left-3.5 top-1.5 w-3 h-3 rounded-full border-2"
                   style={{
-                    background: i === 3 ? "oklch(0.74 0.09 80)" : "oklch(0.13 0.010 70)",
-                    borderColor: "oklch(0.74 0.09 80)",
+                    background: i === 3 ? "oklch(0.74 0.0792 80)" : "oklch(0.13 0.03 256)",
+                    borderColor: "oklch(0.74 0.0792 80)",
                   }} />
                 <div>
                   <p className="text-[10px] text-primary tracking-wider mb-0.5">{m.year}</p>
