@@ -1,14 +1,21 @@
 import { useState } from "react";
-import { Heart, MapPin, Star } from "lucide-react";
+import { Heart, MapPin, Star, ArrowRight } from "lucide-react";
 import { Establishment } from "../data/establishments";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { Link } from "react-router";
 
 interface EstablishmentCardProps {
   establishment: Establishment;
+  /** Affiche le prix et l'affordance "Découvrir" — utile pour les grandes cartes éditoriales. */
+  showPrice?: boolean;
 }
 
-export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
+function priceLabel(establishment: Establishment): string {
+  if (establishment.priceRange) return `Dès ${establishment.priceRange.min} €`;
+  return establishment.price;
+}
+
+export function EstablishmentCard({ establishment, showPrice = false }: EstablishmentCardProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(establishment.id);
   // Certaines photos sources sont en basse résolution : on évite de les étirer
@@ -68,9 +75,17 @@ export function EstablishmentCard({ establishment }: EstablishmentCardProps) {
             <span className="text-xs">{establishment.rating}</span>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 text-muted-foreground text-xs min-w-0">
-          <MapPin className="w-3 h-3 shrink-0" />
-          <span className="truncate min-w-0">{establishment.city || establishment.location}</span>
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <div className="flex items-center gap-1.5 text-muted-foreground text-xs min-w-0">
+            <MapPin className="w-3 h-3 shrink-0" />
+            <span className="truncate min-w-0">{establishment.city || establishment.location}</span>
+          </div>
+          {showPrice && (
+            <div className="flex items-center gap-1 text-xs text-primary shrink-0">
+              <span>{priceLabel(establishment)}</span>
+              <ArrowRight className="w-3 h-3" />
+            </div>
+          )}
         </div>
       </div>
     </Link>
