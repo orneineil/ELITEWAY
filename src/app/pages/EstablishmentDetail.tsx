@@ -4,7 +4,7 @@ import { establishments } from "../data/establishments";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { ScrollRow } from "../components/ScrollRow";
 import {
-  ArrowLeft, Heart, MapPin, Star,
+  ArrowLeft, Heart, MapPin, Star, Gem, Clock, Users, Shirt,
   ChevronLeft, ChevronRight,
 } from "lucide-react";
 
@@ -125,11 +125,17 @@ export function EstablishmentDetail() {
 
   const isLowResPhoto = galleryNaturalWidth !== null && galleryNaturalWidth < 500;
 
+  const practicalInfo = [
+    establishment.hours ? { icon: Clock, label: `${establishment.hours.open} – ${establishment.hours.close}`, sub: establishment.hours.days } : null,
+    establishment.capacity ? { icon: Users, label: establishment.capacity, sub: "Capacité" } : null,
+    establishment.dressCode ? { icon: Shirt, label: establishment.dressCode, sub: "Tenue" } : null,
+  ].filter(Boolean) as { icon: typeof Clock; label: string; sub?: string }[];
+
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      {/* GALLERY */}
-      <div className="relative bg-black overflow-hidden" style={{ height: 225 }}>
+      {/* HERO — immersif, plus une vignette de fiche produit */}
+      <div className="relative bg-black overflow-hidden" style={{ height: "56svh", minHeight: 340, maxHeight: 480 }}>
         {isLowResPhoto && (
           <img
             src={galleryImages[galleryIndex]}
@@ -145,29 +151,25 @@ export function EstablishmentDetail() {
           onLoad={(e) => setGalleryNaturalWidth(e.currentTarget.naturalWidth)}
           className={`relative w-full h-full ${isLowResPhoto ? "object-contain" : "object-cover"}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.08 0.005 60 / 0.4) 0%, transparent 35%, var(--background) 96%)" }} />
 
         <button
           onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 w-9 h-9 rounded-full bg-background/60 flex items-center justify-center"
+          className="absolute w-9 h-9 rounded-full bg-background/60 backdrop-blur-sm flex items-center justify-center"
+          style={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: "16px" }}
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
 
         <button
           onClick={() => toggleFavorite(establishment.id)}
-          className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center"
+          className="absolute w-9 h-9 flex items-center justify-center"
+          style={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", right: "8px" }}
         >
           <Heart
             className={`w-5 h-5 transition-all drop-shadow-sm ${favorited ? "fill-primary text-primary" : "text-white"}`}
           />
         </button>
-
-        <div className="absolute bottom-4 left-4 flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-full text-xs bg-primary text-primary-foreground">
-            {categoryLabels[establishment.category]}
-          </span>
-        </div>
 
         {galleryImages.length > 1 && (
           <>
@@ -183,7 +185,7 @@ export function EstablishmentDetail() {
             >
               <ChevronRight className="w-4 h-4" />
             </button>
-            <div className="absolute bottom-4 right-4 flex items-center gap-1">
+            <div className="absolute bottom-6 right-4 flex items-center gap-1">
               {galleryImages.map((_, i) => (
                 <button
                   key={i}
@@ -194,36 +196,43 @@ export function EstablishmentDetail() {
             </div>
           </>
         )}
-      </div>
 
-      <div className="px-5 pt-6 space-y-8">
-
-        {/* INFOS PRINCIPALES */}
-        <div>
-          <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.8rem" }} className="leading-tight mb-2">
-            {establishment.name}
-          </h1>
-          <div className="flex items-center gap-3 mb-3">
-            <StarRating rating={establishment.rating} />
-            <span className="text-sm text-primary">{establishment.rating}</span>
-            {reviews.length > 0 && (
-              <span className="text-xs text-muted-foreground">({reviews.length} avis)</span>
+        {/* Nom et localisation portés par le hero, pas relégués en dessous */}
+        <div className="absolute bottom-6 left-5 right-20">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <span className="px-2.5 py-1 rounded-full text-xs bg-primary text-primary-foreground">
+              {categoryLabels[establishment.category]}
+            </span>
+            {establishment.exclusive && (
+              <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs bg-background/70 backdrop-blur-sm border border-primary/40 text-primary">
+                <Gem className="w-3 h-3" /> EliteWay Selection
+              </span>
             )}
           </div>
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-3">
+          <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.9rem" }} className="leading-tight mb-1.5">
+            {establishment.name}
+          </h1>
+          <div className="flex items-center gap-1.5 text-sm text-foreground/80">
             <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
             <span>{establishment.city}</span>
+            <span className="text-foreground/40">·</span>
+            <StarRating rating={establishment.rating} size={12} />
+            <span className="text-primary">{establishment.rating}</span>
           </div>
-          {establishment.tags && (
-            <div className="flex flex-wrap gap-2">
-              {establishment.tags.map((tag) => (
-                <span key={tag} className="px-3 py-1 rounded-full text-xs bg-primary/10 text-primary">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
+      </div>
+
+      <div className="px-5 pt-7 space-y-8">
+
+        {/* POURQUOI ELITEWAY — le récit avant le prix */}
+        {establishment.whyEliteWay && (
+          <div className="p-4 rounded-2xl bg-primary/5 border border-primary/15">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-primary mb-2">Pourquoi EliteWay l'a sélectionné</p>
+            <p className="text-sm text-foreground/85 leading-relaxed italic" style={{ fontFamily: "var(--font-heading)" }}>
+              {establishment.whyEliteWay}
+            </p>
+          </div>
+        )}
 
         {/* DESCRIPTION (courte, extensible) */}
         <div>
@@ -240,7 +249,34 @@ export function EstablishmentDetail() {
           )}
         </div>
 
-        {/* PRIX & RÉSERVATION */}
+        {/* SIGNATURE FEATURES */}
+        {establishment.tags && establishment.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {establishment.tags.map((tag) => (
+              <span key={tag} className="px-3 py-1 rounded-full text-xs bg-primary/10 text-primary">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* INFORMATIONS PRATIQUES */}
+        {practicalInfo.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 pt-2">
+            {practicalInfo.map((info, i) => {
+              const Icon = info.icon;
+              return (
+                <div key={i} className="p-3 rounded-2xl bg-card border border-border/40 text-center">
+                  <Icon className="w-4 h-4 text-primary mx-auto mb-2" strokeWidth={1.5} />
+                  <p className="text-xs leading-tight mb-0.5">{info.label}</p>
+                  {info.sub && <p className="text-[10px] text-muted-foreground">{info.sub}</p>}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* PRIX & RÉSERVATION — vient après le récit, jamais avant */}
         <div className="pt-6 border-t border-border/30">
           <div className="flex items-center justify-between mb-5">
             <div>

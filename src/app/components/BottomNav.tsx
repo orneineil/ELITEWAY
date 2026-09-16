@@ -1,12 +1,16 @@
-import { Home, Search, Heart, CalendarCheck, User } from "lucide-react";
+import { Home, Compass, CalendarCheck, Sparkles } from "lucide-react";
 import { Link, useLocation } from "react-router";
 
+// Architecture de navigation MVP 2.0 : 4 destinations seulement.
+// Favoris n'est plus un onglet à part — il vit désormais dans "My EliteWay"
+// (voir doc EliteWay, onglet "MVP 2.0 — Audit & Reconstruction", section 3).
+// EliteWay AI n'est pas un onglet non plus : c'est un accès permanent flottant
+// (AIAssistant), présent sur chaque écran indépendamment de cette barre.
 const tabs = [
-  { icon: Home,           label: "Accueil",      to: "/" },
-  { icon: Search,         label: "Explorer",     to: "/categories" },
-  { icon: Heart,          label: "Favoris",      to: "/favorites" },
-  { icon: CalendarCheck,  label: "Réservations", to: "/reservations" },
-  { icon: User,           label: "Profil",       to: "/profile" },
+  { icon: Home,          label: "Accueil",     to: "/" },
+  { icon: Compass,       label: "Discover",    to: "/categories" },
+  { icon: CalendarCheck, label: "Réservations", to: "/reservations" },
+  { icon: Sparkles,      label: "My EliteWay", to: "/profile" },
 ];
 
 export function BottomNav() {

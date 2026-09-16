@@ -6,24 +6,24 @@ import { LogoMark } from "../components/LogoMark";
 const SLIDES = [
   {
     image: "https://images.unsplash.com/photo-1535024966840-e7424dc2635b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900",
-    eyebrow: "Bienvenue sur",
+    eyebrow: "A World Beyond",
     title: "EliteWay",
-    subtitle: "La plateforme des expériences haut de gamme sur la Côte d'Azur.",
+    subtitle: "Une sélection, jamais un catalogue. L'exceptionnel de la Côte d'Azur, réuni en un seul endroit.",
     accent: "Gastronomie · Yachts · Aviation · Bien-être",
   },
   {
     image: "https://images.unsplash.com/photo-1593351415075-3bac9f45c877?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900",
-    eyebrow: "Explorez",
-    title: "Des expériences uniques",
-    subtitle: "Dîners gastronomiques, sorties en yacht, vols panoramiques, spas vue mer…",
-    accent: "Dès 12€ · Accessible à tous",
+    eyebrow: "L'intelligence",
+    title: "Elle comprend vos goûts",
+    subtitle: "Dites simplement ce que vous voulez. EliteWay construit l'expérience — vous n'avez pas à chercher.",
+    accent: "Curation éditoriale · Sélection continue",
   },
   {
     image: "https://images.unsplash.com/photo-1488345979593-09db0f85545f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900",
-    eyebrow: "Rejoignez",
+    eyebrow: "L'accès",
     title: "Le Club EliteWay",
-    subtitle: "Programme de fidélité, offres exclusives membres et conciergerie dédiée.",
-    accent: "Prestige ✦ · Élite ★",
+    subtitle: "Programme de fidélité, accès réservés aux membres et conciergerie dédiée.",
+    accent: "Prestige · Élite",
   },
 ];
 

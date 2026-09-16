@@ -98,7 +98,7 @@ export function SplashScreen() {
           transition: "opacity 0.8s ease",
           textAlign: "center",
         }}>
-          Elevating Everyday Living
+          A World Beyond
         </p>
 
         <div style={{
