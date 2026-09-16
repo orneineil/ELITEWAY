@@ -10,6 +10,7 @@ import { SearchPage } from "./pages/SearchPage";
 import { MembershipPage } from "./pages/MembershipPage";
 import { AboutPage } from "./pages/AboutPage";
 import { ReservationsPage } from "./pages/ReservationsPage";
+import { MessagesPage } from "./pages/MessagesPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ReservationPage } from "./pages/ReservationPage";
@@ -23,6 +24,7 @@ import { ClientLogin } from "./pages/client/ClientLogin";
 import { ClientRegister } from "./pages/client/ClientRegister";
 import { ClientDashboard } from "./pages/client/ClientDashboard";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { SplashScreen } from "./pages/SplashScreen";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { MentionsLegales } from "./pages/legal/MentionsLegales";
@@ -45,6 +47,7 @@ export const router = createBrowserRouter([
   { path: "/client/login",    Component: ClientLogin },
   { path: "/client/register", Component: ClientRegister },
   { path: "/forgot-password", Component: ForgotPasswordPage },
+  { path: "/reset-password",  Component: ResetPasswordPage },
   { path: "/interests",       Component: InterestsPage },
   { path: "/partner/login",     Component: PartnerLogin },
   { path: "/partner/register",  Component: PartnerRegister },
@@ -77,6 +80,7 @@ export const router = createBrowserRouter([
       // User account
       { path: "favorites",                    Component: Favorites },
       { path: "reservations",                 Component: ReservationsPage },
+      { path: "messages",                     Component: MessagesPage },
       { path: "profile",                      Component: ProfilePage },
       { path: "settings",                     Component: SettingsPage },
       { path: "client/dashboard",             Component: ClientDashboard },

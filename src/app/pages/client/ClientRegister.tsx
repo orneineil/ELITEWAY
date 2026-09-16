@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Eye, EyeOff, Check, X } from "lucide-react";
+import { Eye, EyeOff, Check, X, Mail } from "lucide-react";
 import { useClientAuth } from "../../contexts/ClientAuthContext";
 import { LogoFull } from "../../components/LogoMark";
 
@@ -22,6 +22,7 @@ export function ClientRegister() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [confirmationPending, setConfirmationPending] = useState(false);
 
   const pw = form.password;
   const rules = {
@@ -46,7 +47,10 @@ export function ClientRegister() {
       password: form.password,
     });
     setLoading(false);
-    if (result.success) {
+    if (result.success && result.requiresEmailConfirmation) {
+      setError("");
+      setConfirmationPending(true);
+    } else if (result.success) {
       navigate("/client/dashboard");
     } else {
       setError(result.error || "Une erreur est survenue.");
@@ -72,6 +76,26 @@ export function ClientRegister() {
             boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
           }}
         >
+          {confirmationPending ? (
+            <div className="text-center py-4">
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+                <Mail className="w-6 h-6 text-primary" />
+              </div>
+              <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem" }} className="mb-2">
+                Confirme ton adresse email
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                Un lien de confirmation a été envoyé à <strong className="text-foreground">{form.email}</strong>.
+                Clique dessus pour activer ton compte, puis connecte-toi.
+              </p>
+              <Link
+                to="/client/login"
+                className="block w-full py-3.5 bg-primary text-primary-foreground rounded-lg text-center text-sm hover:bg-primary/85 transition-colors"
+              >
+                Aller à la connexion
+              </Link>
+            </div>
+          ) : (
           <form onSubmit={handleSubmit} className="space-y-7">
             <div className="grid grid-cols-2 gap-5">
               <div>
@@ -186,13 +210,16 @@ export function ClientRegister() {
               {loading ? "Création en cours…" : "Créer mon compte"}
             </button>
           </form>
+          )}
 
+          {!confirmationPending && (
           <p className="text-center text-sm text-muted-foreground mt-7">
             Déjà membre ?{" "}
             <Link to="/client/login" className="text-primary hover:underline">
               Se connecter
             </Link>
           </p>
+          )}
         </div>
       </div>
     </div>

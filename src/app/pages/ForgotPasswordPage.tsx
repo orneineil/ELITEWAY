@@ -2,18 +2,27 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, Mail, CheckCircle } from "lucide-react";
 import { LogoFull } from "../components/LogoMark";
+import { supabase } from "../lib/supabase";
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1200));
+    setError("");
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
     setLoading(false);
+    if (resetError) {
+      setError("Impossible d'envoyer l'email pour l'instant, réessaie dans un instant.");
+      return;
+    }
     setSent(true);
   };
 
@@ -53,6 +62,12 @@ export function ForgotPasswordPage() {
                   />
                 </div>
               </div>
+
+              {error && (
+                <div className="px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-400">
+                  {error}
+                </div>
+              )}
 
               <button
                 type="submit"
