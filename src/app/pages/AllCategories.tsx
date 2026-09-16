@@ -1,5 +1,8 @@
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
 import { ArrowRight, Gift, Search } from "lucide-react";
+import { fetchCollections, CollectionSummary } from "../data/collections";
+import { ScrollRow } from "../components/ScrollRow";
 
 const CATEGORIES = [
   {
@@ -87,10 +90,16 @@ const CATEGORIES = [
 ];
 
 export function AllCategories() {
+  const [collections, setCollections] = useState<CollectionSummary[]>([]);
+
+  useEffect(() => {
+    fetchCollections().then(setCollections);
+  }, []);
+
   return (
     <div className="max-w-lg mx-auto pb-28 pt-4 overflow-x-hidden">
       <div className="px-5 mb-7">
-        <p className="text-xs uppercase tracking-[0.2em] text-primary mb-2">Explorer</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-primary mb-2">Discover</p>
         <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", lineHeight: 1.1 }} className="mb-2">
           Toutes les catégories
         </h1>
@@ -108,6 +117,38 @@ export function AllCategories() {
           Que recherchez-vous ?
         </Link>
       </div>
+
+      {/* EliteWay Edit — la voix éditoriale : pas une catégorie, une sélection */}
+      {collections.length > 0 && (
+        <div className="mb-8">
+          <div className="px-5 mb-3">
+            <p className="text-xs uppercase tracking-[0.15em] text-primary mb-1">EliteWay Edit</p>
+            <p className="text-sm text-muted-foreground">Notre voix, pas un filtre.</p>
+          </div>
+          <ScrollRow gap={12}>
+            {collections.map((c) => (
+              <Link
+                key={c.id}
+                to={`/edit/${c.slug}`}
+                className="group shrink-0 relative overflow-hidden rounded-2xl"
+                style={{ width: 220, height: 150 }}
+              >
+                {c.coverImage && (
+                  <img
+                    src={c.coverImage}
+                    alt={c.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/20 to-transparent" />
+                <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.15rem" }} className="absolute bottom-3 left-4 right-4 leading-tight">
+                  {c.title}
+                </p>
+              </Link>
+            ))}
+          </ScrollRow>
+        </div>
+      )}
 
       <div className="px-5 grid grid-cols-2 gap-4 min-w-0">
         {CATEGORIES.map((cat) => (

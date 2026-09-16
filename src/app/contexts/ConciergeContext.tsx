@@ -121,7 +121,7 @@ function getResponse(msg: string): { content: string; links: Array<{ label: stri
     };
   }
   return {
-    content: "Je suis votre conciergerie EliteWay, spécialiste de la Côte d'Azur. Dites-moi ce que vous cherchez : gastronomie, navigation, bien-être, aviation, œnologie… ou choisissez une suggestion ci-dessus pour commencer.",
+    content: "Je suis EliteWay AI, spécialiste de la Côte d'Azur. Dites-moi ce que vous cherchez : gastronomie, navigation, bien-être, aviation, œnologie… ou choisissez une suggestion ci-dessus pour commencer.",
     links: [],
   };
 }
@@ -132,7 +132,7 @@ function welcomeMessage(): ConciergeMessage {
   return {
     id: "0",
     role: "assistant",
-    content: "Bonjour ! Je suis votre conciergerie EliteWay. Comment puis-je vous aider à concevoir votre prochaine expérience sur la Côte d'Azur ?",
+    content: "Bonjour, je suis EliteWay AI. Décrivez-moi ce que vous voulez vivre — une soirée, un week-end, une envie précise — et j'assemble votre Moment EliteWay : les bonnes adresses, dans le bon ordre, prêtes à réserver.",
     timestamp: new Date().toISOString(),
   };
 }
@@ -159,10 +159,14 @@ interface ConciergeContextType {
 
 const ConciergeContext = createContext<ConciergeContextType | undefined>(undefined);
 
-// Concierge par messagerie : un seul fil de conversation, partagé entre la
-// bulle flottante (accessible partout) et la page Messagerie en plein écran —
-// comme chez les conciergeries digitales type Velocity Black, où la demande
-// se fait par message plutôt que par formulaire, et reste consultable ensuite.
+// EliteWay AI — le moteur de la doctrine "ONE REQUEST" : la membre décrit une
+// intention en une phrase, EliteWay assemble un Moment structuré (adresses
+// réelles, dans l'ordre, avec liens directs), plutôt que de la renvoyer vers
+// un moteur de recherche. Un seul fil de conversation, partagé entre la bulle
+// flottante (accessible partout) et la page Messagerie en plein écran.
+// NB : la sélection reste aujourd'hui pilotée par mots-clés (MOCK_RESPONSES) —
+// le raisonnement génératif viendra en V2, mais l'expérience et la promesse
+// affichées à la membre sont déjà celles de la version finale.
 export function ConciergeProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<ConciergeMessage[]>(loadInitialMessages);
   const [isTyping, setIsTyping] = useState(false);

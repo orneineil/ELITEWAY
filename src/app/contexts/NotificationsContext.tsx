@@ -1,19 +1,22 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { supabase } from "../lib/supabase";
+import { useClientAuth } from "./ClientAuthContext";
 
 export interface Notification {
   id: string;
   title: string;
   message: string;
-  type: "offer" | "table" | "event" | "loyalty";
+  type: "offer" | "table" | "event" | "loyalty" | "booking";
   time: string;
   read: boolean;
   link?: string;
-  group: "today" | "week";
+  group: "today" | "week" | "earlier";
 }
 
 interface NotificationsContextType {
   notifications: Notification[];
   unreadCount: number;
+  loading: boolean;
   markRead: (id: string) => void;
   markAllRead: () => void;
   dismissNotification: (id: string) => void;
@@ -21,81 +24,86 @@ interface NotificationsContextType {
 
 const NotificationsContext = createContext<NotificationsContextType | null>(null);
 
-const INITIAL_NOTIFICATIONS: Notification[] = [
-  {
-    id: "n1",
-    title: "Table libérée — Le Chantecler",
-    message: "Une table pour 2 vient de se libérer ce soir à 20h30. Réservez maintenant !",
-    type: "table",
-    time: "Il y a 5 min",
-    read: false,
-    link: "/establishment/chantecler",
-    group: "today",
-  },
-  {
-    id: "n2",
-    title: "Offre yacht — Nomad Yachting",
-    message: "Profitez de -20% sur votre sortie yacht ce week-end. Offre valable jusqu'à ce soir.",
-    type: "offer",
-    time: "Il y a 1h",
-    read: false,
-    link: "/establishment/nomad-yachting-cannes",
-    group: "today",
-  },
-  {
-    id: "n3",
-    title: "Événement VIP — Rooftop Éclat",
-    message: "La prochaine soirée privative membres a lieu vendredi 20 juin. Places limitées.",
-    type: "event",
-    time: "Il y a 3h",
-    read: false,
-    link: "/establishment/rooftop-eclat",
-    group: "today",
-  },
-  {
-    id: "n4",
-    title: "Points EliteWay crédités",
-    message: "Vous avez reçu +55 points suite à votre visite chez Nomad Yachting. Solde : 240 pts.",
-    type: "loyalty",
-    time: "Il y a 2 jours",
-    read: true,
-    link: "/rewards",
-    group: "week",
-  },
-  {
-    id: "n5",
-    title: "Offre exclusive — Villa Thalgo",
-    message: "Soin signature + accès spa : 65 € au lieu de 90 €. Réservez avant dimanche.",
-    type: "offer",
-    time: "Il y a 3 jours",
-    read: true,
-    link: "/establishment/villa-thalgo-cannes",
-    group: "week",
-  },
-];
+// Notifications réelles, tirées de la table `notifications` (schema_v2_catalog.sql)
+// — remplace l'ancienne liste codée en dur. Elles sont générées côté base par
+// un trigger à la confirmation d'une réservation ; d'autres types (offer,
+// table, event) viendront s'y ajouter au fur et à mesure que les mécaniques
+// correspondantes (disponibilités réelles, partenaires) seront branchées.
+function relativeTime(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const minutes = Math.floor(diffMs / 60000);
+  if (minutes < 1) return "À l'instant";
+  if (minutes < 60) return `Il y a ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `Il y a ${hours}h`;
+  const days = Math.floor(hours / 24);
+  return `Il y a ${days} j`;
+}
+
+function groupFor(iso: string): "today" | "week" | "earlier" {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const days = diffMs / 86400000;
+  if (days < 1) return "today";
+  if (days < 7) return "week";
+  return "earlier";
+}
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
+  const { client, isAuthenticated } = useClientAuth();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated || !client) {
+      setNotifications([]);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    supabase
+      .from("notifications")
+      .select("id, title, message, type, link, read, created_at")
+      .eq("user_id", client.id)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (cancelled) return;
+        setNotifications(
+          (data ?? []).map((n) => ({
+            id: n.id,
+            title: n.title,
+            message: n.message,
+            type: n.type,
+            link: n.link ?? undefined,
+            read: n.read,
+            time: relativeTime(n.created_at),
+            group: groupFor(n.created_at),
+          }))
+        );
+        setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [isAuthenticated, client]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const markRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+    supabase.from("notifications").update({ read: true }).eq("id", id).then();
   };
 
   const markAllRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    if (client) supabase.from("notifications").update({ read: true }).eq("user_id", client.id).then();
   };
 
   const dismissNotification = (id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
+    supabase.from("notifications").delete().eq("id", id).then();
   };
 
   return (
     <NotificationsContext.Provider
-      value={{ notifications, unreadCount, markRead, markAllRead, dismissNotification }}
+      value={{ notifications, unreadCount, loading, markRead, markAllRead, dismissNotification }}
     >
       {children}
     </NotificationsContext.Provider>

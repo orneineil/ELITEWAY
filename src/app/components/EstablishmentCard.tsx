@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, MapPin, Star, ArrowRight } from "lucide-react";
+import { Heart, MapPin, Star, ArrowRight, Gem, Lock } from "lucide-react";
 import { Establishment } from "../data/establishments";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { Link } from "react-router";
@@ -63,6 +63,26 @@ export function EstablishmentCard({ establishment, showPrice = false }: Establis
       >
         <Heart className={`w-3.5 h-3.5 ${favorited ? "fill-primary text-primary" : "text-foreground/90"}`} />
       </button>
+
+      {/* Exclusivité — un seul badge par carte, jamais un accès fictif : reflète
+          exactement establishment.exclusive / la catégorie Offres Exclusives. */}
+      {establishment.exclusive ? (
+        <div
+          className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
+          style={{ background: "oklch(0.08 0.005 60 / 0.65)" }}
+        >
+          <Gem className="w-3 h-3 text-primary" />
+          <span className="text-[9px] uppercase tracking-[0.1em] text-primary">EliteWay Selection</span>
+        </div>
+      ) : establishment.category === "offres-exclusives" ? (
+        <div
+          className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
+          style={{ background: "oklch(0.08 0.005 60 / 0.65)" }}
+        >
+          <Lock className="w-3 h-3 text-primary" />
+          <span className="text-[9px] uppercase tracking-[0.1em] text-primary">Membres</span>
+        </div>
+      ) : null}
 
       {/* Legend: name, rating, location */}
       <div className="absolute inset-x-0 bottom-0 p-3">

@@ -4,6 +4,8 @@ import { Home } from "./pages/Home";
 import { HomeGuard } from "./components/HomeGuard";
 import { AllCategories } from "./pages/AllCategories";
 import { CategoryPage } from "./pages/CategoryPage";
+import { CollectionPage } from "./pages/CollectionPage";
+import { MomentBuilderPage } from "./pages/MomentBuilderPage";
 import { EstablishmentDetail } from "./pages/EstablishmentDetail";
 import { Favorites } from "./pages/Favorites";
 import { SearchPage } from "./pages/SearchPage";
@@ -70,6 +72,8 @@ export const router = createBrowserRouter([
       { index: true,                          Component: HomeGuard },
       { path: "categories",                   Component: AllCategories },
       { path: "category/:categoryId",         Component: CategoryPage },
+      { path: "edit/:slug",                   Component: CollectionPage },
+      { path: "moment",                       Component: MomentBuilderPage },
       { path: "establishment/:id",            Component: EstablishmentDetail },
       { path: "establishment/:id/reserve",    Component: ReservationPage },
       { path: "establishment/:id/payment",    Component: PaymentPage },

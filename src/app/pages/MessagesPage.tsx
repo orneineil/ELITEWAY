@@ -27,11 +27,11 @@ export function MessagesPage() {
         </div>
         <div>
           <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.3rem" }} className="leading-tight">
-            Conciergerie EliteWay
+            EliteWay AI
           </h1>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="text-[10px] text-emerald-400">En ligne</span>
+            <span className="text-[10px] text-emerald-400">Une demande, un moment assemblé</span>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@ export function MessagesPage() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleSend(inputValue); }}
-            placeholder="Votre demande..."
+            placeholder="Décrivez votre moment idéal..."
             className="flex-1 px-4 py-3 bg-card border border-border/60 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-primary/50"
           />
           <button

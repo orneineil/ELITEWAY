@@ -1,19 +1,29 @@
 import { useNotifications, Notification } from "../contexts/NotificationsContext";
 import { Link } from "react-router";
-import { Bell, Gift, Utensils, Calendar, Star, Trash2, CheckCheck } from "lucide-react";
+import { Bell, Gift, Utensils, Calendar, Star, Trash2, CheckCheck, CalendarCheck, Loader } from "lucide-react";
 
 const TYPE_CONFIG: Record<Notification["type"], { icon: React.ComponentType<any>; color: string; bg: string }> = {
-  offer:   { icon: Gift,     color: "text-emerald-400", bg: "bg-emerald-500/10" },
-  table:   { icon: Utensils, color: "text-orange-400",  bg: "bg-orange-500/10"  },
-  event:   { icon: Calendar, color: "text-purple-400",  bg: "bg-purple-500/10"  },
-  loyalty: { icon: Star,     color: "text-primary",     bg: "bg-primary/10"     },
+  offer:   { icon: Gift,         color: "text-emerald-400", bg: "bg-emerald-500/10" },
+  table:   { icon: Utensils,     color: "text-orange-400",  bg: "bg-orange-500/10"  },
+  event:   { icon: Calendar,     color: "text-purple-400",  bg: "bg-purple-500/10"  },
+  loyalty: { icon: Star,         color: "text-primary",     bg: "bg-primary/10"     },
+  booking: { icon: CalendarCheck,color: "text-primary",     bg: "bg-primary/10"     },
 };
 
 export function NotificationsPage() {
-  const { notifications, unreadCount, markRead, markAllRead, dismissNotification } = useNotifications();
+  const { notifications, unreadCount, loading, markRead, markAllRead, dismissNotification } = useNotifications();
 
   const todayNotifs = notifications.filter((n) => n.group === "today");
   const weekNotifs = notifications.filter((n) => n.group === "week");
+  const earlierNotifs = notifications.filter((n) => n.group === "earlier");
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-24">
+        <Loader className="w-5 h-5 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   if (notifications.length === 0) {
     return (
@@ -69,10 +79,26 @@ export function NotificationsPage() {
       )}
 
       {weekNotifs.length > 0 && (
-        <section className="px-5">
+        <section className="mb-6 px-5">
           <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Cette semaine</p>
           <div className="divide-y divide-border/30">
             {weekNotifs.map((notif) => (
+              <NotifCard
+                key={notif.id}
+                notif={notif}
+                onRead={() => markRead(notif.id)}
+                onDismiss={() => dismissNotification(notif.id)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {earlierNotifs.length > 0 && (
+        <section className="px-5">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Plus tôt</p>
+          <div className="divide-y divide-border/30">
+            {earlierNotifs.map((notif) => (
               <NotifCard
                 key={notif.id}
                 notif={notif}

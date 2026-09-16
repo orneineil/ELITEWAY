@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import {
-  Search, ChevronRight, MapPin, Locate, Loader, Crown, Check,
+  Search, ChevronRight, MapPin, Locate, Loader, Crown, Check, Sparkles,
   UtensilsCrossed, BedDouble, Sailboat, Flower2, Plane, Wine, CalendarDays, Gem, Trophy,
 } from "lucide-react";
 import { establishments, cityCoordinates, Establishment } from "../data/establishments";
@@ -205,6 +205,29 @@ export function Home() {
           </Link>
         </div>
       </div>
+
+      {/* ── Créer un Moment — l'intention avant le catalogue ────────────
+          Doctrine produit : on ne demande pas "que voulez-vous réserver ?"
+          mais "que voulez-vous vivre ?". Ce module précède volontairement
+          les catégories classiques ci-dessous. */}
+      <section className="px-5 pt-8">
+        <Link
+          to="/moment"
+          className="flex items-center gap-4 p-5 rounded-2xl border transition-colors hover:border-primary/50"
+          style={{ borderColor: "oklch(0.74 0.09 80 / 0.35)", background: "oklch(0.13 0.008 60)" }}
+        >
+          <div className="w-11 h-11 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+            <Sparkles className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-primary mb-1">EliteWay AI</p>
+            <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }} className="leading-tight">
+              Qu'avez-vous envie de vivre ?
+            </p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+        </Link>
+      </section>
 
       {/* ── Accès rapide aux univers ──────────────────────────────────── */}
       <section className="px-5 pt-8 mb-14">
