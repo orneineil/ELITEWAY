@@ -329,6 +329,88 @@ export function addNextBeat(
   return [...beats, { label: nextTemplate.label, establishment: candidate, surDevis }];
 }
 
+// ── Anticipation ─────────────────────────────────────────────────────────
+// Doctrine (directive "MVP Complete Experience Engine") : l'IA ne doit pas
+// attendre qu'on lui demande chaque élément — mais elle reste un moteur par
+// règles, jamais un raisonnement génératif inventé au cas par cas. Ici,
+// l'anticipation ne fait qu'un chose honnête et vérifiable : regarder si le
+// prochain temps fort de la séquence de l'humeur existe réellement dans le
+// catalogue (même mécanique que addNextBeat), et le PRÉVISUALISER avant de
+// l'ajouter — jamais imposé, toujours proposé.
+export function previewNextBeat(
+  mood: MoodKey,
+  beats: MomentBeat[],
+  budgetCap: number | null,
+  city?: string | null
+): MomentBeat | null {
+  const next = addNextBeat(mood, beats, budgetCap, city);
+  if (!next) return null;
+  return next[next.length - 1];
+}
+
+// ── Experience Brief — need-to-know réel ────────────────────────────────
+// Un partenaire ne reçoit jamais le profil du client : seulement ce que CE
+// temps fort précis nécessite. `input` ne doit contenir QUE des informations
+// saisies explicitement par le client pour cette réservation précise —
+// jamais réutilisées depuis un autre Moment ou depuis son profil général.
+// Fonction pure : aucune donnée n'est lue ni stockée ailleurs.
+export interface ExperienceBriefInput {
+  partySize: number;
+  date?: string | null;
+  time?: string | null;
+  occasion?: string;
+  specialRequest?: string;
+  dietaryNote?: string;
+}
+
+export interface ExperienceBrief {
+  momentTitle: string;
+  beatLabel: string;
+  establishmentName: string;
+  partySize: number;
+  date: string | null;
+  time: string | null;
+  occasion: string | null;
+  specialRequest: string | null;
+  categoryFields: Record<string, string>;
+}
+
+export function buildExperienceBrief(
+  moment: Pick<ComposedMoment, "title">,
+  beat: MomentBeat,
+  input: ExperienceBriefInput
+): ExperienceBrief {
+  const categoryFields: Record<string, string> = {};
+
+  switch (beat.establishment.category) {
+    case "gastronomie":
+      if (input.occasion) categoryFields["Occasion"] = input.occasion;
+      if (input.dietaryNote) categoryFields["Restrictions alimentaires"] = input.dietaryNote;
+      break;
+    case "navigation":
+    case "aviation":
+      categoryFields["Passagers"] = String(input.partySize);
+      break;
+    case "bien-etre":
+      if (input.specialRequest) categoryFields["Préférence de soin"] = input.specialRequest;
+      break;
+    default:
+      break;
+  }
+
+  return {
+    momentTitle: moment.title,
+    beatLabel: beat.label,
+    establishmentName: beat.establishment.name,
+    partySize: input.partySize,
+    date: input.date ?? null,
+    time: input.time ?? null,
+    occasion: input.occasion ?? null,
+    specialRequest: input.specialRequest ?? null,
+    categoryFields,
+  };
+}
+
 // L'écran Recommendations : jusqu'à 3 propositions réellement distinctes
 // (plus intime / plus complet / meilleur rapport), jamais un faux choix —
 // si le catalogue ne permet réellement qu'une ou deux combinaisons

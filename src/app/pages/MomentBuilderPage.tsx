@@ -5,8 +5,8 @@ import {
 } from "lucide-react";
 import {
   MOODS, WHO_OPTIONS, BUDGET_OPTIONS, TIME_OPTIONS,
-  composeMomentOptions, totalsFor, replaceBeat, addNextBeat,
-  MoodKey, WhoKey, BudgetKey, TimeKey, ComposedMoment, Category,
+  composeMomentOptions, totalsFor, replaceBeat, addNextBeat, previewNextBeat,
+  MoodKey, WhoKey, BudgetKey, TimeKey, ComposedMoment, MomentBeat, Category,
 } from "../data/momentEngine";
 import { parseIntent } from "../data/intentParser";
 
@@ -20,8 +20,9 @@ type QuestionKey = typeof ORDER[number];
 // LISTENING (les questions ci-dessus, seulement celles qui manquent encore)
 // → UNDERSTANDING (on montre ce qu'on a compris avant d'agir, éditable)
 // → CURATING (un instant perçu de soin, jamais un vrai chargement réseau)
-// → RESULT (la proposition).
-type StepKey = QuestionKey | "understanding" | "curating" | "result";
+// → ANTICIPATING (une suggestion réelle, seulement si elle existe — jamais
+//   inventée, voir previewNextBeat) → RESULT (la proposition).
+type StepKey = QuestionKey | "understanding" | "curating" | "anticipating" | "result";
 
 interface ResolvedState {
   mood: MoodKey | null;
@@ -61,6 +62,7 @@ export function MomentBuilderPage() {
   const [options, setOptions] = useState<ComposedMoment[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [moment, setMoment] = useState<ComposedMoment | null | "empty">(null);
+  const [anticipation, setAnticipation] = useState<MomentBeat | null>(null);
   const [refineError, setRefineError] = useState<string | null>(null);
 
   // Comprendre ce qui a été fourni dès l'arrivée sur la page — depuis "Ask
@@ -104,7 +106,39 @@ export function MomentBuilderPage() {
     const results = composeMomentOptions({ mood: m, who: w, budget: b, time: t, city: c });
     setOptions(results);
     setSelectedIndex(0);
-    setMoment(results[0] ?? "empty");
+    const chosen = results[0] ?? "empty";
+    setMoment(chosen);
+
+    // ANTICIPATING : une suggestion réelle seulement si le catalogue permet
+    // honnêtement d'aller plus loin sur cette proposition — jamais un écran
+    // d'anticipation vide ou une suggestion fabriquée.
+    if (chosen !== "empty") {
+      const cap = (BUDGET_OPTIONS.find((bo) => bo.key === b) ?? BUDGET_OPTIONS[0]).cap;
+      const preview = previewNextBeat(m, chosen.beats, cap, c);
+      if (preview) {
+        setAnticipation(preview);
+        setStep("anticipating");
+        return;
+      }
+    }
+    setStep("result");
+  };
+
+  const acceptAnticipation = () => {
+    if (moment !== "empty" && moment !== null && mood) {
+      const cap = (BUDGET_OPTIONS.find((b) => b.key === budget) ?? BUDGET_OPTIONS[0]).cap;
+      const next = addNextBeat(mood, moment.beats, cap, city);
+      if (next) {
+        const { pricePerPerson, hasSurDevis } = totalsFor(next);
+        setMoment({ ...moment, beats: next, pricePerPerson, hasSurDevis });
+      }
+    }
+    setAnticipation(null);
+    setStep("result");
+  };
+
+  const declineAnticipation = () => {
+    setAnticipation(null);
     setStep("result");
   };
 
@@ -146,7 +180,7 @@ export function MomentBuilderPage() {
   };
 
   const goBack = () => {
-    if (step === "curating" || step === "result") { setStep("understanding"); return; }
+    if (step === "curating" || step === "anticipating" || step === "result") { setStep("understanding"); return; }
     if (step === "understanding") { setStep(ORDER[ORDER.length - 1]); return; }
     const idx = ORDER.indexOf(step as QuestionKey);
     if (idx <= 0) navigate(-1);
@@ -240,6 +274,7 @@ export function MomentBuilderPage() {
   const subtitle =
     step === "understanding" ? "Je confirme votre envie"
     : step === "curating" ? "Je compose votre Moment"
+    : step === "anticipating" ? "J'anticipe"
     : step === "result" ? "Votre Moment"
     : "Créer un Moment";
 
@@ -324,6 +359,10 @@ export function MomentBuilderPage() {
       )}
 
       {step === "curating" && <CuratingStep />}
+
+      {step === "anticipating" && anticipation && (
+        <AnticipatingStep beat={anticipation} onAccept={acceptAnticipation} onDecline={declineAnticipation} />
+      )}
 
       {step === "result" && (
         <MomentResult
@@ -475,6 +514,59 @@ function CuratingStep() {
       <p className="text-xs text-muted-foreground max-w-[220px]">
         Sélection des adresses les plus justes pour votre envie, votre budget et votre temps.
       </p>
+    </div>
+  );
+}
+
+// ANTICIPATING — l'IA propose, jamais n'impose. N'apparaît QUE si une suite
+// réelle existe dans le catalogue pour cette envie (voir previewNextBeat) —
+// jamais un écran vide ou une suggestion fabriquée pour faire "intelligent".
+function AnticipatingStep({
+  beat, onAccept, onDecline,
+}: {
+  beat: MomentBeat;
+  onAccept: () => void;
+  onDecline: () => void;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-2.5">
+        <Sparkles className="w-3.5 h-3.5 text-primary" />
+        <p className="text-xs uppercase tracking-[0.2em] text-primary">EliteWay anticipe</p>
+      </div>
+      <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.4rem", lineHeight: 1.15 }} className="mb-5">
+        Une idée pour prolonger ce Moment ?
+      </h1>
+
+      <div className="flex gap-3 items-center rounded-2xl bg-card border border-border/50 p-3 mb-5">
+        <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0">
+          <img src={beat.establishment.imageUrl} alt={beat.establishment.name} className="w-full h-full object-cover" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[10px] uppercase tracking-[0.15em] text-primary mb-0.5">{beat.label}</p>
+          <p style={{ fontFamily: "var(--font-heading)", fontSize: "0.95rem" }} className="leading-tight truncate">
+            {beat.establishment.name}
+          </p>
+          <p className="text-[11px] text-muted-foreground truncate">{beat.establishment.city}</p>
+        </div>
+      </div>
+
+      <p className="text-xs text-muted-foreground mb-6">
+        EliteWay propose, ne décide jamais à votre place — libre à vous d'ignorer.
+      </p>
+
+      <div className="flex flex-col gap-3">
+        <button
+          onClick={onAccept}
+          className="w-full py-4 rounded-full text-sm text-center uppercase tracking-[0.1em] transition-transform active:scale-95"
+          style={{ background: "oklch(0.74 0.0792 80)", color: "oklch(0.08 0.03 256)" }}
+        >
+          Oui, ajoutez-le
+        </button>
+        <button onClick={onDecline} className="text-sm text-muted-foreground hover:text-foreground py-2">
+          Non merci, passer à mon Moment
+        </button>
+      </div>
     </div>
   );
 }
