@@ -10,10 +10,12 @@ import { EstablishmentCard } from "../components/EstablishmentCard";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { MOODS } from "../data/momentEngine";
 
-// Ask EliteWay — la porte d'entrée conversationnelle, en clair sur l'accueil
-// (jamais un bouton caché). Une phrase libre OU une humeur en un tap : les
-// deux mènent au même moteur de composition (/moment).
-function AskEliteWay() {
+// Ask EliteWay — LE point d'entrée du produit, pas une fonctionnalité parmi
+// d'autres. Une phrase libre OU une humeur en un tap : les deux mènent au
+// même moteur de composition (/moment). Deux habillages : "hero" — posé en
+// transparence sur l'image d'accueil, sans encadré, c'est la première chose
+// que l'on touche — et "boxed" — encadré, réutilisable ailleurs (Explorer…).
+function AskEliteWay({ variant = "boxed" }: { variant?: "hero" | "boxed" }) {
   const [text, setText] = useState("");
   const navigate = useNavigate();
 
@@ -22,42 +24,62 @@ function AskEliteWay() {
     navigate(text.trim() ? `/moment?q=${encodeURIComponent(text.trim())}` : "/moment");
   };
 
+  const isHero = variant === "hero";
+
   return (
-    <div
-      className="rounded-2xl border p-5"
-      style={{ borderColor: "oklch(0.74 0.0792 80 / 0.35)", background: "oklch(0.13 0.03 256)" }}
-    >
-      <div className="flex items-center gap-2 mb-3.5">
+    <div className={isHero ? "" : "rounded-2xl border p-5"} style={isHero ? undefined : { borderColor: "oklch(0.74 0.0792 80 / 0.35)", background: "oklch(0.13 0.03 256)" }}>
+      <div className={`flex items-center gap-2 ${isHero ? "mb-3 justify-center" : "mb-3.5"}`}>
         <Sparkles className="w-3.5 h-3.5 text-primary" />
-        <p className="text-[10px] uppercase tracking-[0.2em] text-primary">Ask EliteWay</p>
+        <p className="text-[10px] uppercase tracking-[0.25em] text-primary">Ask EliteWay</p>
       </div>
-      <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="leading-snug mb-4">
-        Dites-nous ce que vous voulez vivre.
-      </p>
+      {isHero ? (
+        <p
+          style={{ fontFamily: "var(--font-heading)", fontSize: "1.2rem" }}
+          className="leading-snug mb-4 text-center text-foreground"
+        >
+          Dites-nous ce que vous voulez vivre.
+        </p>
+      ) : (
+        <p style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }} className="leading-snug mb-4">
+          Dites-nous ce que vous voulez vivre.
+        </p>
+      )}
       <form onSubmit={handleAsk} className="mb-4">
-        <div className="flex items-center rounded-full overflow-hidden border border-border/60 bg-background/50">
+        <div
+          className="flex items-center rounded-full overflow-hidden"
+          style={
+            isHero
+              ? { border: "1px solid oklch(0.74 0.0792 80 / 0.45)", background: "oklch(0.08 0.03 256 / 0.6)", backdropFilter: "blur(10px)" }
+              : { border: "1px solid var(--border)", background: "oklch(0.22 0.03 252 / 0.5)" }
+          }
+        >
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Une soirée romantique à Cannes, samedi…"
-            style={{ fontSize: "0.8rem" }}
-            className="flex-1 min-w-0 bg-transparent pl-4 pr-2 py-3 focus:outline-none placeholder:text-muted-foreground/60"
+            style={{ fontSize: "0.85rem" }}
+            className="flex-1 min-w-0 bg-transparent pl-4 pr-2 py-3.5 focus:outline-none placeholder:text-muted-foreground/60 text-foreground"
           />
           <button
             type="submit"
-            className="w-9 h-9 mr-1 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0"
+            className="w-9 h-9 mr-1.5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0 transition-transform active:scale-90"
             aria-label="Envoyer"
           >
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </form>
-      <div className="flex flex-wrap gap-2">
+      <div className={`flex flex-wrap gap-2 ${isHero ? "justify-center" : ""}`}>
         {MOODS.map((m) => (
           <Link
             key={m.key}
             to={`/moment?mood=${m.key}`}
-            className="px-3 py-1.5 rounded-full text-xs border border-border/60 text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors"
+            className="px-3 py-1.5 rounded-full text-xs border transition-colors"
+            style={
+              isHero
+                ? { borderColor: "oklch(1 0 0 / 0.22)", color: "oklch(0.96 0.011 85 / 0.85)", background: "oklch(0.08 0.03 256 / 0.35)" }
+                : undefined
+            }
           >
             {m.label}
           </Link>
@@ -212,8 +234,14 @@ export function Home() {
   return (
     <div className="max-w-lg mx-auto pb-28">
 
-      {/* ── Hero immersif (header flotte transparent par-dessus) ────────── */}
-      <div className="relative overflow-hidden" style={{ height: "80svh", minHeight: "540px", maxHeight: "760px" }}>
+      {/* ── Hero immersif — Ask EliteWay EST le hero ─────────────────────
+          Doctrine produit : on ne demande pas "que voulez-vous réserver ?"
+          mais "que voulez-vous vivre ?". Ce n'est plus un module posé sous
+          l'image d'accueil : c'est la première chose que l'on touche, en
+          transparence sur l'image, avant même le catalogue. La recherche
+          classique et la grille de catégories restent accessibles juste
+          en dessous, comme chemin secondaire pour qui préfère parcourir. */}
+      <div className="relative overflow-hidden" style={{ height: "88svh", minHeight: "620px", maxHeight: "840px" }}>
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -223,64 +251,49 @@ export function Home() {
           }}
         />
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(180deg, rgba(10,8,6,0.55) 0%, rgba(10,8,6,0.05) 22%, rgba(10,8,6,0.08) 46%, rgba(10,8,6,0.88) 92%, var(--background) 100%)",
+          background: "linear-gradient(180deg, rgba(10,8,6,0.55) 0%, rgba(10,8,6,0.05) 22%, rgba(10,8,6,0.1) 40%, rgba(10,8,6,0.9) 90%, var(--background) 100%)",
         }} />
 
-        {/* Search — discrète, en haut du hero */}
-        <form onSubmit={handleSearch} className="absolute inset-x-0 px-6" style={{ top: "calc(env(safe-area-inset-top, 0px) + 68px)" }}>
-          <div
-            className="relative flex items-center rounded-full overflow-hidden"
-            style={{
-              border: "1px solid oklch(0.74 0.0792 80 / 0.4)",
-              background: "oklch(0.08 0.03 256 / 0.55)",
-              backdropFilter: "blur(10px)",
-            }}
+        {/* Statement éditorial — signature de marque, discrète */}
+        <div className="absolute inset-x-0 flex flex-col items-center text-center px-8" style={{ top: "calc(env(safe-area-inset-top, 0px) + 64px)" }}>
+          <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-4">Côte d'Azur</p>
+          <h1
+            style={{ fontFamily: "var(--font-heading)", fontSize: "2.1rem", lineHeight: 1.1, letterSpacing: "0.01em" }}
+            className="text-foreground mb-2"
           >
+            L'art des expériences<br />d'exception
+          </h1>
+        </div>
+
+        {/* Ask EliteWay — l'entrée principale, en bas du hero */}
+        <div className="absolute inset-x-0 px-6" style={{ bottom: "6%" }}>
+          <AskEliteWay variant="hero" />
+          <a
+            href="#univers"
+            className="mt-5 flex items-center justify-center gap-1.5 text-[11px] uppercase tracking-[0.15em] text-foreground/60 hover:text-foreground/90 transition-colors"
+          >
+            Parcourir les univers
+            <ChevronRight className="w-3 h-3 rotate-90" />
+          </a>
+        </div>
+      </div>
+
+      {/* ── Recherche directe + accès rapide aux univers ────────────────
+          Chemin secondaire assumé pour qui sait déjà ce qu'il cherche. */}
+      <section id="univers" className="px-5 pt-8 mb-14">
+        <form onSubmit={handleSearch} className="mb-5">
+          <div className="relative flex items-center rounded-full overflow-hidden border border-border/60 bg-card">
             <Search className="w-3.5 h-3.5 text-primary ml-4 shrink-0" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Que recherchez-vous ?"
+              placeholder="Ou cherchez directement un lieu, une ville…"
               style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem" }}
               className="flex-1 min-w-0 bg-transparent pl-2.5 pr-3 py-2.5 focus:outline-none placeholder:text-muted-foreground/70 text-foreground"
             />
           </div>
         </form>
-
-        {/* Statement éditorial — au centre-bas du hero */}
-        <div className="absolute inset-x-0 flex flex-col items-center text-center px-8" style={{ bottom: "13%" }}>
-          <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-4">Côte d'Azur</p>
-          <h1
-            style={{ fontFamily: "var(--font-heading)", fontSize: "2.5rem", lineHeight: 1.08, letterSpacing: "0.01em" }}
-            className="text-foreground mb-4"
-          >
-            L'art des expériences<br />d'exception
-          </h1>
-          <p className="text-sm text-foreground/75 italic mb-8 max-w-xs" style={{ fontFamily: "var(--font-heading)" }}>
-            The art of exceptional experiences.
-          </p>
-          <Link
-            to="/categories"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-xs uppercase tracking-[0.18em] transition-transform active:scale-95"
-            style={{ background: "oklch(0.74 0.0792 80)", color: "oklch(0.08 0.03 256)" }}
-          >
-            Explorer
-          </Link>
-        </div>
-      </div>
-
-      {/* ── Ask EliteWay — l'intention avant le catalogue ───────────────
-          Doctrine produit : on ne demande pas "que voulez-vous réserver ?"
-          mais "que voulez-vous vivre ?". Ce module précède volontairement
-          les catégories classiques ci-dessous, et l'IA y est une porte
-          d'entrée directe — pas un bouton caché dans un menu. */}
-      <section className="px-5 pt-8">
-        <AskEliteWay />
-      </section>
-
-      {/* ── Accès rapide aux univers ──────────────────────────────────── */}
-      <section className="px-5 pt-8 mb-14">
         <div className="grid grid-cols-4 gap-2.5">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;

@@ -144,9 +144,24 @@ export interface MomentBeat {
   surDevis: boolean;
 }
 
+// Un Moment composé porte toujours un "angle" — jamais présenté comme LA
+// seule réponse possible. "signature" reste la composition par défaut
+// (utilisée par le chat EliteWay AI, qui ne montre qu'une réponse). Les 3
+// propositions de l'écran Recommendations utilisent intimate/complete/value.
+export type MomentAngle = "signature" | "intimate" | "complete" | "value";
+
+const ANGLE_LABELS: Record<MomentAngle, string> = {
+  signature: "La proposition EliteWay",
+  intimate: "Plus intime",
+  complete: "Plus complet",
+  value: "Meilleur rapport",
+};
+
 export interface ComposedMoment {
   mood: MoodKey;
   title: string;
+  angle: MomentAngle;
+  angleLabel: string;
   beats: MomentBeat[];
   pricePerPerson: number;
   isEstimate: boolean;
@@ -173,31 +188,52 @@ export function totalsFor(beats: MomentBeat[]): { pricePerPerson: number; hasSur
   return { pricePerPerson, hasSurDevis };
 }
 
+type PickStrategy = "rating" | "value";
+
 function findCandidate(
   categories: Category[],
   usedIds: Set<string>,
   cap: number | null,
-  city?: string | null
+  city: string | null | undefined,
+  strategy: PickStrategy = "rating"
 ): Establishment | undefined {
   for (const cat of categories) {
-    const pool = establishments
+    let pool = establishments
       .filter((e) => e.category === cat && !usedIds.has(e.id))
       .filter((e) => !city || e.city === city)
-      .filter((e) => cap == null || estimatePricePerPerson(e) <= cap)
-      .sort((a, b) => b.rating - a.rating);
+      .filter((e) => cap == null || estimatePricePerPerson(e) <= cap);
+
+    if (strategy === "value") {
+      // Un rapport qualité-prix réel, jamais "moins cher donc moins bien" :
+      // on exige un plancher de qualité avant de trier par prix. Si rien ne
+      // l'atteint, on retombe sur l'ensemble plutôt que de ne rien proposer.
+      const qualityFloor = pool.filter((e) => e.rating >= 4.3);
+      pool = (qualityFloor.length > 0 ? qualityFloor : pool)
+        .sort((a, b) => estimatePricePerPerson(a) - estimatePricePerPerson(b) || b.rating - a.rating);
+    } else {
+      pool = pool.sort((a, b) => b.rating - a.rating);
+    }
     if (pool.length > 0) return pool[0];
   }
   return undefined;
 }
 
-// Compose un Moment à partir d'une envie. Ne renvoie jamais une adresse
-// inventée : si rien ne correspond pour un temps fort, ce temps fort est
-// simplement omis plutôt que rempli artificiellement.
-export function composeMoment(input: MomentInput): ComposedMoment | null {
+// Le cœur du moteur, factorisé pour servir aussi bien la composition par
+// défaut (composeMoment, utilisée par le chat) que les 3 propositions
+// (composeMomentOptions). Ne renvoie jamais une adresse inventée : si rien
+// ne correspond pour un temps fort, ce temps fort est simplement omis
+// plutôt que rempli artificiellement.
+function buildMoment(
+  input: MomentInput,
+  angle: MomentAngle,
+  opts: { beatCountDelta?: number; strategy?: PickStrategy } = {}
+): ComposedMoment | null {
   const sequence = MOOD_SEQUENCES[input.mood];
   const timeConf = TIME_OPTIONS.find((t) => t.key === input.time) ?? TIME_OPTIONS[0];
   const budgetConf = BUDGET_OPTIONS.find((b) => b.key === input.budget) ?? BUDGET_OPTIONS[0];
-  const wanted = sequence.slice(0, timeConf.beatCount);
+  const beatCount = Math.max(1, timeConf.beatCount + (opts.beatCountDelta ?? 0));
+  const wanted = sequence.slice(0, beatCount);
+  const strategy = opts.strategy ?? "rating";
 
   const usedIds = new Set<string>();
   const beats: MomentBeat[] = [];
@@ -206,9 +242,9 @@ export function composeMoment(input: MomentInput): ComposedMoment | null {
   for (const beat of wanted) {
     // On respecte toujours le budget annoncé ; on élargit seulement la
     // contrainte de ville si rien n'est trouvé localement.
-    let candidate = findCandidate(beat.categories, usedIds, budgetConf.cap, input.city);
+    let candidate = findCandidate(beat.categories, usedIds, budgetConf.cap, input.city, strategy);
     if (!candidate && input.city) {
-      candidate = findCandidate(beat.categories, usedIds, budgetConf.cap, null);
+      candidate = findCandidate(beat.categories, usedIds, budgetConf.cap, null, strategy);
     }
     if (candidate) {
       usedIds.add(candidate.id);
@@ -225,9 +261,91 @@ export function composeMoment(input: MomentInput): ComposedMoment | null {
   return {
     mood: input.mood,
     title: MOOD_TITLES[input.mood],
+    angle,
+    angleLabel: ANGLE_LABELS[angle],
     beats,
     pricePerPerson,
     isEstimate,
     hasSurDevis,
   };
+}
+
+// Composition par défaut — un seul résultat, utilisé là où une seule réponse
+// a du sens (le fil de chat EliteWay AI). Comportement inchangé depuis avant
+// l'introduction des 3 propositions.
+export function composeMoment(input: MomentInput): ComposedMoment | null {
+  return buildMoment(input, "signature");
+}
+
+function sameBeats(a: ComposedMoment, b: ComposedMoment): boolean {
+  if (a.beats.length !== b.beats.length) return false;
+  const idsA = a.beats.map((x) => x.establishment.id).sort().join("|");
+  const idsB = b.beats.map((x) => x.establishment.id).sort().join("|");
+  return idsA === idsB;
+}
+
+// ── Moment Builder — actions par temps fort ─────────────────────────────────
+// Le Moment composé n'est jamais figé : ces trois fonctions portent les
+// actions "Remplacer / Retirer / Ajouter" du Moment Builder visuel. Chacune
+// ne renvoie jamais une adresse inventée : si aucune alternative réelle
+// n'existe, elle renvoie null et l'appelant affiche un état honnête.
+
+// Remplace le temps fort à `index` par une autre adresse de la même
+// catégorie, jamais déjà utilisée ailleurs dans le Moment.
+export function replaceBeat(
+  beats: MomentBeat[],
+  index: number,
+  budgetCap: number | null,
+  city?: string | null
+): MomentBeat[] | null {
+  const current = beats[index];
+  if (!current) return null;
+  const usedIds = new Set(beats.map((b) => b.establishment.id));
+  let alt = findCandidate([current.establishment.category], usedIds, budgetCap, city);
+  if (!alt && city) alt = findCandidate([current.establishment.category], usedIds, budgetCap, null);
+  if (!alt) return null;
+  const surDevis = estimatePricePerPerson(alt) > SUR_DEVIS_THRESHOLD;
+  const next = [...beats];
+  next[index] = { label: current.label, establishment: alt, surDevis };
+  return next;
+}
+
+// Ajoute le prochain temps fort de la séquence de l'humeur (celui qui suit
+// le dernier déjà présent) — jamais au-delà de ce que la séquence prévoit.
+export function addNextBeat(
+  mood: MoodKey,
+  beats: MomentBeat[],
+  budgetCap: number | null,
+  city?: string | null
+): MomentBeat[] | null {
+  const sequence = MOOD_SEQUENCES[mood];
+  if (beats.length >= sequence.length) return null;
+  const nextTemplate = sequence[beats.length];
+  const usedIds = new Set(beats.map((b) => b.establishment.id));
+  let candidate = findCandidate(nextTemplate.categories, usedIds, budgetCap, city);
+  if (!candidate && city) candidate = findCandidate(nextTemplate.categories, usedIds, budgetCap, null);
+  if (!candidate) return null;
+  const surDevis = estimatePricePerPerson(candidate) > SUR_DEVIS_THRESHOLD;
+  return [...beats, { label: nextTemplate.label, establishment: candidate, surDevis }];
+}
+
+// L'écran Recommendations : jusqu'à 3 propositions réellement distinctes
+// (plus intime / plus complet / meilleur rapport), jamais un faux choix —
+// si le catalogue ne permet réellement qu'une ou deux combinaisons
+// différentes pour cette envie, on en renvoie une ou deux. Mieux vaut une
+// honnêteté à 1 proposition qu'un triplet avec des doublons déguisés.
+export function composeMomentOptions(input: MomentInput): ComposedMoment[] {
+  const candidates = [
+    buildMoment(input, "intimate", { beatCountDelta: -1 }),
+    buildMoment(input, "complete", { beatCountDelta: 1 }),
+    buildMoment(input, "value", { strategy: "value" }),
+  ];
+
+  const results: ComposedMoment[] = [];
+  for (const c of candidates) {
+    if (!c) continue;
+    if (results.some((r) => sameBeats(r, c))) continue;
+    results.push(c);
+  }
+  return results;
 }
