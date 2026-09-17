@@ -70,6 +70,7 @@ export function MomentBuilderPage() {
   useEffect(() => {
     const q = searchParams.get("q");
     const moodParam = searchParams.get("mood");
+    const cityParam = searchParams.get("city");
 
     let initial: ResolvedState = { mood: null, who: null, budget: null, time: null };
     let initialCity: string | null = null;
@@ -83,6 +84,11 @@ export function MomentBuilderPage() {
     } else if (moodParam && MOODS.some((m) => m.key === moodParam)) {
       initial.mood = moodParam as MoodKey;
     }
+
+    // "Fais-moi quelque chose de similaire, mais à Monaco" (My Moments) : la
+    // ville explicite passée en paramètre prime toujours sur celle déduite
+    // d'une phrase libre.
+    if (cityParam) initialCity = cityParam;
 
     setMood(initial.mood);
     setWho(initial.who);
@@ -376,6 +382,10 @@ export function MomentBuilderPage() {
           onReplaceBeat={handleReplaceBeat}
           onRemoveBeat={handleRemoveBeat}
           onAddBeat={handleAddBeat}
+          onBook={() => {
+            if (moment === "empty" || moment === null || !who || !budget || !time) return;
+            navigate("/moment/booking", { state: { composed: moment, who, budget, time, city } });
+          }}
           onRestart={() => {
             setMood(null); setWho(null); setBudget(null); setTime(null); setCity(null);
             setOptions([]); setSelectedIndex(0);
@@ -573,7 +583,7 @@ function AnticipatingStep({
 
 function MomentResult({
   moment, options, selectedIndex, onSelectOption, isCouple, refineError, onRefine,
-  onReplaceBeat, onRemoveBeat, onAddBeat, onRestart,
+  onReplaceBeat, onRemoveBeat, onAddBeat, onBook, onRestart,
 }: {
   moment: ComposedMoment | null | "empty";
   options: ComposedMoment[];
@@ -585,6 +595,7 @@ function MomentResult({
   onReplaceBeat: (index: number) => void;
   onRemoveBeat: (index: number) => void;
   onAddBeat: () => void;
+  onBook: () => void;
   onRestart: () => void;
 }) {
   const [refineText, setRefineText] = useState("");
@@ -745,13 +756,13 @@ function MomentResult({
       </div>
 
       <div className="flex flex-col gap-3">
-        <Link
-          to={`/establishment/${moment.beats[0].establishment.id}/reserve`}
+        <button
+          onClick={onBook}
           className="w-full py-4 rounded-full text-sm text-center uppercase tracking-[0.1em] transition-transform active:scale-95"
           style={{ background: "oklch(0.74 0.0792 80)", color: "oklch(0.08 0.03 256)" }}
         >
           Réserver ce Moment
-        </Link>
+        </button>
         <button onClick={onRestart} className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground hover:text-foreground py-2">
           <Heart className="w-3.5 h-3.5" /> Essayer une autre envie
         </button>

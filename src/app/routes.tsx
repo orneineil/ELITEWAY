@@ -6,6 +6,8 @@ import { AllCategories } from "./pages/AllCategories";
 import { CategoryPage } from "./pages/CategoryPage";
 import { CollectionPage } from "./pages/CollectionPage";
 import { MomentBuilderPage } from "./pages/MomentBuilderPage";
+import { MomentBookingPage } from "./pages/MomentBookingPage";
+import { MyMomentsPage } from "./pages/MyMomentsPage";
 import { EstablishmentDetail } from "./pages/EstablishmentDetail";
 import { Favorites } from "./pages/Favorites";
 import { SearchPage } from "./pages/SearchPage";
@@ -74,6 +76,8 @@ export const router = createBrowserRouter([
       { path: "category/:categoryId",         Component: CategoryPage },
       { path: "edit/:slug",                   Component: CollectionPage },
       { path: "moment",                       Component: MomentBuilderPage },
+      { path: "moment/booking",               Component: MomentBookingPage },
+      { path: "my-moments",                   Component: MyMomentsPage },
       { path: "establishment/:id",            Component: EstablishmentDetail },
       { path: "establishment/:id/reserve",    Component: ReservationPage },
       { path: "establishment/:id/payment",    Component: PaymentPage },

@@ -144,6 +144,14 @@ export interface MomentBeat {
   surDevis: boolean;
 }
 
+// Exposé pour la persistance (moment_items.price_estimate) — même estimation
+// que celle utilisée en interne par totalsFor, jamais recalculée autrement
+// pour éviter que l'affichage et la base ne divergent.
+export function estimateBeatPrice(beat: MomentBeat): number | null {
+  if (beat.surDevis) return null;
+  return estimatePricePerPerson(beat.establishment);
+}
+
 // Un Moment composé porte toujours un "angle" — jamais présenté comme LA
 // seule réponse possible. "signature" reste la composition par défaut
 // (utilisée par le chat EliteWay AI, qui ne montre qu'une réponse). Les 3

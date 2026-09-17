@@ -2,10 +2,9 @@
 -- ELITEWAY — schéma v4 : Orchestration, Experience Brief, Assurance, Memory
 -- Additif uniquement : ne modifie ni ne supprime aucune table existante.
 --
--- ⚠️ NE PAS EXÉCUTER TANT QUE TU N'AS PAS CONFIRMÉ QUE schema_v2_catalog.sql
--- ET schema_v3_moments.sql SONT DÉJÀ EN PLACE. Ce fichier ajoute des colonnes
--- à `moments` et `moment_items` — s'ils n'existent pas encore, lance d'abord
--- schema_v2_catalog.sql puis schema_v3_moments.sql.
+-- schema_v2_catalog.sql et schema_v3_moments.sql sont confirmés déjà exécutés
+-- (17/09) — ce fichier peut donc être lancé. Statuts partenaires alignés sur
+-- la directive "ORCHESTRATION IS PART OF THE MVP" (voir section 2 plus bas).
 --
 -- Lance d'abord seule cette requête d'audit si tu as un doute :
 -- select table_name from information_schema.tables where table_schema = 'public' order by table_name;
@@ -26,13 +25,19 @@ alter table public.moments add column if not exists assurance_checked_at timesta
 
 -- ----------------------------------------------------------------------------
 -- 2. MOMENT_ITEMS — statut de confirmation partenaire + Experience Brief.
--- 'manual' = aucun partner_id identifiable sur l'établissement : l'équipe
--- EliteWay traite à la main (orchestration hybride assumée, pas une lacune).
+-- Statuts alignés sur la directive "ORCHESTRATION IS PART OF THE MVP" :
+-- pending (créé, pas encore transmis), requested (transmis au partenaire,
+-- réponse attendue), confirmed (partenaire a confirmé), ready (confirmé ET
+-- vérifié prêt pour le jour J — Experience Control), cancelled, et
+-- needs_attention (EliteWay doit intervenir — jamais affiché tel quel au
+-- client, qui voit un statut global via Experience Control).
 -- experience_brief (jsonb) est généré par buildExperienceBrief() côté app à
 -- la création du Moment — need-to-know réel, jamais le profil complet.
 -- ----------------------------------------------------------------------------
-alter table public.moment_items add column if not exists partner_status text not null default 'pending'
-  check (partner_status in ('pending', 'manual', 'confirmed'));
+alter table public.moment_items drop constraint if exists moment_items_partner_status_check;
+alter table public.moment_items add column if not exists partner_status text not null default 'pending';
+alter table public.moment_items add constraint moment_items_partner_status_check
+  check (partner_status in ('pending', 'requested', 'confirmed', 'ready', 'cancelled', 'needs_attention'));
 alter table public.moment_items add column if not exists experience_brief jsonb;
 
 -- ----------------------------------------------------------------------------

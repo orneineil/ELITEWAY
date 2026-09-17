@@ -116,6 +116,14 @@ export function ReservationsPage() {
         </h1>
       </div>
 
+      <Link
+        to="/my-moments"
+        className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-2xl px-4 py-3.5 mb-7 hover:border-primary/40 transition-colors"
+      >
+        <span className="text-sm text-primary">Voir mes Moments EliteWay</span>
+        <ChevronRight className="w-4 h-4 text-primary" />
+      </Link>
+
       {bookings === null ? (
         <div className="flex justify-center py-16">
           <Loader className="w-5 h-5 text-primary animate-spin" />
