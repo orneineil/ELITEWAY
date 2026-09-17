@@ -1,10 +1,12 @@
 -- ============================================================================
 -- ELITEWAY — schéma v3 : Moments (mémoire d'expérience basique du MVP)
 -- Additif uniquement : ne modifie ni ne supprime aucune table existante.
--- Prérequis : schema.sql ET schema_v2_catalog.sql déjà exécutés — moment_items
--- référence public.establishments, créée dans schema_v2_catalog.sql. Si tu as
--- un doute sur ce qui est déjà en place, lance d'abord la requête d'audit
--- ci-dessous SEULE, avant le reste de ce fichier.
+-- Prérequis : schema.sql ET schema_v2_catalog.sql déjà exécutés. moment_items
+-- ne référence PAS public.establishments (voir le constat du 17/09 dans
+-- schema_v2_catalog.sql — cette table existante est un dataset partenaire à
+-- id uuid, sans rapport avec le catalogue statique) : establishment_id reste
+-- un slug texte libre. Si tu as un doute sur ce qui est déjà en place, lance
+-- d'abord la requête d'audit ci-dessous SEULE, avant le reste de ce fichier.
 --
 -- Voir MVP 3.0 — Experience Engine (doc Claude, désaccords n°4 et n°5) :
 -- 3 tables seulement pour le MVP, tout le reste (offers, memberships,
@@ -49,7 +51,12 @@ create table if not exists public.moments (
 create table if not exists public.moment_items (
   id uuid primary key default gen_random_uuid(),
   moment_id uuid not null references public.moments(id) on delete cascade,
-  establishment_id text not null references public.establishments(id) on delete restrict,
+  -- ⚠️ Pas de FK vers public.establishments : cette table existe déjà dans la
+  -- base avec des id en uuid (flux partenaire distinct, voir schema_v2_catalog.sql),
+  -- sans rapport avec le catalogue éditorial statique (establishments.ts) que
+  -- l'app cliente utilise réellement. establishment_id reste donc le slug
+  -- texte du catalogue statique (ex. "chevre-dor"), en texte libre.
+  establishment_id text not null,
   label text not null, -- "Matin", "Coucher de soleil", "Soir"...
   sort_order int not null default 0,
   price_estimate numeric(10,2),

@@ -24,10 +24,13 @@ interface NotificationsContextType {
 
 const NotificationsContext = createContext<NotificationsContextType | null>(null);
 
-// Notifications réelles, tirées de la table `notifications` (schema_v2_catalog.sql)
-// — remplace l'ancienne liste codée en dur. Elles sont générées côté base par
-// un trigger à la confirmation d'une réservation ; d'autres types (offer,
-// table, event) viendront s'y ajouter au fur et à mesure que les mécaniques
+// Notifications réelles, tirées de la table `app_notifications`
+// (schema_v2_catalog.sql) — remplace l'ancienne liste codée en dur. Nom
+// distinct de `notifications`, qui existe déjà dans cette base pour un autre
+// usage (colonnes différentes : client_id, pas de title/type/link — voir le
+// constat du 17/09 dans schema_v2_catalog.sql). Générées côté base par un
+// trigger à la confirmation d'une réservation ; d'autres types (offer, table,
+// event) viendront s'y ajouter au fur et à mesure que les mécaniques
 // correspondantes (disponibilités réelles, partenaires) seront branchées.
 function relativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();
@@ -61,7 +64,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     setLoading(true);
     supabase
-      .from("notifications")
+      .from("app_notifications")
       .select("id, title, message, type, link, read, created_at")
       .eq("user_id", client.id)
       .order("created_at", { ascending: false })
@@ -88,17 +91,17 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
 
   const markRead = (id: string) => {
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-    supabase.from("notifications").update({ read: true }).eq("id", id).then();
+    supabase.from("app_notifications").update({ read: true }).eq("id", id).then();
   };
 
   const markAllRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    if (client) supabase.from("notifications").update({ read: true }).eq("user_id", client.id).then();
+    if (client) supabase.from("app_notifications").update({ read: true }).eq("user_id", client.id).then();
   };
 
   const dismissNotification = (id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
-    supabase.from("notifications").delete().eq("id", id).then();
+    supabase.from("app_notifications").delete().eq("id", id).then();
   };
 
   return (

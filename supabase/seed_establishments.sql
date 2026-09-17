@@ -1,9 +1,14 @@
 -- ============================================================================
+-- ⚠️ NE PAS EXÉCUTER (constat du 17/09, voir schema_v2_catalog.sql) :
+-- public.establishments existe déjà dans la base réelle avec id en UUID (table
+-- du flux partenaire, sans rapport avec ce catalogue) — ce script insère des
+-- id texte ("chevre-dor"...) qui échoueraient contre une colonne uuid. Le
+-- catalogue reste servi depuis src/app/data/establishments.ts côté app ; ce
+-- fichier est conservé pour mémoire seulement, au cas où une vraie migration
+-- du catalogue en base serait décidée plus tard (hors scope MVP).
+--
 -- ELITEWAY — import du catalogue établissements dans Supabase
 -- Généré automatiquement à partir de src/app/data/establishments.ts (40 fiches).
--- À exécuter APRÈS schema_v2_catalog.sql : Project > SQL Editor > New query.
--- Colle tout ce fichier et clique "Run". Peut être relancé sans risque : les
--- lignes existantes sont mises à jour plutôt que dupliquées (upsert sur id).
 -- ============================================================================
 
 insert into public.establishments
